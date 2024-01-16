@@ -1,5 +1,6 @@
 import "./style.css";
-import { MistApp, CreateApplication, Mathf } from "../../packages";
+
+import { MistApp, CreateApplication } from "../../packages";
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 

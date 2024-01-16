@@ -24,7 +24,7 @@ export class MistApp {
 		return this.appName;
 	}
 
-	run() {
+	Run() {
 		console.log(
 			"%cMist Engine",
 			"font-weight: bold; font-size: 3rem; color: transparent; background: linear-gradient(to right, orange, red); padding: 5px; background-clip: text;"
@@ -36,5 +36,5 @@ export class MistApp {
 
 export const CreateApplication = (setup: () => MistApp) => {
 	const app = setup();
-	app.run();
+	app.Run();
 };

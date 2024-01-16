@@ -1,16 +1,14 @@
-type ScalarArg = [v: number];
+export type ScalarArg = [v: number];
 
-type V2 = [x: number, y: number];
-type V3 = [x: number, y: number, z: number];
-type V4 = [x: number, y: number, z: number, w: number];
+export type V2 = [x: number, y: number];
+export type V3 = [x: number, y: number, z: number];
+export type V4 = [x: number, y: number, z: number, w: number];
 
-type MVec2Args = ScalarArg | V2;
-type MVec3Args = ScalarArg | V3;
-type MVec4Args = ScalarArg | V4;
+export type Vec2Args = ScalarArg | V2;
+export type Vec3Args = ScalarArg | V3;
+export type Vec4Args = ScalarArg | V4;
 
-abstract class VectorBase {
-	constructor() {}
-
+export default abstract class VectorBase {
 	protected static readonly Components = ["x", "y", "z", "w"];
 
 	get componentCount(): number {
@@ -25,36 +23,23 @@ abstract class VectorBase {
 	}
 
 	toArray(): number[] {
-		return Array.from(Array(this.componentCount)).map((_, i) => {
-			const currentComponent = VectorBase.Components[i] as keyof VectorBase;
-			if (currentComponent in this) return this[currentComponent];
-			return 0;
-		}) as number[];
+		return [...this] as number[]; // use the Iterator;
 	}
 
 	toString() {
 		// Make a string based on the components given in the vector
-		const vectorStr = Array.from(Array(this.componentCount)).reduce(
-			(str, _, i) => {
-				const currentComponent = VectorBase.Components[i] as keyof VectorBase;
-				return (
-					str +
-					(currentComponent in this
-						? ` ${currentComponent}: ${this[currentComponent]} `
-						: "")
-				);
-			},
-			""
-		);
+		const vectorStr = this.toArray()
+			.map((val: number, i: number) => {
+				return `${VectorBase.Components[i]}: ${val}`;
+			})
+			.join(", ");
 
-		return "[" + vectorStr + "]";
+		return `${Object.getPrototypeOf(this)?.constructor?.name} [${vectorStr} ]`;
 	}
 
-	protected static ConstructVectorFromArguments = <
-		T extends { x: number; y: number; z?: number; w?: number }
-	>(
-		vec: T,
-		args: MVec2Args | MVec3Args | MVec4Args
+	protected static ConstructVectorFromArguments = (
+		vec: VectorBase,
+		args: Vec2Args | Vec3Args | Vec4Args
 	) => {
 		let [x, y, z, w] = args;
 
@@ -62,49 +47,18 @@ abstract class VectorBase {
 			x = y = z = w = args[0];
 		}
 
-		vec.x = x ?? 0;
-		vec.y = y ?? 0;
+		if ("x" in vec) vec.x = x ?? 0;
+		if ("y" in vec) vec.y = y ?? 0;
 
 		if ("z" in vec) vec.z = z ?? 0;
 		if ("w" in vec) vec.w = w ?? 0;
 	};
-}
 
-/**
- * Vector 2
- */
-export class Vec2 extends VectorBase {
-	x!: number;
-	y!: number;
-	constructor(...args: MVec2Args) {
-		super();
-		VectorBase.ConstructVectorFromArguments(this, args);
-	}
-}
+	*[Symbol.iterator]() {
+		if ("x" in this) yield this.x;
+		if ("y" in this) yield this.y;
 
-/**
- * Vector 3
- */
-export class Vec3 extends VectorBase {
-	x!: number;
-	y!: number;
-	z!: number;
-	constructor(...args: MVec3Args) {
-		super();
-		VectorBase.ConstructVectorFromArguments(this, args);
-	}
-}
-
-/**
- * Vector 3
- */
-export class Vec4 extends VectorBase {
-	x!: number;
-	y!: number;
-	z!: number;
-	w!: number;
-	constructor(...args: MVec4Args) {
-		super();
-		VectorBase.ConstructVectorFromArguments(this, args);
+		if ("z" in this) yield this.z;
+		if ("w" in this) yield this.w;
 	}
 }
