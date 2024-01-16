@@ -1,5 +1,19 @@
 type ApplicationConstructorProps = { name: string; canvas: HTMLCanvasElement };
 
+const mistLog__ = () => {
+	console.log(
+		"%c❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️️️️️️️",
+		"font-size: 2rem;"
+	);
+	console.log(
+		"%cMist Engine",
+		"font-weight: bold; font-size: 3rem; color: transparent; background: linear-gradient(to right, orange, red); padding: 5px; background-clip: text;"
+	);
+	console.log(
+		"%c❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️️️️️️️",
+		"font-size: 2rem;"
+	);
+};
 const ignore = (_: any) => {};
 export class MistApp {
 	private appName: string;
@@ -10,6 +24,7 @@ export class MistApp {
 	constructor({ name, canvas }: ApplicationConstructorProps) {
 		this.appName = name;
 		this.canvas = canvas;
+
 		const gl = canvas.getContext("webgl2");
 
 		// Todo better error handling
@@ -25,14 +40,11 @@ export class MistApp {
 	}
 
 	Run() {
-		console.log(
-			"%cMist Engine",
-			"font-weight: bold; font-size: 3rem; color: transparent; background: linear-gradient(to right, orange, red); padding: 5px; background-clip: text;"
-		);
+		mistLog__();
 	}
 }
 
-export const CreateApplication = (setup: () => MistApp) => {
+export const CreateMist = (setup: () => MistApp) => {
 	const app = setup();
 	app.Run();
 };

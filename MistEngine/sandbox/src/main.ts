@@ -1,6 +1,6 @@
 import "./style.css";
 
-import { MistApp, CreateApplication } from "../../packages";
+import { MistApp, CreateMist } from "../../packages";
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 
@@ -10,4 +10,4 @@ class SandboxApp extends MistApp {
 	}
 }
 
-CreateApplication(() => new SandboxApp());
+CreateMist(() => new SandboxApp());
