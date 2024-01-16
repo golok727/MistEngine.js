@@ -1,0 +1,17 @@
+{
+	"name": "sandbox",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"clean:build": "del \f lib",
+		"vite": "vite",
+		"run:sandbox": "vite serve ./sandbox",
+		"build": "tsc && vite build",
+		"preview": "vite preview"
+	},
+	"devDependencies": {
+		"typescript": "^5.2.2",
+		"vite": "^5.0.8"
+	}
+}
