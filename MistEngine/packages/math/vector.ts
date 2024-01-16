@@ -22,7 +22,7 @@ export default abstract class VectorBase {
 		return new Float32Array(this.toArray());
 	}
 
-	toArray(): number[] {
+	toArray() {
 		return [...this] as number[]; // use the Iterator;
 	}
 
@@ -55,10 +55,10 @@ export default abstract class VectorBase {
 	};
 
 	*[Symbol.iterator]() {
-		if ("x" in this) yield this.x;
-		if ("y" in this) yield this.y;
+		if ("x" in this) yield this.x as number;
+		if ("y" in this) yield this.y as number;
 
-		if ("z" in this) yield this.z;
-		if ("w" in this) yield this.w;
+		if ("z" in this) yield this.z as number;
+		if ("w" in this) yield this.w as number;
 	}
 }
