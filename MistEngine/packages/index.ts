@@ -1,1 +1,3 @@
-export { Application, CreateApplication } from "./core/application";
+export { MistApp, CreateApplication } from "./core/application";
+
+export { default as Mathf } from "./math";
