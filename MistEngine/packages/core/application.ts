@@ -29,8 +29,6 @@ export class MistApp {
 			"%cMist Engine",
 			"font-weight: bold; font-size: 3rem; color: transparent; background: linear-gradient(to right, orange, red); padding: 5px; background-clip: text;"
 		);
-
-		console.log(`App '${this.appName}' running...`);
 	}
 }
 
