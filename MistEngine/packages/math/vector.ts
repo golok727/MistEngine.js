@@ -8,18 +8,15 @@ export type Vec2Args = ScalarArg | V2;
 export type Vec3Args = ScalarArg | V3;
 export type Vec4Args = ScalarArg | V4;
 
-export default abstract class VectorBase<T = V2 | V3 | V4> {
+export default abstract class VectorBase<T extends V2 | V3 | V4> {
 	protected static readonly Components = ["x", "y", "z", "w"];
 
 	get componentCount(): number {
-		return ["x", "y", "z", "w"].reduce(
-			(total, c) => (c in this ? total + 1 : total),
-			0
-		);
+		return this.toArray().length;
 	}
 
 	toFloat32() {
-		return new Float32Array(this.toArray() as number[]);
+		return new Float32Array(this.toArray());
 	}
 
 	toArray() {
@@ -37,8 +34,8 @@ export default abstract class VectorBase<T = V2 | V3 | V4> {
 		return `${Object.getPrototypeOf(this)?.constructor?.name} [ ${vectorStr} ]`;
 	}
 
-	protected static ConstructVectorFromArguments = (
-		vec: VectorBase,
+	protected static ConstructVectorFromArguments = <T extends V2 | V3 | V4>(
+		vec: VectorBase<T>,
 		args: Vec2Args | Vec3Args | Vec4Args
 	) => {
 		let [x, y, z, w] = args;
@@ -54,7 +51,7 @@ export default abstract class VectorBase<T = V2 | V3 | V4> {
 		if ("w" in vec) vec.w = w ?? 0;
 	};
 
-	*[Symbol.iterator]() {
+	*[Symbol.iterator](): Generator<number, void, void> {
 		if ("x" in this) yield this.x as number;
 		if ("y" in this) yield this.y as number;
 

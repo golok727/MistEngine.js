@@ -1,6 +1,17 @@
 import { expect, test } from "vitest";
 
-import { vec3 } from "../packages";
+import { Vector3, vec3 } from "../packages";
+
+test("vec3.createHelper", () => {
+	expect(vec3(2, 4, 5)).toStrictEqual(new Vector3(2, 4, 5));
+	expect(vec3(2)).toStrictEqual(new Vector3(2));
+});
+
+test("vec3.scalarInitialize", () => {
+	const v = vec3(1);
+	expect(v.x).toBe(1);
+	expect(v.y).toBe(1);
+});
 
 test("vec3.add", () => {
 	let v1 = vec3(1, 2, 3);
@@ -82,6 +93,29 @@ test("vec3.mul", () => {
 	expect(cloneRes).not.toBe(v1);
 });
 
+test("vec3.mul with different overloads", () => {
+	// Test multiplication with a scalar (number)
+	const scalarResult = vec3(2, 3, 4).mul(1.5);
+	expect(scalarResult.x).toBe(3);
+	expect(scalarResult.y).toBe(4.5);
+	expect(scalarResult.z).toBe(6);
+	expect(scalarResult).toBeInstanceOf(Vector3);
+
+	// Test multiplication with another Vector3
+	const vectorResult = vec3(2, 3, 4).mul(vec3(1.5, 2, 2.5));
+	expect(vectorResult.x).toBe(3);
+	expect(vectorResult.y).toBe(6);
+	expect(vectorResult.z).toBe(10);
+	expect(vectorResult).toBeInstanceOf(Vector3);
+
+	// Test multiplication with an array [x, y, z]
+	const arrayResult = vec3(2, 3, 4).mul([1.5, 2, 2.5]);
+	expect(arrayResult.x).toBe(3);
+	expect(arrayResult.y).toBe(6);
+	expect(arrayResult.z).toBe(10);
+	expect(arrayResult).toBeInstanceOf(Vector3);
+});
+
 test("vec3.div", () => {
 	let v1 = vec3(6, 9, 12);
 	const divisor = 2;
@@ -106,6 +140,15 @@ test("vec3.div", () => {
 
 	// Check if the cloned vector is not the same object as v1
 	expect(cloneRes).not.toBe(v1);
+});
+
+test("vec3.div with division by zero", () => {
+	try {
+		vec3(2).div(vec3(0));
+		expect.fail("Expected division by zero error but didn't get one");
+	} catch (error) {
+		expect(error.message).toBe("Division by zero");
+	}
 });
 
 test("vec3.mag", () => {

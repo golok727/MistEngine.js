@@ -76,9 +76,9 @@ export default class Vector4 extends VectorBase<V4> {
 
 	div(v: Vector4) {
 		const [x, y, z, w] = this.parseComponents(v);
+
 		if (x === 0 || y === 0 || z === 0 || w === 0) {
-			console.warn("Division by zero!");
-			return this;
+			throw new Error("Division by zero"); // TODO better errors
 		}
 
 		this.x /= v.x;

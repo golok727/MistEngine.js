@@ -56,10 +56,19 @@ export default class Vector3 extends VectorBase<V3> {
 		return this;
 	}
 
-	mul(s: number) {
-		this.x *= s;
-		this.y *= s;
-		this.z *= s;
+	mul(v: number | Vector3 | V3) {
+		if (typeof v === "number") {
+			this.x *= v;
+			this.y *= v;
+			this.z *= v;
+			return this;
+		}
+
+		const [x, y, z] = this.parseComponents(v);
+		this.x *= x;
+		this.y *= y;
+		this.z *= z;
+
 		return this;
 	}
 
@@ -67,8 +76,7 @@ export default class Vector3 extends VectorBase<V3> {
 		let [x, y, z] = this.parseComponents(v);
 
 		if (x === 0 || y === 0 || z === 0) {
-			console.warn("Division by zero!");
-			return this;
+			throw new Error("Division by zero"); // TODO better errors
 		}
 
 		this.x /= x;

@@ -1,5 +1,16 @@
 import { expect, test } from "vitest";
-import { vec4 } from "../packages";
+import { Vector4, vec4 } from "../packages";
+
+test("vec4.createHelper", () => {
+	expect(vec4(2, 4, 5, 7)).toStrictEqual(new Vector4(2, 4, 5, 7));
+	expect(vec4(2)).toStrictEqual(new Vector4(2));
+});
+
+test("vec4.scalarInitialize", () => {
+	const v = vec4(1);
+	expect(v.x).toBe(1);
+	expect(v.y).toBe(1);
+});
 
 test("vec4.add", () => {
 	let v1 = vec4(1, 2, 3, 4);
@@ -87,6 +98,32 @@ test("vec4.mul", () => {
 	expect(cloneRes).not.toBe(v1);
 });
 
+test("vec4.mul with different overloads", () => {
+	// Test multiplication with a scalar (number)
+	const scalarResult = vec4(2, 3, 4, 5).mul(1.5);
+	expect(scalarResult.x).toBe(3);
+	expect(scalarResult.y).toBe(4.5);
+	expect(scalarResult.z).toBe(6);
+	expect(scalarResult.w).toBe(7.5);
+	expect(scalarResult).toBeInstanceOf(Vector4);
+
+	// Test multiplication with another Vector4
+	const vectorResult = vec4(2, 3, 4, 5).mul(vec4(1.5, 2, 2.5, 3));
+	expect(vectorResult.x).toBe(3);
+	expect(vectorResult.y).toBe(6);
+	expect(vectorResult.z).toBe(10);
+	expect(vectorResult.w).toBe(15);
+	expect(vectorResult).toBeInstanceOf(Vector4);
+
+	// Test multiplication with an array [x, y, z, w]
+	const arrayResult = vec4(2, 3, 4, 5).mul([1.5, 2, 2.5, 3]);
+	expect(arrayResult.x).toBe(3);
+	expect(arrayResult.y).toBe(6);
+	expect(arrayResult.z).toBe(10);
+	expect(arrayResult.w).toBe(15);
+	expect(arrayResult).toBeInstanceOf(Vector4);
+});
+
 test("vec4.div", () => {
 	let v1 = vec4(6, 9, 12, 15);
 	const divisor = 2;
@@ -113,6 +150,17 @@ test("vec4.div", () => {
 
 	// Check if the cloned vector is not the same object as v1
 	expect(cloneRes).not.toBe(v1);
+});
+
+test("vec3.div with division by zero", () => {
+	try {
+		vec4(2).div(vec4(0));
+		// If the above line doesn't throw an error, fail the test
+		expect.fail("Expected division by zero error but didn't get one");
+	} catch (error) {
+		// Check if the error message matches the expected message
+		expect(error.message).toBe("Division by zero");
+	}
 });
 
 test("vec4.mag", () => {

@@ -44,9 +44,17 @@ export default class Vector2 extends VectorBase<V2> {
 		return this;
 	}
 
-	mul(s: number) {
-		this.x *= s;
-		this.y *= s;
+	mul(v: number | Vector2 | V2) {
+		if (typeof v === "number") {
+			this.x *= v;
+			this.y *= v;
+			return this;
+		}
+
+		const [x, y] = this.parseComponents(v);
+		this.x *= x;
+		this.y *= y;
+
 		return this;
 	}
 
@@ -54,8 +62,7 @@ export default class Vector2 extends VectorBase<V2> {
 		const [x, y] = this.parseComponents(v);
 
 		if (x === 0 || y === 0) {
-			console.warn("Division by zero!");
-			return this;
+			throw new Error("Division by zero"); // TODO better errors
 		}
 
 		this.x /= x;
