@@ -36,6 +36,8 @@ export class MistApp {
 			default:
 				throw new Error(`Renderer Api ${rendererAPI} is not supported!`);
 		}
+
+		!this.renderer; //! ignore
 	}
 
 	get name() {
