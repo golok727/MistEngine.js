@@ -21,19 +21,24 @@ export default class Vector4 extends VectorBase<V4> {
 
 	setX(x: number) {
 		this.x = x;
+		return this;
 	}
 
 	setY(y: number) {
 		this.y = y;
+		return this;
 	}
 
 	setZ(z: number) {
 		this.z = z;
+		return this;
 	}
 
 	setW(w: number) {
 		this.w = w;
+		return this;
 	}
+
 	clone(): Vector4 {
 		return new Vector4(...this.toArray());
 	}
@@ -86,6 +91,14 @@ export default class Vector4 extends VectorBase<V4> {
 		this.z /= v.z;
 		this.w /= v.w;
 
+		return this;
+	}
+
+	floor() {
+		this.x = Math.floor(this.x);
+		this.y = Math.floor(this.y);
+		this.z = Math.floor(this.z);
+		this.w = Math.floor(this.w);
 		return this;
 	}
 

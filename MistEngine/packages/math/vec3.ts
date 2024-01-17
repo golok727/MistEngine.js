@@ -86,6 +86,13 @@ export default class Vector3 extends VectorBase<V3> {
 		return this;
 	}
 
+	floor() {
+		this.x = Math.floor(this.x);
+		this.y = Math.floor(this.y);
+		this.z = Math.floor(this.z);
+		return this;
+	}
+
 	mag() {
 		return Math.hypot(this.x, this.y, this.z);
 	}

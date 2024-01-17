@@ -19,10 +19,12 @@ export default class Vector2 extends VectorBase<V2> {
 
 	setX(x: number) {
 		this.x = x;
+		return this;
 	}
 
 	setY(y: number) {
 		this.y = y;
+		return this;
 	}
 
 	clone() {
@@ -69,6 +71,13 @@ export default class Vector2 extends VectorBase<V2> {
 		this.y /= y;
 		return this;
 	}
+
+	floor() {
+		this.x = Math.floor(this.x);
+		this.y = Math.floor(this.y);
+		return this;
+	}
+
 	mag() {
 		return Math.hypot(this.x, this.y);
 	}

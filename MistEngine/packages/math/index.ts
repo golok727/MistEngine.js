@@ -11,4 +11,7 @@ export default {
 	cos: Math.cos,
 	sin: Math.sin,
 	tan: Math.tan,
+	vec2,
+	vec3,
+	vec4,
 };
