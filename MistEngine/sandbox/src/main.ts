@@ -1,6 +1,6 @@
 import "./style.css";
 
-import { MistApp, CreateMist, MthX } from "../../packages";
+import { MistApp, CreateMist } from "../../packages";
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 

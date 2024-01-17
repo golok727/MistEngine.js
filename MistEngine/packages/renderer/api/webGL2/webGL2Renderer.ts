@@ -1,7 +1,7 @@
 import Renderer, { MistRendererApi } from "../../renderer";
 import type { MistRendererApiT } from "../../renderer";
 
-export class WebGL2Renderer extends Renderer {
+export class MistWebGL2Renderer extends Renderer {
 	public static readonly API: MistRendererApiT = MistRendererApi.WebGL2;
 	private gl: WebGL2RenderingContext;
 

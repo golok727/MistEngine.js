@@ -1,8 +1,8 @@
 import {
-	WebGL2Renderer,
+	MistWebGL2Renderer,
 	Renderer,
 	MistRendererApi,
-	WebGPURenderer,
+	MistWebGPURenderer,
 } from "@mist-engine/renderer";
 import type { MistRendererApiT } from "@mist-engine/renderer";
 
@@ -11,9 +11,6 @@ export type ApplicationConstructorProps = {
 	canvas: HTMLCanvasElement;
 	rendererAPI: MistRendererApiT;
 };
-
-const ignore = (_?: any) => {};
-ignore();
 
 export class MistApp {
 	private appName: string;
@@ -26,18 +23,26 @@ export class MistApp {
 		// Select renderer API
 		switch (rendererAPI) {
 			case MistRendererApi.WebGL2:
-				this.renderer = new WebGL2Renderer(canvas);
+				this.renderer = new MistWebGL2Renderer(canvas);
 				break;
 
 			case MistRendererApi.WebGPU:
-				this.renderer = new WebGPURenderer(canvas);
+				this.renderer = new MistWebGPURenderer(canvas);
 				break;
 
 			default:
 				throw new Error(`Renderer Api ${rendererAPI} is not supported!`);
 		}
 
-		!this.renderer; //! ignore
+		this.renderer; //! ignore
+	}
+
+	getApi<T extends typeof Renderer>(api: T) {
+		if (this.renderer instanceof api) {
+			return this.renderer as InstanceType<T>;
+		}
+
+		throw new Error(`The current renderer is not of type ${api.name}`);
 	}
 
 	get name() {
