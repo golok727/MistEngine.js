@@ -6,7 +6,7 @@
 	"scripts": {
 		"clean:build": "del \f lib",
 		"vite": "vite",
-		"run:sandbox": "vite serve ./sandbox",
+		"run:sandbox": "vite serve ./sandbox -c ./vite.config.js",
 		"build": "tsc && vite build",
 		"preview": "vite preview"
 	},

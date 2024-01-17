@@ -3,6 +3,12 @@ import { defineConfig } from "vite";
 
 // Todo add dts plugin for ts types
 export default defineConfig({
+	resolve: {
+		alias: {
+			"@mist-engine": path.resolve(__dirname, "packages"),
+		},
+	},
+
 	build: {
 		lib: {
 			entry: path.resolve(__dirname, "packages"),
