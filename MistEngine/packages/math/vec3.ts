@@ -1,10 +1,11 @@
-import VectorBase, { type Vec3Args } from "./vector";
+import VectorBase, { type Vec3Args, type V3 } from "./vector";
 
-type Vec3Like = { x: number; y: number; z: number };
+export type Vec3Like = { x: number; y: number; z: number };
+
 /**
  * Vector 3
  */
-export default class Vector3 extends VectorBase {
+export default class Vector3 extends VectorBase<V3> {
 	x!: number;
 	y!: number;
 	z!: number;
@@ -20,45 +21,61 @@ export default class Vector3 extends VectorBase {
 
 	setX(x: number) {
 		this.x = x;
+		return this;
 	}
 
 	setY(y: number) {
 		this.y = y;
+		return this;
 	}
 
 	setZ(z: number) {
 		this.z = z;
+		return this;
 	}
 
-	add(v: Vector3 | Vec3Like) {
-		return new Vector3(this.x + v.x, this.y + v.y, this.z + v.z);
+	clone() {
+		return new Vector3(...this.toArray());
 	}
 
-	sub(v: Vector3 | Vec3Like) {
-		return new Vector3(this.x - v.x, this.y - v.y, this.z - v.z);
+	add(v: Vector3 | V3) {
+		const [x, y, z] = this.parseComponents(v);
+		this.x += x;
+		this.y += y;
+		this.z += z;
+
+		return this;
+	}
+
+	sub(v: Vector3 | V3) {
+		const [x, y, z] = this.parseComponents(v);
+
+		this.x -= x;
+		this.y -= y;
+		this.z -= z;
+		return this;
 	}
 
 	mul(s: number) {
-		return new Vector3(this.x * s, this.y * s, this.z * s);
+		this.x *= s;
+		this.y *= s;
+		this.z *= s;
+		return this;
 	}
 
-	div(v: Vector3 | Vec3Like, floor = false) {
-		if (v.x === 0 || v.y === 0 || v.z === 0) {
+	div(v: Vector3 | V3) {
+		let [x, y, z] = this.parseComponents(v);
+
+		if (x === 0 || y === 0 || z === 0) {
 			console.warn("Division by zero!");
 			return this;
 		}
 
-		let x = this.x / v.x;
-		let y = this.y / v.y;
-		let z = this.z / v.z;
+		this.x /= x;
+		this.y /= y;
+		this.z /= z;
 
-		if (floor) {
-			x = Math.floor(x);
-			y = Math.floor(y);
-			z = Math.floor(z);
-		}
-
-		return new Vector3(x, y, z);
+		return this;
 	}
 
 	mag() {
@@ -71,18 +88,22 @@ export default class Vector3 extends VectorBase {
 
 	normalize(): Vector3 {
 		const magnitude = this.mag();
-		return magnitude !== 0 ? this.div(Vector3.new(magnitude)) : Vector3.new(0);
+		return magnitude !== 0 ? this.div(Vector3.new(magnitude)) : this;
 	}
 
-	dot(v: Vector3 | Vec3Like): number {
-		return this.x * v.x + this.y * v.y + this.z * v.z;
+	dot(v: Vector3 | V3): number {
+		const [x, y, z] = this.parseComponents(v);
+
+		return this.x * x + this.y * y + this.z * z;
 	}
 
-	cross(v: Vector3 | Vec3Like): Vector3 {
+	cross(v: Vector3 | V3): Vector3 {
+		const [x, y, z] = this.parseComponents(v);
+
 		return new Vector3(
-			this.y * v.z - this.z * v.y,
-			this.z * v.x - this.x * v.z,
-			this.x * v.y - this.y * v.x
+			this.y * z - this.z * y,
+			this.z * x - this.x * z,
+			this.x * y - this.y * x
 		);
 	}
 
@@ -98,24 +119,41 @@ export default class Vector3 extends VectorBase {
 		return this.normalize().mul(magnitude);
 	}
 
-	rotate(angle: number, axis: Vec3Like): Vector3 {
+	rotate(angle: number, axis: Vector3 | V3): Vector3 {
+		const [x, y, z] = this.parseComponents(axis);
+
 		const cosA = Math.cos(angle);
 		const sinA = Math.sin(angle);
-		const x =
-			this.x * (cosA + (1 - cosA) * axis.x ** 2) +
-			this.y * ((1 - cosA) * axis.x * axis.y - sinA * axis.z) +
-			this.z * ((1 - cosA) * axis.x * axis.z + sinA * axis.y);
+		const newX =
+			this.x * (cosA + (1 - cosA) * x ** 2) +
+			this.y * ((1 - cosA) * x * y - sinA * z) +
+			this.z * ((1 - cosA) * x * z + sinA * y);
 
-		const y =
-			this.x * ((1 - cosA) * axis.x * axis.y + sinA * axis.z) +
-			this.y * (cosA + (1 - cosA) * axis.y ** 2) +
-			this.z * ((1 - cosA) * axis.y * axis.z - sinA * axis.x);
+		const newY =
+			this.x * ((1 - cosA) * x * y + sinA * z) +
+			this.y * (cosA + (1 - cosA) * y ** 2) +
+			this.z * ((1 - cosA) * y * z - sinA * x);
 
-		const z =
-			this.x * ((1 - cosA) * axis.x * axis.z - sinA * axis.y) +
-			this.y * ((1 - cosA) * axis.y * axis.z + sinA * axis.x) +
-			this.z * (cosA + (1 - cosA) * axis.z ** 2);
+		const newZ =
+			this.x * ((1 - cosA) * x * z - sinA * y) +
+			this.y * ((1 - cosA) * y * z + sinA * x) +
+			this.z * (cosA + (1 - cosA) * z ** 2);
 
-		return new Vector3(x, y, z);
+		this.x = newX;
+		this.y = newY;
+		this.z = newZ;
+		return this;
+	}
+
+	private parseComponents(v: Vector3 | V3): V3 {
+		if (v instanceof Vector3) return v.toArray();
+		else return v;
 	}
 }
+
+/**
+ * @description A helper function to construct a new `Vector3`
+ */
+export const vec3 = (...args: ConstructorParameters<typeof Vector3>) => {
+	return new Vector3(...args);
+};

@@ -5,6 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"clean:build": "del \f lib",
+		"test": "vitest",
 		"vite": "vite",
 		"run:sandbox": "vite serve ./sandbox -c ./vite.config.js",
 		"build": "tsc && vite build",
@@ -12,6 +13,7 @@
 	},
 	"devDependencies": {
 		"typescript": "^5.2.2",
-		"vite": "^5.0.8"
+		"vite": "^5.0.8",
+		"vitest": "^1.2.0"
 	}
 }

@@ -1,6 +1,8 @@
-export { default as Vector2 } from "./vec2";
-export { default as Vector3 } from "./vec3";
-export { default as Vector4 } from "./vec4";
+import Vector2, { vec2 } from "./vec2";
+import Vector3, { vec3 } from "./vec3";
+import Vector4, { vec4 } from "./vec4";
+
+export { Vector2, Vector3, Vector4, vec2, vec3, vec4 };
 
 export default {
 	PI: Math.PI,

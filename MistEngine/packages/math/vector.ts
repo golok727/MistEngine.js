@@ -8,7 +8,7 @@ export type Vec2Args = ScalarArg | V2;
 export type Vec3Args = ScalarArg | V3;
 export type Vec4Args = ScalarArg | V4;
 
-export default abstract class VectorBase {
+export default abstract class VectorBase<T = V2 | V3 | V4> {
 	protected static readonly Components = ["x", "y", "z", "w"];
 
 	get componentCount(): number {
@@ -19,22 +19,22 @@ export default abstract class VectorBase {
 	}
 
 	toFloat32() {
-		return new Float32Array(this.toArray());
+		return new Float32Array(this.toArray() as number[]);
 	}
 
 	toArray() {
-		return [...this] as number[]; // use the Iterator;
+		return [...this] as T; // use the Iterator;
 	}
 
 	toString() {
 		// Make a string based on the components given in the vector
-		const vectorStr = this.toArray()
+		const vectorStr = (this.toArray() as number[])
 			.map((val: number, i: number) => {
 				return `${VectorBase.Components[i]}: ${val}`;
 			})
 			.join(", ");
 
-		return `${Object.getPrototypeOf(this)?.constructor?.name} [${vectorStr} ]`;
+		return `${Object.getPrototypeOf(this)?.constructor?.name} [ ${vectorStr} ]`;
 	}
 
 	protected static ConstructVectorFromArguments = (

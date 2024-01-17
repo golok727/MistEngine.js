@@ -1,9 +1,11 @@
-import VectorBase, { type Vec4Args } from "./vector";
+import VectorBase, { type Vec4Args, type V4 } from "./vector";
+
+export type Vec4Like = { x: number; y: number; z: number; w: number };
 
 /**
- * Vector 3
+ * Vector 4
  */
-export default class Vector4 extends VectorBase {
+export default class Vector4 extends VectorBase<V4> {
 	x!: number;
 	y!: number;
 	z!: number;
@@ -32,38 +34,59 @@ export default class Vector4 extends VectorBase {
 	setW(w: number) {
 		this.w = w;
 	}
+	clone(): Vector4 {
+		return new Vector4(...this.toArray());
+	}
 
 	add(v: Vector4) {
-		return new Vector4(this.x + v.x, this.y + v.y, this.z + v.z, this.w + v.w);
+		const [x, y, z, w] = this.parseComponents(v);
+		this.x += x;
+		this.y += y;
+		this.z += z;
+		this.w += w;
+		return this;
 	}
 
 	sub(v: Vector4) {
-		return new Vector4(this.x - v.x, this.y - v.y, this.z - v.z, this.w - v.w);
+		const [x, y, z, w] = this.parseComponents(v);
+		this.x -= x;
+		this.y -= y;
+		this.z -= z;
+		this.w -= w;
+		return this;
 	}
 
-	mul(s: number) {
-		return new Vector4(this.x * s, this.y * s, this.z * s, this.w * s);
+	mul(v: number | Vector4 | V4) {
+		if (typeof v === "number") {
+			this.x *= v;
+			this.y *= v;
+			this.z *= v;
+			this.w *= v;
+			return this;
+		}
+
+		const [x, y, z, w] = this.parseComponents(v);
+		this.x *= x;
+		this.y *= y;
+		this.z *= z;
+		this.w *= w;
+
+		return this;
 	}
 
-	div(v: Vector4, floor = false) {
-		if (v.x === 0 || v.y === 0 || v.z === 0 || v.w === 0) {
+	div(v: Vector4) {
+		const [x, y, z, w] = this.parseComponents(v);
+		if (x === 0 || y === 0 || z === 0 || w === 0) {
 			console.warn("Division by zero!");
 			return this;
 		}
 
-		let x = this.x / v.x;
-		let y = this.y / v.y;
-		let z = this.z / v.z;
-		let w = this.w / v.w;
+		this.x /= v.x;
+		this.y /= v.y;
+		this.z /= v.z;
+		this.w /= v.w;
 
-		if (floor) {
-			x = Math.floor(x);
-			y = Math.floor(y);
-			z = Math.floor(z);
-			w = Math.floor(w);
-		}
-
-		return new Vector4(x, y, z, w);
+		return this;
 	}
 
 	mag() {
@@ -75,4 +98,20 @@ export default class Vector4 extends VectorBase {
 			this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w
 		);
 	}
+	normalize(): Vector4 {
+		const magnitude = this.mag();
+		return magnitude !== 0 ? this.div(Vector4.new(magnitude)) : this;
+	}
+
+	private parseComponents(v: Vector4 | V4): V4 {
+		if (v instanceof Vector4) return v.toArray();
+		else return v;
+	}
 }
+
+/**
+ * @description A helper function to construct a new `Vector4`
+ */
+export const vec4 = (...args: ConstructorParameters<typeof Vector4>) => {
+	return new Vector4(...args);
+};

@@ -1,11 +1,11 @@
-import VectorBase, { type Vec2Args } from "./vector";
+import VectorBase, { type Vec2Args, type V2 } from "./vector";
 
-type Vec2Like = { x: number; y: number };
+export type Vec2Like = { x: number; y: number };
 
 /**
  * Vector 2
  */
-export default class Vector2 extends VectorBase {
+export default class Vector2 extends VectorBase<V2> {
 	x!: number;
 	y!: number;
 	constructor(...args: Vec2Args) {
@@ -25,36 +25,43 @@ export default class Vector2 extends VectorBase {
 		this.y = y;
 	}
 
-	// Math
-	add(v: Vector2 | Vec2Like) {
-		return new Vector2(this.x + v.x, this.y + v.y);
+	clone() {
+		return new Vector2(...this.toArray());
 	}
 
-	sub(v: Vector2 | Vec2Like) {
-		return new Vector2(this.x - v.x, this.y - v.y);
+	// Math
+	add(v: Vector2 | V2) {
+		const [x, y] = this.parseComponents(v);
+		this.x += x;
+		this.y += y;
+		return this;
+	}
+
+	sub(v: Vector2 | V2) {
+		const [x, y] = this.parseComponents(v);
+		this.x -= x;
+		this.y -= y;
+		return this;
 	}
 
 	mul(s: number) {
-		return new Vector2(this.x * s, this.y * s);
+		this.x *= s;
+		this.y *= s;
+		return this;
 	}
 
-	div(v: Vector2 | Vec2Like, floor = false) {
-		if (v.x === 0 || v.y === 0) {
+	div(v: Vector2 | V2) {
+		const [x, y] = this.parseComponents(v);
+
+		if (x === 0 || y === 0) {
 			console.warn("Division by zero!");
 			return this;
 		}
 
-		let x = this.x / v.x;
-		let y = this.y / v.y;
-
-		if (floor) {
-			x = Math.floor(x);
-			y = Math.floor(y);
-		}
-
-		return new Vector2(x, y);
+		this.x /= x;
+		this.y /= y;
+		return this;
 	}
-
 	mag() {
 		return Math.hypot(this.x, this.y);
 	}
@@ -69,15 +76,16 @@ export default class Vector2 extends VectorBase {
 
 	normalize(): Vector2 {
 		const magnitude = this.mag();
-		return magnitude !== 0 ? this.div(Vector2.new(magnitude)) : Vector2.new(0);
+		return magnitude !== 0 ? this.div(Vector2.new(magnitude)) : this;
 	}
 
 	dot(v: Vector2): number {
 		return this.x * v.x + this.y * v.y;
 	}
 
-	cross(v: Vector2 | Vec2Like): number {
-		return this.x * v.y - this.y * v.x;
+	cross(v: Vector2 | V2): number {
+		const [x, y] = this.parseComponents(v);
+		return this.x * x - this.y * y;
 	}
 
 	limit(max: number): Vector2 {
@@ -99,6 +107,20 @@ export default class Vector2 extends VectorBase {
 		const sinA = Math.sin(angle);
 		const x = this.x * cosA - this.y * sinA;
 		const y = this.x * sinA + this.y * cosA;
-		return Vector2.new(x, y);
+
+		this.x = x;
+		this.y = y;
+		return this;
+	}
+
+	private parseComponents(v: Vector2 | V2): V2 {
+		if (v instanceof Vector2) return v.toArray();
+		else return v;
 	}
 }
+
+/**
+ * @description A helper function to construct a new `Vector2`
+ */
+export const vec2 = (...args: ConstructorParameters<typeof Vector2>) =>
+	new Vector2(...args);
