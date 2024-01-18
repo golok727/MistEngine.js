@@ -4,7 +4,12 @@ import {
 	MistRendererApi,
 	MistWebGPURenderer,
 } from "@mist-engine/renderer";
+
+import { MistLogger } from "@mist-engine/logger";
+
 import type { MistRendererApiT } from "@mist-engine/renderer";
+
+const logger = new MistLogger({ name: "App" });
 
 export type ApplicationConstructorProps = {
 	name: string;
@@ -14,11 +19,12 @@ export type ApplicationConstructorProps = {
 
 export class MistApp {
 	private appName: string;
-
 	private renderer: Renderer;
 
 	constructor({ name, canvas, rendererAPI }: ApplicationConstructorProps) {
 		this.appName = name;
+
+		logger.log("{0}", "Radhey Shyam");
 
 		// Select renderer API
 		switch (rendererAPI) {
