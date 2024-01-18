@@ -24,8 +24,6 @@ export class MistApp {
 	constructor({ name, canvas, rendererAPI }: ApplicationConstructorProps) {
 		this.appName = name;
 
-		logger.log("{0}", "Radhey Shyam");
-
 		// Select renderer API
 		switch (rendererAPI) {
 			case MistRendererApi.WebGL2:
@@ -56,12 +54,18 @@ export class MistApp {
 	}
 
 	Run() {
-		mistLog__();
+		logger.warn("App may fail");
+		logger.error("{0} is not implemented yet", "MistApp.Run");
 	}
 }
 
 export const CreateMist = (setup: () => MistApp) => {
+	mistLog__();
 	const app = setup();
+	logger.log("{0}", "Radhey Shyam");
+	logger.info("Using {0}", app.name);
+	logger.info("Starting Mist engine");
+
 	app.Run();
 };
 

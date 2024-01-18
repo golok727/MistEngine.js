@@ -8,5 +8,5 @@
 		"**/node_modules": true,
 		"**/target": true
 	},
-	"cSpell.words": ["Mathf", "webgpu"]
+	"cSpell.words": ["bgcolor", "Mathf", "webgpu"]
 }
