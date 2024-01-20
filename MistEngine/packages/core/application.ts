@@ -64,7 +64,14 @@ export const CreateMist = (setup: () => MistApp) => {
 	logger.log("{0}", "Radhey Shyam");
 	logger.log("{0}", "Radha Vallabh Shri Harivansh");
 
+	console.time("MistLogger");
 	logger.info("Using {0}", app.name);
+	console.timeEnd("MistLogger");
+
+	console.time("console");
+	console.log(`Using ${app.name}`);
+	console.timeEnd("console");
+
 	app.Run();
 };
 

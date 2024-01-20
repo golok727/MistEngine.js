@@ -13,10 +13,10 @@ Mist logger is a printf style logger
 |%m 	| Month in number (1-12)|   			|
 |%M 	| Month in text		 			|   			|
 |%D 	| Short MM/DD/YY date		|  				|
-|%d 	| day in 1-31       		|  				|
-|%d 	| day in 1-31       		|  				|
+|%w 	| week-day in 1-6       |  				|
 |%L 	| Emoji of level       	|  				|
 |%l 	| Level in text       	|  				|
+|%p 	| current performance   |  				|
 
 
 ## Usage
