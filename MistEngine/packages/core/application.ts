@@ -8,6 +8,7 @@ import {
 import { MistLogger } from "@mist-engine/logger";
 
 import type { MistRendererApiT } from "@mist-engine/renderer";
+import { vec2 } from "..";
 
 const logger = new MistLogger({ name: "App" });
 
@@ -59,10 +60,17 @@ export class MistApp {
 }
 
 export const CreateMist = (setup: () => MistApp) => {
-	mistLog__();
+	mistIntro__();
+
 	const app = setup();
 	logger.log("{0}", "Radhey Shyam");
 	logger.log("{0}", "Radha Vallabh Shri Harivansh");
+
+	logger.log(
+		"p1 = {0}, \n\t\t p2 = {1}",
+		vec2(0).toString(),
+		vec2(10).toString()
+	);
 
 	console.time("MistLogger");
 	logger.info("Using {0}", app.name);
@@ -78,7 +86,7 @@ export const CreateMist = (setup: () => MistApp) => {
 //-----------------------------------------------------------
 
 //-----------------------------------------------------------
-function mistLog__() {
+function mistIntro__() {
 	console.log(
 		"%c❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️️️️️️️",
 		"font-size: 2rem;"

@@ -25,7 +25,7 @@ type PatternName = Keys<typeof LogPatterns>;
 type Pattern = `${LogPatterns}`;
 
 export class MistLogger {
-	static readonly DefaultPattern: string = "%n: [ %l ]\n\t\t %s ( %D ) %p %W";
+	static readonly DefaultPattern: string = "%n: [ %l ] ( %D ) %p \n\t\t %s ";
 
 	static readonly defaultOptions: LoggerOptions = {
 		pattern: MistLogger.DefaultPattern,
