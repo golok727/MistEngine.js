@@ -15,6 +15,8 @@ Mist logger is a printf style logger
 |%D 	| Short MM/DD/YY date		|  				|
 |%d 	| day in 1-31       		|  				|
 |%d 	| day in 1-31       		|  				|
+|%L 	| Emoji of level       	|  				|
+|%l 	| Level in text       	|  				|
 
 
 ## Usage

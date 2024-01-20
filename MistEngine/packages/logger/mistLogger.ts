@@ -14,7 +14,6 @@ const monthFormatter = new Intl.DateTimeFormat("en", {
 export class MistLogger {
 	private options: LoggerOptions;
 	private parsedPatterns!: Keys<typeof MistLogger.FormatterPatterns>[];
-	private stylesCache: Map<string, string>;
 
 	/**
 	  # Format
@@ -29,12 +28,13 @@ export class MistLogger {
 		|%D 	| Short MM/DD/YY date		|  				|
 		|%d 	| day in 1-31       		|  				|
 		|%d 	| day in 1-31       		|  				|
+		|%L 	| Emoji of level       	|  				|
+		|%l 	| Level in text       	|  				|
 
 	// 
 	*/
 
 	constructor(options?: Partial<LoggerOptions>) {
-		this.stylesCache = new Map();
 		this.options = { ...MistLogger.defaultOptions, ...options };
 		this.recalculatePlaceholders();
 	}
@@ -179,8 +179,29 @@ export class MistLogger {
 					break;
 				}
 
-				case formatters.Level.pattern: {
-					const { regex, parse, styles } = formatters.Level;
+				// Log in text form
+				case formatters.LevelText.pattern: {
+					const { regex, parse, styles } = formatters.LevelText;
+					logFormat = logFormat.replace(
+						regex,
+						this.wrapWithStyles(
+							parse({ ...this.options, message, level }),
+							!!styles
+						)
+					);
+					const consoleLevelStyles = this.getTextColorForLevel(level);
+
+					if (styles) {
+						allStyles.push(
+							this.applyStyles(styles, consoleLevelStyles),
+							"" // extra empty string is required to pop the styles
+						);
+					}
+					break;
+				}
+
+				case formatters.LevelShort.pattern: {
+					const { regex, parse, styles } = formatters.LevelShort;
 					logFormat = logFormat.replace(
 						regex,
 						this.wrapWithStyles(
@@ -192,7 +213,7 @@ export class MistLogger {
 
 					if (styles) {
 						allStyles.push(
-							this.applyStyles(styles, consoleLevelStyles, level),
+							this.applyStyles(styles, consoleLevelStyles),
 							"" // extra empty string is required to pop the styles
 						);
 					}
@@ -214,31 +235,36 @@ export class MistLogger {
 		return [logFormat, allStyles];
 	}
 	// For using styles with %value% placeholder
-	private applyStyles(
-		stylesStr: string,
-		styles: Record<string, string>,
-		key: string
-	) {
-		const cache = this.stylesCache.get(key);
-		if (cache !== undefined) return cache;
-
+	private applyStyles(stylesStr: string, styles: Record<string, string>) {
 		const s = Object.entries(styles).reduce((final, [k, v]) => {
 			return final.replace(new RegExp(`%${k}%`), v);
 		}, stylesStr);
 
-		this.stylesCache.set(key, s);
 		return s;
+	}
+
+	private getTextColorForLevel(level: Values<typeof MistLogger.LogLevel>) {
+		switch (level) {
+			case MistLogger.LogLevel.ERROR:
+				return { color: "red" };
+			case MistLogger.LogLevel.WARN:
+				return { color: "yellow" };
+			case MistLogger.LogLevel.INFO:
+				return { color: "cyan" };
+			case MistLogger.LogLevel.LOG:
+				return { color: "orange" };
+		}
 	}
 	private getStylesForLevel(level: Values<typeof MistLogger.LogLevel>) {
 		switch (level) {
 			case MistLogger.LogLevel.ERROR:
-				return { borderColor: "red", color: "white" };
+				return { borderColor: "red" };
 			case MistLogger.LogLevel.WARN:
-				return { borderColor: "yellow", color: "white" };
+				return { borderColor: "yellow" };
 			case MistLogger.LogLevel.INFO:
-				return { borderColor: "cyan", color: "white" };
+				return { borderColor: "cyan" };
 			case MistLogger.LogLevel.LOG:
-				return { borderColor: "orange", color: "white" };
+				return { borderColor: "orange" };
 		}
 	}
 	private recalculatePlaceholders() {
@@ -256,7 +282,8 @@ export class MistLogger {
 
 	private static readonly FormatterPatterns: Record<string, string> = {
 		"%s": "Message",
-		"%L": "Level",
+		"%L": "LevelShort",
+		"%l": "LevelText",
 		"%n": "LoggerName",
 		"%Y": "Year4Digits",
 		"%y": "Year2Digits",
@@ -289,10 +316,21 @@ export class MistLogger {
 				return options.message;
 			},
 		},
-		Level: {
+
+		LevelText: {
+			pattern: "%l",
+			styles: "color: %color%; font-weight: bold;",
+			regex: new RegExp("%l"),
+			parse(options) {
+				if (!options.level) throw new Error("Level was not provided");
+				return options.level;
+			},
+		},
+
+		LevelShort: {
 			pattern: "%L",
 			styles:
-				"border:1px solid %borderColor%; border-radius: 10px; padding:  .5rem; color: %color%; font-weight: bold; font-size: .9rem;",
+				"border:1px solid %borderColor%; border-radius: 10px; padding:  .5rem; font-weight: bold; font-size: .9rem;",
 			regex: new RegExp("%L"),
 			parse: function (options) {
 				if (!options.level) throw new Error("Level was not provided");
@@ -373,7 +411,7 @@ export class MistLogger {
 		},
 	} as const;
 
-	static readonly DefaultPattern: string = "%L %n: %s ( %D )";
+	static readonly DefaultPattern: string = "%L %n: [ %l ] %s ( %D )";
 
 	static readonly defaultOptions: LoggerOptions = {
 		pattern: MistLogger.DefaultPattern,
