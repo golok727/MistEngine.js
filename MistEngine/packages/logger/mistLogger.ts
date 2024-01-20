@@ -11,6 +11,14 @@ const monthFormatter = new Intl.DateTimeFormat("en", {
 }).format;
 
 export class MistLogger {
+	static readonly DefaultPattern: string = "%n: [ %l ]\n\t\t %s ( %D )";
+
+	static readonly defaultOptions: LoggerOptions = {
+		pattern: MistLogger.DefaultPattern,
+		name: "MistLog",
+		styled: true,
+	};
+
 	private options: LoggerOptions;
 	private parsedPatterns!: Keys<typeof MistLogger.FormatterPatterns>[];
 
@@ -18,7 +26,7 @@ export class MistLogger {
 	  # Format
 		|flag | meaning								| example	|
 		|-----|:---------------------:|--------|
-		|%s   |  text to log 					|  				|
+		|%s   | Text to log 					|  				|
 		|%n 	| Logger Name 					|   			|
 		|%Y 	| Year in 4 digits			|   			|
 	  |%y 	| Year in 2 digits			|  				|
@@ -45,42 +53,42 @@ export class MistLogger {
 
 	// Normal logging
 	public log(message: string, ...args: any[]) {
-		const [logMessage, styles] = this.createLog(
+		const [formattedMessage, styles] = this.createLog(
 			message,
 			MistLogger.LogLevel.LOG,
 			args
 		);
-		console.log(logMessage, ...styles);
+		this._consoleLog(formattedMessage, styles);
 	}
 
 	// Info
 	public info(message: string, ...args: any[]) {
-		const [logMessage, styles] = this.createLog(
+		const [formattedMessage, styles] = this.createLog(
 			message,
 			MistLogger.LogLevel.INFO,
 			args
 		);
-		console.log(logMessage, ...styles);
+		this._consoleLog(formattedMessage, styles);
 	}
 
 	// Warnings
 	public warn(message: string, ...args: any[]) {
-		const [logMessage, styles] = this.createLog(
+		const [formattedMessage, styles] = this.createLog(
 			message,
 			MistLogger.LogLevel.WARN,
 			args
 		);
-		console.log(logMessage, ...styles);
+		this._consoleLog(formattedMessage, styles);
 	}
 
 	// Errors
 	public error(message: string, ...args: any[]) {
-		const [logMessage, styles] = this.createLog(
+		const [formattedMessage, styles] = this.createLog(
 			message,
 			MistLogger.LogLevel.ERROR,
 			args
 		);
-		console.log(logMessage, ...styles);
+		this._consoleLog(formattedMessage, styles);
 	}
 
 	/*
@@ -89,7 +97,27 @@ export class MistLogger {
 		Index is the index of the data in the args
 	 */
 
-	private parseLogText(template: string, args: any[]) {
+	private _consoleLog(formattedMessage: string, styles: string[]) {
+		if (this.options.styled) console.log(formattedMessage, ...styles);
+		else console.log(formattedMessage);
+	}
+
+	/*
+		Creates a formatted log with given level template and data for the placeholder as args
+	*/
+	private createLog(
+		template: string,
+		level: Values<typeof MistLogger.LogLevel>,
+		args: any[]
+	) {
+		const parsedMessage = this.parseTemplatedMessage(template, args);
+		return this.replaceFormattersWithData(parsedMessage, level);
+	}
+
+	/**
+	  Parse the templated message and replace it with the data provided in the args
+	 */
+	private parseTemplatedMessage(template: string, args: any[]) {
 		// Check for "{0}, {1}.. etc"  or "{:0}...etc" for formatted result for objects
 		const matches = template.matchAll(/{(?<fPretty>:)?(?<index>\d+)}/g);
 
@@ -112,14 +140,13 @@ export class MistLogger {
 
 			let prettify = !!match.groups?.fPretty;
 
-			let replacement = this.getReplacement(args[index], prettify);
+			let replacement = this.getArgDataReplacement(args[index], prettify);
 			template = template.replace(placeholder, `${replacement}`);
 		}
 		return template;
 	}
 
-	// is the passes in object has a toString method it will use it or if it gives [object Object] it parses it using JSON.parse
-	private getReplacement(obj: any, prettifyObject = false) {
+	private getArgDataReplacement(obj: any, prettifyObject = false) {
 		if (obj.toString !== undefined && typeof obj.toString === "function") {
 			const str = obj.toString();
 			if (str === "[object Object]" && typeof obj === "object") {
@@ -134,31 +161,19 @@ export class MistLogger {
 	/*
 		Wraps the tokens with color stop codes
 	 */
-	private wrapWithStyles(token: string) {
+	private wrapTokenWithStyles(token: string) {
 		if (this.options.styled) return "%c" + token.replace(/%c/g, "") + "%c";
 		else return token;
-	}
-
-	/*
-		Creates a formatted log with given level template and data for the placeholder as args
-	*/
-	private createLog(
-		template: string,
-		level: Values<typeof MistLogger.LogLevel>,
-		args: any[]
-	) {
-		const parsedMessage = this.parseLogText(template, args);
-		return this.replaceFormatters(parsedMessage, level);
 	}
 
 	/* 
 		Replaces the formatters with actual data
 	*/
-	private replaceFormatters(
+	private replaceFormattersWithData(
 		message: string,
 		level: Values<typeof MistLogger.LogLevel>
-	) {
-		let { pattern: logFormat } = this.options;
+	): [string, string[]] {
+		let { pattern: placeholderString } = this.options;
 
 		const allStyles: string[] = [];
 
@@ -168,80 +183,113 @@ export class MistLogger {
 			switch (pattern) {
 				// Parsing messages require a extra message parameter
 				case formatters.Message.pattern: {
-					const { regex, parse, styles: s } = formatters.Message;
-					const styles = MistLogger.makeConsoleStyles({
-						...s,
-						color: this.getColorForLevel(level),
-					});
-
-					logFormat = logFormat.replace(
-						regex,
-						this.wrapWithStyles(parse({ ...this.options, message }))
+					const [parsedStr, styles] = this.replaceFormatterMessageToken(
+						message,
+						placeholderString,
+						level
 					);
-					allStyles.push(styles, "");
+					placeholderString = parsedStr;
+					allStyles.push(...styles);
 					break;
 				}
 
 				// Log in text form
 				case formatters.LevelText.pattern: {
-					const { regex, parse, styles: s } = formatters.LevelText;
-
-					const styles = MistLogger.makeConsoleStyles({
-						...s,
-						color: this.getColorForLevel(level),
-						fontWeight: "bold",
-					});
-
-					logFormat = logFormat.replace(
-						regex,
-						this.wrapWithStyles(parse({ ...this.options, message, level }))
+					const [parsedStr, styles] = this.replaceFormatterLogLevelTextToken(
+						placeholderString,
+						level
 					);
-
-					allStyles.push(
-						styles,
-						"" // extra empty string is required to pop the styles
-					);
+					placeholderString = parsedStr;
+					allStyles.push(...styles);
 					break;
 				}
 
 				case formatters.LevelShort.pattern: {
-					const { regex, parse, styles: s } = formatters.LevelShort;
-
-					const styles = MistLogger.makeConsoleStyles({
-						...s,
-					});
-
-					logFormat = logFormat.replace(
-						regex,
-						this.wrapWithStyles(parse({ ...this.options, message, level }))
+					const [parsedStr, styles] = this.replaceFormatterLogLevelShortToken(
+						placeholderString,
+						level
 					);
-
-					allStyles.push(
-						styles,
-						"" // extra empty string is required to pop the styles
-					);
+					placeholderString = parsedStr;
+					allStyles.push(...styles);
 					break;
 				}
 
 				default: {
 					const key = MistLogger.FormatterPatterns[pattern];
-					const { regex, parse, styles: s } = formatters[key];
+					const { regex, getValue, styles: s } = formatters[key];
 
 					const styles = MistLogger.makeConsoleStyles(s);
 
-					logFormat = logFormat.replace(
+					placeholderString = placeholderString.replace(
 						regex,
-						this.wrapWithStyles(parse(this.options))
+						this.wrapTokenWithStyles(getValue(this.options))
 					);
 					allStyles.push(styles, "");
 					break;
 				}
 			}
 		}
-		return [logFormat, allStyles];
+		return [placeholderString, allStyles];
 	}
 
-	private getColorForLevel(level: Values<typeof MistLogger.LogLevel>) {
+	// Formatters["Message"]
+	private replaceFormatterMessageToken(
+		message: string,
+		placeholderString: string,
+		level: Values<typeof MistLogger.LogLevel>
+	): [string, string[]] {
+		const { regex, getValue, styles: s } = MistLogger.Formatters.Message;
+		const styles = MistLogger.makeConsoleStyles({
+			...s,
+			color: this.getColorForLogLevel(level),
+		});
+
+		placeholderString = placeholderString.replace(
+			regex,
+			this.wrapTokenWithStyles(getValue({ ...this.options, message }))
+		);
+		return [placeholderString, [styles, ""]];
+	}
+
+	// Formatters["LevelText"]
+	private replaceFormatterLogLevelTextToken(
+		placeholderString: string,
+		level: Values<typeof MistLogger.LogLevel>
+	): [string, string[]] {
+		const { regex, getValue, styles: s } = MistLogger.Formatters.LevelText;
+
+		const styles = MistLogger.makeConsoleStyles({
+			...s,
+			color: this.getColorForLogLevel(level),
+			fontWeight: "bold",
+		});
+
+		placeholderString = placeholderString.replace(
+			regex,
+			this.wrapTokenWithStyles(getValue({ ...this.options, level }))
+		);
+
+		return [placeholderString, [styles, ""]];
+	}
+
+	private replaceFormatterLogLevelShortToken(
+		placeholderString: string,
+		level: Values<typeof MistLogger.LogLevel>
+	): [string, string[]] {
+		const { regex, getValue, styles: s } = MistLogger.Formatters.LevelShort;
+
+		const styles = MistLogger.makeConsoleStyles({
+			...s,
+		});
+
+		placeholderString = placeholderString.replace(
+			regex,
+			this.wrapTokenWithStyles(getValue({ ...this.options, level }))
+		);
+		return [placeholderString, [styles, ""]];
+	}
+
+	private getColorForLogLevel(level: Values<typeof MistLogger.LogLevel>) {
 		switch (level) {
 			case MistLogger.LogLevel.ERROR:
 				return "red";
@@ -254,6 +302,7 @@ export class MistLogger {
 		}
 	}
 
+	// Placeholders
 	private recalculatePlaceholders() {
 		this.parsedPatterns = this.parsePlaceholdersFromPattern(
 			this.options.pattern
@@ -300,7 +349,7 @@ export class MistLogger {
 		{
 			pattern: Keys<typeof MistLogger.FormatterPatterns>;
 			regex: RegExp;
-			parse(
+			getValue(
 				options: LoggerOptions & {
 					message?: string;
 					level?: Values<typeof MistLogger.LogLevel>;
@@ -314,7 +363,7 @@ export class MistLogger {
 			pattern: "%s",
 			styles: { fontStyle: "italic" },
 			regex: new RegExp("%s"),
-			parse(options) {
+			getValue(options) {
 				if (options.message === undefined)
 					throw new Error("message not provided");
 				return options.message;
@@ -325,7 +374,7 @@ export class MistLogger {
 			pattern: "%l",
 			styles: {},
 			regex: new RegExp("%l"),
-			parse(options) {
+			getValue(options) {
 				if (!options.level) throw new Error("Level was not provided");
 				return options.level;
 			},
@@ -335,7 +384,7 @@ export class MistLogger {
 			pattern: "%L",
 			styles: {},
 			regex: new RegExp("%L"),
-			parse: function (options) {
+			getValue: function (options) {
 				if (!options.level) throw new Error("Level was not provided");
 				let emoji = "";
 				switch (options.level) {
@@ -369,7 +418,7 @@ export class MistLogger {
 			},
 
 			regex: new RegExp("%n"),
-			parse(options) {
+			getValue(options) {
 				return options.name;
 			},
 		},
@@ -378,7 +427,7 @@ export class MistLogger {
 			pattern: "%Y",
 			styles: {},
 			regex: new RegExp("%Y"),
-			parse() {
+			getValue() {
 				return new Date().getFullYear().toString();
 			},
 		},
@@ -387,7 +436,7 @@ export class MistLogger {
 			pattern: "%y",
 			styles: {},
 			regex: new RegExp("%y"),
-			parse() {
+			getValue() {
 				return new Date().getFullYear().toString().slice(2);
 			},
 		},
@@ -396,7 +445,7 @@ export class MistLogger {
 			pattern: "%m",
 			styles: {},
 			regex: new RegExp("%m"),
-			parse() {
+			getValue() {
 				return new Date().getMonth().toString();
 			},
 		},
@@ -405,7 +454,7 @@ export class MistLogger {
 			pattern: "%M",
 			styles: {},
 			regex: new RegExp("%M"),
-			parse() {
+			getValue() {
 				return monthFormatter(new Date());
 			},
 		},
@@ -415,7 +464,7 @@ export class MistLogger {
 				color: "lightgreen",
 			},
 			regex: new RegExp("%D"),
-			parse() {
+			getValue() {
 				return new Date().toLocaleDateString();
 			},
 		},
@@ -423,19 +472,11 @@ export class MistLogger {
 			pattern: "%d",
 			styles: {},
 			regex: new RegExp("%d"),
-			parse() {
+			getValue() {
 				return new Date().getDay().toString();
 			},
 		},
 	} as const;
-
-	static readonly DefaultPattern: string = "%n: [ %l ]\n\t\t %s ( %D )";
-
-	static readonly defaultOptions: LoggerOptions = {
-		pattern: MistLogger.DefaultPattern,
-		name: "MistLog",
-		styled: true,
-	};
 
 	private static makeConsoleStyles(styles: Record<string, string>) {
 		let stylesStr = "";
