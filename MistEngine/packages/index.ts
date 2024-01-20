@@ -16,12 +16,4 @@
 
 export { MistApp, CreateMist } from "./core/application";
 
-export {
-	default as MthX,
-	Vector2,
-	Vector3,
-	Vector4,
-	vec2,
-	vec3,
-	vec4,
-} from "./math";
+export { MthX, Vector2, Vector3, Vector4, vec2, vec3, vec4 } from "./math";

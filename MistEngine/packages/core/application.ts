@@ -54,7 +54,6 @@ export class MistApp {
 	}
 
 	Run() {
-		logger.warn("App may fail");
 		logger.error("{0} is not implemented yet", "MistApp.Run");
 	}
 }
@@ -63,6 +62,7 @@ export const CreateMist = (setup: () => MistApp) => {
 	mistLog__();
 	const app = setup();
 	logger.log("{0}", "Radhey Shyam");
+	logger.log("{0}", "Radha Vallabh Shri Harivansh");
 	logger.info("Using {0}", app.name);
 	logger.info("Starting Mist engine");
 
