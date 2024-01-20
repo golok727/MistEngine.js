@@ -63,9 +63,8 @@ export const CreateMist = (setup: () => MistApp) => {
 	const app = setup();
 	logger.log("{0}", "Radhey Shyam");
 	logger.log("{0}", "Radha Vallabh Shri Harivansh");
-	logger.info("Using {0}", app.name);
-	logger.info("Starting Mist engine");
 
+	logger.info("Using {0}", app.name);
 	app.Run();
 };
 
