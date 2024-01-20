@@ -95,8 +95,9 @@ export default class Vector2 extends VectorBase<V2> {
 		return magnitude !== 0 ? this.div(Vector2.new(magnitude)) : this;
 	}
 
-	dot(v: Vector2): number {
-		return this.x * v.x + this.y * v.y;
+	dot(v: Vector2 | V2): number {
+		const [x, y] = this.parseComponents(v);
+		return this.x * x + this.y * y;
 	}
 
 	cross(v: Vector2 | V2): number {

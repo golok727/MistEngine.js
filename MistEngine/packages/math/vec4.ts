@@ -94,6 +94,12 @@ export default class Vector4 extends VectorBase<V4> {
 		return this;
 	}
 
+	dot(v: Vector4 | V4) {
+		const [x, y, z, w] = this.parseComponents(v);
+
+		return this.x * x + this.y * y + this.z * z + this.w * w;
+	}
+
 	floor() {
 		this.x = Math.floor(this.x);
 		this.y = Math.floor(this.y);
