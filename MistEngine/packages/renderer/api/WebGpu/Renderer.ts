@@ -3,14 +3,14 @@
 	Mist WebGPU Renderer
   
  */
-import Renderer, { MistRendererApi } from "../../Renderer";
+import Renderer, { MistRendererAPI } from "../../Renderer";
 import { WebGPUContext } from "./Context";
 
 export class MistWebGPURenderer extends Renderer {
-	public static readonly API: MistRendererApi = MistRendererApi.WebGPU;
-	private context: WebGPUContext;
+	public static readonly API: MistRendererAPI = MistRendererAPI.WebGPU;
+	protected context: WebGPUContext;
 	constructor(canvas: HTMLCanvasElement) {
-		super(canvas, MistRendererApi.WebGPU);
+		super(canvas, MistRendererAPI.WebGPU);
 		this.context = new WebGPUContext(canvas);
 		this.context;
 	}

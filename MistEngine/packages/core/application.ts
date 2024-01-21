@@ -52,14 +52,40 @@ export class MistApp {
 		return this.appName;
 	}
 
-	public getApi() {
-		return this.renderer;
+	public GetApi() {
+		return this.renderer.GetApi();
+	}
+
+	public GetContext() {
+		return this.renderer.GetContext();
 	}
 
 	private setRunning(enable: boolean) {
 		this.running = enable;
 	}
 
+	public Run() {
+		this.setRunning(true);
+		logger.log("Using {0}", this.GetApi());
+		requestAnimationFrame(this.loop.bind(this));
+	}
+
+	// Main Loop
+	private loop(time: number) {
+		if (!this.running) return;
+
+		const deltaTime = this.lastTime ? time - this.lastTime : this.lastTime;
+
+		requestAnimationFrame(this.loop.bind(this));
+
+		for (const layer of this.layerStack.reversed()) {
+			layer.onUpdate(deltaTime);
+		}
+
+		this.lastTime = time;
+	}
+
+	// Layer Stuff
 	public pushLayer(layer: Layer) {
 		layer.onAttach();
 		this.layerStack.pushLayer(layer);
@@ -78,25 +104,6 @@ export class MistApp {
 	public popOverlay(overlay: Layer) {
 		overlay.onDetach();
 		this.layerStack.popOverlay(overlay);
-	}
-
-	private loop(time: number) {
-		if (!this.running) return;
-
-		const deltaTime = this.lastTime ? time - this.lastTime : this.lastTime;
-
-		requestAnimationFrame(this.loop.bind(this));
-
-		for (const layer of this.layerStack.reversed()) {
-			layer.onUpdate(deltaTime);
-		}
-
-		this.lastTime = time;
-	}
-
-	public Run() {
-		this.setRunning(true);
-		requestAnimationFrame(this.loop.bind(this));
 	}
 }
 
