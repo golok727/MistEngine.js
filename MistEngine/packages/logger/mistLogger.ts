@@ -25,7 +25,7 @@ type PatternName = Keys<typeof LogPatterns>;
 type Pattern = `${LogPatterns}`;
 
 export class MistLogger {
-	static readonly DefaultPattern: string = "%n: [ %l ] ( %D ) %p \n\t\t %s ";
+	static readonly DefaultPattern: string = "%n: [ %l ] ( %D ) %p \n\t %s ";
 
 	static readonly defaultOptions: LoggerOptions = {
 		pattern: MistLogger.DefaultPattern,
@@ -354,7 +354,6 @@ export class MistLogger {
 
 		const formatterPatterns: any = {};
 		for (const [name, pattern] of Object.entries(LogPatterns)) {
-			console.log(name, pattern);
 			formatterPatterns[pattern] = { name, regex: new RegExp(pattern) };
 		}
 		return formatterPatterns as Record<

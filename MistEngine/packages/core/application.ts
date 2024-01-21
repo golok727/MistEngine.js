@@ -4,11 +4,13 @@ import {
 	MistRendererApi,
 	MistWebGPURenderer,
 } from "@mist-engine/renderer";
+import { LayerStack } from "@mist-engine/core/layerStack";
+import { Layer } from "@mist-engine/core/layer";
 
 import { MistLogger } from "@mist-engine/logger";
 
 import type { MistRendererApiT } from "@mist-engine/renderer";
-import { vec2 } from "..";
+import { mistIntro__ } from "@mist-engine/utils";
 
 const logger = new MistLogger({ name: "App" });
 
@@ -21,10 +23,15 @@ export type ApplicationConstructorProps = {
 export class MistApp {
 	private appName: string;
 	private renderer: Renderer;
+	private layerStack: LayerStack;
+	private running: boolean;
+	private lastTime: number;
 
 	constructor({ name, canvas, rendererAPI }: ApplicationConstructorProps) {
 		this.appName = name;
-
+		this.layerStack = new LayerStack();
+		this.running = false;
+		this.lastTime = 0;
 		// Select renderer API
 		switch (rendererAPI) {
 			case MistRendererApi.WebGL2:
@@ -42,20 +49,55 @@ export class MistApp {
 		this.renderer; //! ignore
 	}
 
-	getApi<T extends typeof Renderer>(api: T) {
-		if (this.renderer instanceof api) {
-			return this.renderer as InstanceType<T>;
-		}
-
-		throw new Error(`The current renderer is not of type ${api.name}`);
-	}
-
 	get name() {
 		return this.appName;
 	}
 
-	Run() {
-		logger.error("{0} is not implemented yet", "MistApp.Run");
+	public getApi() {
+		return this.renderer;
+	}
+
+	private setRunning(enable: boolean) {
+		this.running = enable;
+	}
+
+	public pushLayer(layer: Layer) {
+		layer.onAttach();
+		this.layerStack.pushLayer(layer);
+	}
+
+	public popLayer(layer: Layer) {
+		layer.onDetach();
+		this.layerStack.popLayer(layer);
+	}
+
+	public pushOverlay(overlay: Layer) {
+		overlay.onAttach();
+		this.layerStack.pushOverlay(overlay);
+	}
+
+	public popOverlay(overlay: Layer) {
+		overlay.onDetach();
+		this.layerStack.popOverlay(overlay);
+	}
+
+	private loop(time: number) {
+		if (!this.running) return;
+
+		const deltaTime = this.lastTime ? time - this.lastTime : this.lastTime;
+
+		requestAnimationFrame(this.loop.bind(this));
+
+		for (const layer of this.layerStack.reversed()) {
+			layer.onUpdate(deltaTime);
+		}
+
+		this.lastTime = time;
+	}
+
+	public Run() {
+		this.setRunning(true);
+		requestAnimationFrame(this.loop.bind(this));
 	}
 }
 
@@ -63,40 +105,6 @@ export const CreateMist = (setup: () => MistApp) => {
 	mistIntro__();
 
 	const app = setup();
-	logger.log("{0}", "Radhey Shyam");
-	logger.log("{0}", "Radha Vallabh Shri Harivansh");
-
-	logger.log(
-		"p1 = {0}, \n\t\t p2 = {1}",
-		vec2(0).toString(),
-		vec2(10).toString()
-	);
-
-	console.time("MistLogger");
-	logger.info("Using {0}", app.name);
-	console.timeEnd("MistLogger");
-
-	console.time("console");
-	console.log(`Using ${app.name}`);
-	console.timeEnd("console");
-
+	logger.log("{0}\n\t {1}", "Radha Vallabh Shri Harivansh", "Radhey Shyam");
 	app.Run();
 };
-
-//-----------------------------------------------------------
-
-//-----------------------------------------------------------
-function mistIntro__() {
-	console.log(
-		"%c❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️️️️️️️",
-		"font-size: 2rem;"
-	);
-	console.log(
-		"%cMist Engine",
-		"font-weight: bold; font-size: 3rem; color: transparent; background: linear-gradient(to right, orange, red); padding: 5px; background-clip: text;"
-	);
-	console.log(
-		"%c❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️️️️️️️",
-		"font-size: 2rem;"
-	);
-}

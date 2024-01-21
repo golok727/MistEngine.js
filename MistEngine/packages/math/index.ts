@@ -6,23 +6,41 @@ export { Vector2, Vector3, Vector4, vec2, vec3, vec4 };
 
 export class MthX {
 	static PI = Math.PI;
-	static TAU = MthX.PI * 2;
-	static HALF_PI = MthX.PI / 2;
-	static DEG_TO_RAD = MthX.PI / 180;
-	static RAD_TO_DEG = 180 / MthX.PI;
+	static TAU = this.PI * 2;
+	static HALF_PI = this.PI / 2;
+	static DEG_TO_RAD = this.PI / 180;
+	static RAD_TO_DEG = 180 / this.PI;
 
 	static degToRad(degrees: number) {
-		return degrees * MthX.DEG_TO_RAD;
+		return degrees * this.DEG_TO_RAD;
 	}
 
 	static radToDeg(radians: number) {
-		return radians * MthX.RAD_TO_DEG;
+		return radians * this.RAD_TO_DEG;
 	}
 
 	static lerp(start: number, stop: number, t: number) {
 		return start + (stop - start) * t;
 	}
 
+	static map(
+		value: number,
+		inMin: number,
+		inMax: number,
+		outMin: number,
+		outMax: number,
+		clamp = false
+	) {
+		if (clamp) value = this.clamp(value, inMin, inMax);
+		return (value - inMin) * ((outMax - outMin) / (inMax - inMin)) + outMin;
+	}
+
+	static clamp(value: number, min: number, max: number) {
+		return this.min(max, this.max(min, value));
+	}
+
+	static min = Math.min;
+	static max = Math.max;
 	static floor = Math.floor;
 	static random = Math.random;
 	static ceil = Math.ceil;

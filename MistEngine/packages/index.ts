@@ -14,6 +14,15 @@
  ---------------------------------------------------------------
 */
 
-export { MistApp, CreateMist } from "./core/application";
+export { MistApp, CreateMist } from "@mist-engine/core/application";
+export { Layer } from "@mist-engine/core/layer";
 
-export { MthX, Vector2, Vector3, Vector4, vec2, vec3, vec4 } from "./math";
+export {
+	MthX,
+	Vector2,
+	Vector3,
+	Vector4,
+	vec2,
+	vec3,
+	vec4,
+} from "@mist-engine/math";
