@@ -10,6 +10,4 @@ export class WebGPUContext extends GraphicsContext<GPUCanvasContext> {
 		if (!context) throw new Error("Error getting webgpu context");
 		this.context = context;
 	}
-
-	override Init() {}
 }

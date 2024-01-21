@@ -7,6 +7,4 @@ export class WebGL2Context extends GraphicsContext<WebGL2RenderingContext> {
 		if (!gl) throw new Error("Error getting WebGL2Context...");
 		this.context = gl;
 	}
-
-	override Init() {}
 }

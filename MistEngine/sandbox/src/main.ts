@@ -1,6 +1,11 @@
 import "./style.css";
 
-import { CreateMist, Layer, MistApp } from "../../packages";
+import {
+	CreateMist,
+	Layer,
+	MistApp,
+	MistRendererApi,
+} from "@mist-engine/index";
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 
@@ -9,7 +14,9 @@ class ExampleLayer extends Layer {
 		super("ExampleLayer");
 	}
 
-	override onAttach(): void {}
+	override onAttach(): void {
+		console.log("Layer Attach");
+	}
 
 	override onUpdate(_delta: number): void {
 		// Each Frame
@@ -17,9 +24,10 @@ class ExampleLayer extends Layer {
 
 	override onDetach(): void {}
 }
+
 class SandboxApp extends MistApp {
 	constructor() {
-		super({ name: "SandboxApp", canvas, rendererAPI: "webgl2" });
+		super({ name: "SandboxApp", canvas, rendererAPI: MistRendererApi.WebGL2 });
 		this.pushLayer(new ExampleLayer());
 	}
 }

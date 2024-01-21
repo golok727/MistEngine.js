@@ -5,6 +5,4 @@ export class GraphicsContext<T> {
 	constructor(canvas: HTMLCanvasElement) {
 		this.canvas = canvas;
 	}
-
-	Init() {}
 }

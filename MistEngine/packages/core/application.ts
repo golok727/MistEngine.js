@@ -1,15 +1,14 @@
 import {
 	MistWebGL2Renderer,
-	Renderer,
 	MistRendererApi,
 	MistWebGPURenderer,
+	Renderer,
 } from "@mist-engine/renderer";
 import { LayerStack } from "./LayerStack";
 import { Layer } from "./Layer";
 
 import { MistLogger } from "@mist-engine/logger";
 
-import type { MistRendererApiT } from "@mist-engine/renderer";
 import { mistIntro__ } from "@mist-engine/utils";
 
 const logger = new MistLogger({ name: "App" });
@@ -17,7 +16,7 @@ const logger = new MistLogger({ name: "App" });
 export type ApplicationConstructorProps = {
 	name: string;
 	canvas: HTMLCanvasElement;
-	rendererAPI: MistRendererApiT;
+	rendererAPI: MistRendererApi;
 };
 
 export class MistApp {
@@ -107,4 +106,6 @@ export const CreateMist = (setup: () => MistApp) => {
 	const app = setup();
 	logger.log("{0}\n\t {1}", "Radha Vallabh Shri Harivansh", "Radhey Shyam");
 	app.Run();
+
+	return () => {};
 };
