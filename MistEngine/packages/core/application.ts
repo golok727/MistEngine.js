@@ -52,12 +52,8 @@ export class MistApp {
 		return this.appName;
 	}
 
-	public GetApi() {
-		return this.renderer.GetApi();
-	}
-
-	public GetContext() {
-		return this.renderer.GetContext();
+	public getRenderer<T extends Renderer>() {
+		return this.renderer as T;
 	}
 
 	private setRunning(enable: boolean) {
@@ -65,8 +61,8 @@ export class MistApp {
 	}
 
 	public Run() {
-		this.setRunning(true);
-		logger.log("Using {0}", this.GetApi());
+		this.setRunning(!true); //!
+		logger.log("Using {0}", this.renderer.GetApi());
 		requestAnimationFrame(this.loop.bind(this));
 	}
 
