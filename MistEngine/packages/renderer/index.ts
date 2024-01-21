@@ -1,6 +1,4 @@
-export type { MistRendererApiT } from "./renderer";
-export { default as Renderer, MistRendererApi } from "./renderer";
-
-export { MistWebGPURenderer } from "./api/webGpu/webGPURenderer";
-
-export { MistWebGL2Renderer } from "./api/webGL2/webGL2Renderer";
+export type { MistRendererApiT } from "./Renderer";
+export { default as Renderer, MistRendererApi } from "./Renderer";
+export { MistWebGPURenderer } from "./api/WebGpu/Renderer";
+export { MistWebGL2Renderer } from "./api/WebGL2/Renderer";

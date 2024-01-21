@@ -4,8 +4,8 @@ import {
 	MistRendererApi,
 	MistWebGPURenderer,
 } from "@mist-engine/renderer";
-import { LayerStack } from "@mist-engine/core/layerStack";
-import { Layer } from "@mist-engine/core/layer";
+import { LayerStack } from "./LayerStack";
+import { Layer } from "./Layer";
 
 import { MistLogger } from "@mist-engine/logger";
 

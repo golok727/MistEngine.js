@@ -1,4 +1,4 @@
-import { Layer } from "@mist-engine/core/layer";
+import { Layer } from "./Layer";
 export class LayerStack {
 	private layerStack: Layer[];
 	constructor() {

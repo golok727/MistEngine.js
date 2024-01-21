@@ -14,8 +14,8 @@
  ---------------------------------------------------------------
 */
 
-export { MistApp, CreateMist } from "@mist-engine/core/application";
-export { Layer } from "@mist-engine/core/layer";
+export { MistApp, CreateMist } from "@mist-engine/core/Application";
+export { Layer } from "@mist-engine/core/Layer";
 
 export {
 	MthX,

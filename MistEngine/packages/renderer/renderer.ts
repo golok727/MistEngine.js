@@ -1,3 +1,5 @@
+import { GraphicsContext } from "./GraphicsContext";
+
 export const MistRendererApi = {
 	WebGL2: "webgl2",
 	WebGPU: "webgpu",
@@ -9,7 +11,6 @@ export type MistRendererApiT =
 
 export default class Renderer {
 	protected canvas: HTMLCanvasElement;
-
 	public readonly API: MistRendererApiT;
 	public static readonly API: MistRendererApiT = MistRendererApi.None;
 
