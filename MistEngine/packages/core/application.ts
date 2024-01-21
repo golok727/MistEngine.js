@@ -63,6 +63,11 @@ export class MistApp {
 	public Run() {
 		this.setRunning(!true); //!
 		logger.log("Using {0}", this.renderer.GetApi());
+
+		const context = this.renderer.GetContext();
+		context.clearColor(1, 0.2, 0.1, 1);
+		context.clear();
+
 		requestAnimationFrame(this.loop.bind(this));
 	}
 
@@ -82,24 +87,26 @@ export class MistApp {
 	}
 
 	// Layer Stuff
-	public pushLayer(layer: Layer) {
+	public pushLayer<T extends new (...args: any[]) => Layer>(
+		layerConstructor: T,
+		...args: ConstructorParameters<T>
+	) {
+		const layer = new layerConstructor(...args);
+		layer.link(this);
+
 		layer.onAttach();
 		this.layerStack.pushLayer(layer);
 	}
 
-	public popLayer(layer: Layer) {
-		layer.onDetach();
-		this.layerStack.popLayer(layer);
-	}
+	public pushOverlay<T extends new (...args: any[]) => Layer>(
+		overlayConstructor: T,
+		...args: ConstructorParameters<T>
+	) {
+		const overlay = new overlayConstructor(...args);
+		overlay.link(this);
 
-	public pushOverlay(overlay: Layer) {
 		overlay.onAttach();
 		this.layerStack.pushOverlay(overlay);
-	}
-
-	public popOverlay(overlay: Layer) {
-		overlay.onDetach();
-		this.layerStack.popOverlay(overlay);
 	}
 }
 

@@ -10,5 +10,7 @@ export class MistWebGL2Renderer extends Renderer {
 		this.context = new WebGL2Context(this.canvas);
 	}
 
-	hello() {}
+	GetContext(): WebGL2Context {
+		return this.context;
+	}
 }

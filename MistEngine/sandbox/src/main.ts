@@ -28,7 +28,7 @@ class ExampleLayer extends Layer {
 class SandboxApp extends MistApp {
 	constructor() {
 		super({ name: "SandboxApp", canvas, rendererAPI: MistRendererApi.WebGL2 });
-		this.pushLayer(new ExampleLayer());
+		this.pushLayer(ExampleLayer);
 	}
 }
 
