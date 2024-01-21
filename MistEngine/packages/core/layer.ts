@@ -2,7 +2,6 @@ import { MistApp } from "..";
 
 export class Layer {
 	private _name: string;
-	public _app!: MistApp;
 	constructor(name: string) {
 		this._name = name;
 	}
@@ -10,17 +9,10 @@ export class Layer {
 	get name() {
 		return this._name;
 	}
-	link(app: MistApp) {
-		this._app = app;
-	}
 
-	get app() {
-		return this._app;
-	}
-
-	public onAttach() {}
-	public onUpdate(deltaTime: number) {
+	public onAttach(_app: MistApp) {}
+	public onUpdate(_app: MistApp, deltaTime: number) {
 		deltaTime;
 	}
-	public onDetach() {}
+	public onDetach(_app: MistApp) {}
 }

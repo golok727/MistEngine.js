@@ -52,8 +52,8 @@ export class MistApp {
 		return this.appName;
 	}
 
-	public getRenderer<T extends Renderer>() {
-		return this.renderer as T;
+	public getRenderer() {
+		return this.renderer;
 	}
 
 	private setRunning(enable: boolean) {
@@ -63,10 +63,6 @@ export class MistApp {
 	public Run() {
 		this.setRunning(!true); //!
 		logger.log("Using {0}", this.renderer.GetApi());
-
-		const context = this.renderer.GetContext();
-		context.clearColor(1, 0.2, 0.1, 1);
-		context.clear();
 
 		requestAnimationFrame(this.loop.bind(this));
 	}
@@ -80,7 +76,7 @@ export class MistApp {
 		requestAnimationFrame(this.loop.bind(this));
 
 		for (const layer of this.layerStack.reversed()) {
-			layer.onUpdate(deltaTime);
+			layer.onUpdate(this, deltaTime);
 		}
 
 		this.lastTime = time;
@@ -92,9 +88,8 @@ export class MistApp {
 		...args: ConstructorParameters<T>
 	) {
 		const layer = new layerConstructor(...args);
-		layer.link(this);
 
-		layer.onAttach();
+		layer.onAttach(this);
 		this.layerStack.pushLayer(layer);
 	}
 
@@ -103,9 +98,8 @@ export class MistApp {
 		...args: ConstructorParameters<T>
 	) {
 		const overlay = new overlayConstructor(...args);
-		overlay.link(this);
 
-		overlay.onAttach();
+		overlay.onAttach(this);
 		this.layerStack.pushOverlay(overlay);
 	}
 }

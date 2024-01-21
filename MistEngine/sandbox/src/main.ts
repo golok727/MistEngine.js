@@ -9,16 +9,19 @@ import {
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 
-class ExampleLayer extends Layer {
+class TestLayer extends Layer {
 	constructor() {
-		super("ExampleLayer");
+		super("TestLayer");
 	}
 
-	override onAttach(): void {
-		console.log("Layer Attach");
+	override onAttach(app: SandboxApp): void {
+		console.log("Layer Attach: ", this.name);
+		const context = app.getRenderer().GetContext();
+		context.clearColor(0.2, 0.2, 0.2, 1);
+		context.clear();
 	}
 
-	override onUpdate(_delta: number): void {
+	override onUpdate(_app: SandboxApp, _delta: number): void {
 		// Each Frame
 	}
 
@@ -28,7 +31,7 @@ class ExampleLayer extends Layer {
 class SandboxApp extends MistApp {
 	constructor() {
 		super({ name: "SandboxApp", canvas, rendererAPI: MistRendererApi.WebGL2 });
-		this.pushLayer(ExampleLayer);
+		this.pushLayer(TestLayer);
 	}
 }
 

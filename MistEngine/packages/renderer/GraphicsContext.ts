@@ -6,8 +6,7 @@ export class GraphicsContext<T> {
 		this.canvas = canvas;
 	}
 
-	// @ts-ignore
-	clearColor(r: number, g: number, b: number, a: number) {}
+	clearColor(_r: number, _g: number, _b: number, _a: number) {}
 
 	clear() {}
 

@@ -4,6 +4,8 @@ import { WebGL2IndexBuffer, WebGL2VertexBuffer } from "./api/WebGL2/Buffer";
 import { WebGPUIndexBuffer, WebGPUVertexBuffer } from "./api/WebGpu/Buffer";
 
 export class VertexBuffer {
+	protected buffer!: any;
+	protected renderer!: Renderer;
 	constructor() {}
 
 	public static Create(renderer: Renderer, vertices: Float32Array) {
@@ -23,6 +25,9 @@ export class VertexBuffer {
 }
 
 export class IndexBuffer {
+	protected buffer: any;
+	protected renderer!: Renderer;
+
 	constructor() {}
 
 	public static Create(renderer: Renderer, indices: Uint32Array): IndexBuffer {
