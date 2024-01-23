@@ -43,8 +43,6 @@ class TestLayer extends Layer {
 		`;
 		const basicShader = MistShader.Create(app.getRenderer(), vs, fs);
 
-		// VAO BEGIN
-
 		const triangle = new Float32Array([
 			-0.5, -0.5, 0.0 /* Bottom left */,
 
@@ -64,10 +62,8 @@ class TestLayer extends Layer {
 		const vb = MistBuffer.Vertex(renderer, triangle);
 		const ibo = MistBuffer.Index(renderer, indices);
 
-		// IBO END
 		/*	
-
-		Layout
+		Layout Design
 			attributes: [
 				{
 					shaderLocation: number
@@ -77,8 +73,8 @@ class TestLayer extends Layer {
 			]
 			stride: number,
 		}
+		*/
 
-*/
 		gl.enableVertexAttribArray(0);
 		gl.vertexAttribPointer(
 			0,
@@ -92,8 +88,10 @@ class TestLayer extends Layer {
 		gl.bindVertexArray(null);
 		vb.unBind();
 		ibo.unBind();
+
 		basicShader.use();
 		basicShader.setUniform3f("u_Color", 0.7, 0.2, 0.1);
+
 		// Begin
 		gl.bindVertexArray(vao);
 	}
