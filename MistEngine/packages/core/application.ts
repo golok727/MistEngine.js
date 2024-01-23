@@ -1,9 +1,9 @@
 import {
-	MistWebGL2Renderer,
-	MistRendererApi,
-	MistWebGPURenderer,
+	MistRendererAPI,
 	Renderer,
-} from "@mist-engine/renderer";
+	WebGL2Renderer,
+} from "@mist-engine/renderers";
+
 import { LayerStack } from "./LayerStack";
 import { Layer } from "./Layer";
 
@@ -16,7 +16,7 @@ const logger = new MistLogger({ name: "App" });
 export type ApplicationConstructorProps = {
 	name: string;
 	canvas: HTMLCanvasElement;
-	rendererAPI: MistRendererApi;
+	rendererAPI: Omit<"None", MistRendererAPI>;
 };
 
 export class MistApp {
@@ -33,19 +33,17 @@ export class MistApp {
 		this.lastTime = 0;
 		// Select renderer API
 		switch (rendererAPI) {
-			case MistRendererApi.WebGL2:
-				this.renderer = new MistWebGL2Renderer(canvas);
+			case MistRendererAPI.WebGL2:
+				this.renderer = new WebGL2Renderer(canvas);
 				break;
 
-			case MistRendererApi.WebGPU:
-				this.renderer = new MistWebGPURenderer(canvas);
-				break;
+			// case MistRendererAPI.WebGPU:
+			// 	logger.log("Implement WebGPU Renderer");
+			// 	break;
 
 			default:
 				throw new Error(`Renderer Api ${rendererAPI} is not supported!`);
 		}
-
-		this.renderer; //! ignore
 	}
 
 	get name() {
@@ -61,7 +59,7 @@ export class MistApp {
 	}
 
 	public Run() {
-		this.setRunning(!true); //!
+		this.setRunning(true); //!
 		logger.log("Using {0}", this.renderer.GetApi());
 
 		requestAnimationFrame(this.loop.bind(this));
