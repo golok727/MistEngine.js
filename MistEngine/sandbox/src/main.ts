@@ -119,4 +119,6 @@ class SandboxApp extends MistApp {
 	}
 }
 
-CreateMist(() => new SandboxApp());
+CreateMist(() => {
+	return new SandboxApp();
+});

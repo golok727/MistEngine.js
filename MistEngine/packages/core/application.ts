@@ -102,12 +102,13 @@ export class MistApp {
 	}
 }
 
-export const CreateMist = (setup: () => MistApp) => {
+export const CreateMist = async (setup: () => Promise<MistApp> | MistApp) => {
 	mistIntro__();
+	let _preApp = setup();
+	let app: MistApp;
+	if (_preApp instanceof Promise) app = await _preApp;
+	else app = _preApp;
 
-	const app = setup();
-	logger.log("{0}\n\t {1}", "Radha Vallabh Shri Harivansh", "Radhey Shyam");
 	app.Run();
-
-	return () => {};
+	logger.log("{0}\n\t {1}", "Radha Vallabh Shri Harivansh", "Radhey Shyam");
 };
