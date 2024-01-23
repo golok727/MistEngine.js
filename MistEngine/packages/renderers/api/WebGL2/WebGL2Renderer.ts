@@ -8,10 +8,8 @@ export class WebGL2Renderer implements Renderer {
 
 	constructor(canvas: HTMLCanvasElement) {
 		this.canvas = canvas;
-
-		this.canvas.getContext("webgl2");
 		this.api = MistRendererAPI.WebGL2;
-		this.context = new WebGL2Context(canvas);
+		this.context = new WebGL2Context(this.canvas);
 	}
 
 	getWidth(): number {

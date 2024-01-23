@@ -22,7 +22,8 @@ class TestLayer extends Layer {
 		const gl = (renderer.GetContext() as WebGL2Context).inner;
 
 		// SHADER
-		const vs = `#version 300 es
+		const vs = `
+			#version 300 es
 			layout ( location = 0 ) in  vec3 a_Pos;
 			void main()
 			{	
@@ -30,10 +31,11 @@ class TestLayer extends Layer {
 			}
 		`;
 
-		const fs = `#version 300 es
-		 precision mediump float;
-		 out vec4 fragColor;
-		 uniform vec3 u_Color;
+		const fs = `
+			#version 300 es
+			precision mediump float;
+			out vec4 fragColor;
+			uniform vec3 u_Color;
 			void main()
 			{
 				fragColor = vec4(u_Color, 1.0);
