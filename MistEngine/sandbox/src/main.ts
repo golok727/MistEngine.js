@@ -37,7 +37,6 @@ class TestLayer extends Layer {
 	}
 
 	override onAttach(app: SandboxApp): void {
-		console.log("Layer Attach: ", this.name);
 		const renderer = app.getRenderer();
 		const aspect = renderer.getWidth() / renderer.getHeight();
 
