@@ -7,9 +7,8 @@ export enum MistRendererAPI {
 }
 
 export interface Renderer<Ctx = unknown> {
-	api: MistRendererAPI;
 	GetContext(): Context<Ctx>;
-	GetApi(): Renderer["api"];
+	GetApi(): MistRendererAPI;
 	getWidth(): number;
 	getHeight(): number;
 	getNativeContext(): Ctx;

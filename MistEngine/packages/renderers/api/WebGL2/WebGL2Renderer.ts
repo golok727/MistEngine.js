@@ -5,12 +5,12 @@ import { WebGL2Context } from "./WebGL2Context";
 
 export class WebGL2Renderer implements Renderer<WebGL2RenderingContext> {
 	private canvas: HTMLCanvasElement;
-	readonly api: MistRendererAPI;
+	private readonly API: MistRendererAPI;
 	private context: WebGL2Context;
 
 	constructor(canvas: HTMLCanvasElement) {
 		this.canvas = canvas;
-		this.api = MistRendererAPI.WebGL2;
+		this.API = MistRendererAPI.WebGL2;
 		this.context = new WebGL2Context(this.canvas);
 
 		registerContext(this);
@@ -33,6 +33,6 @@ export class WebGL2Renderer implements Renderer<WebGL2RenderingContext> {
 	}
 
 	public GetApi(): MistRendererAPI {
-		return this.api;
+		return this.API;
 	}
 }
