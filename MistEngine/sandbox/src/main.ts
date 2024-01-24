@@ -102,6 +102,7 @@ class TestLayer extends Layer {
 			sqFragmentShader
 		);
 
+		// prettier-ignore
 		const squareVertices = new Float32Array([
 			-0.75, -0.75, 0.0, 0.0, 0.0 /* Bottom left */,
 
