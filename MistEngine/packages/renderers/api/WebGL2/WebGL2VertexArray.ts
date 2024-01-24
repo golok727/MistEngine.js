@@ -10,23 +10,46 @@ import { MistVertexArrayBase } from "@mist-engine/renderers/VertexArray";
 export class WebGL2VertexArray implements MistVertexArrayBase {
 	private _gl: WebGL2RenderingContext;
 	private vao: WebGLVertexArrayObject;
-	private ibo!: MistIndexBuffer;
-	private vbo!: MistVertexBuffer;
+	private indexBuffer!: MistIndexBuffer;
+	private vertexBuffers: MistVertexBuffer[];
 
 	constructor(renderer: Renderer) {
 		this._gl = getGLContext(renderer);
+		this.vertexBuffers = [];
+
 		const vao = this._gl.createVertexArray();
 		if (!vao) throw new Error("Error creating WebGL Vertex Array");
 		this.vao = vao;
 		this._gl.bindVertexArray(vao);
 	}
 
-	setVertexBuffer(buffer: MistVertexBuffer): void {
-		this.vbo = buffer;
-		this.vbo.use();
+	public use(): void {
+		this._gl.bindVertexArray(this.vao);
+	}
 
+	public detach(): void {
+		this._gl.bindVertexArray(null);
+	}
+
+	public delete(): void {
+		this._gl.deleteVertexArray(this.vao);
+	}
+
+	public getVertexBuffers(): MistVertexBuffer[] {
+		return this.vertexBuffers;
+	}
+
+	public getIndexBuffer(): MistIndexBuffer {
+		return this.indexBuffer;
+	}
+
+	public addVertexBuffer(vertexBuffer: MistVertexBuffer): void {
 		const gl = this._gl;
-		const layout = buffer.getLayout();
+		gl.bindVertexArray(this.vao);
+
+		vertexBuffer.use();
+
+		const layout = vertexBuffer.getLayout();
 		for (const element of layout) {
 			gl.enableVertexAttribArray(element.location);
 			gl.vertexAttribPointer(
@@ -38,24 +61,14 @@ export class WebGL2VertexArray implements MistVertexArrayBase {
 				element.offset
 			);
 		}
+		this.vertexBuffers.push(vertexBuffer);
 	}
 
-	setIndexBuffer(buffer: MistIndexBuffer): void {
-		this.ibo = buffer;
-		this.ibo.use();
-	}
+	public setIndexBuffer(indexBuffer: MistIndexBuffer): void {
+		const gl = this._gl;
+		gl.bindVertexArray(this.vao);
+		indexBuffer.use();
 
-	use(): void {
-		this._gl.bindVertexArray(this.vao);
-	}
-
-	detach(): void {
-		this._gl.bindVertexArray(null);
-		this.vbo.detach();
-		this.ibo.detach();
-	}
-
-	delete(): void {
-		this._gl.deleteVertexArray(this.vao);
+		this.indexBuffer = indexBuffer;
 	}
 }

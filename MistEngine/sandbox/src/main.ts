@@ -79,7 +79,7 @@ class TestLayer extends Layer {
 
 		const ib = MistBuffer.Index(renderer, indices);
 
-		vao.setVertexBuffer(vb);
+		vao.addVertexBuffer(vb);
 		vao.setIndexBuffer(ib);
 		vao.detach();
 

@@ -13,17 +13,22 @@ export class WebGL2Context implements Context<WebGL2RenderingContext> {
 		return this.context;
 	}
 
-	clearColor(r: number, g: number, b: number, a: number): void {
+	public clearColor(r: number, g: number, b: number, a: number): void {
 		const gl = this.context;
 		gl.clearColor(r, g, b, a);
 	}
 
-	clear(): void {
+	public clear(): void {
 		const gl = this.context;
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	}
 
-	setViewport(x: number, y: number, width: number, height: number): void {
+	public setViewport(
+		x: number,
+		y: number,
+		width: number,
+		height: number
+	): void {
 		const gl = this.context;
 		gl.viewport(x, y, width, height);
 	}

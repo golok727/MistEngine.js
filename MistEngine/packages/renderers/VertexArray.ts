@@ -3,8 +3,10 @@ import { MistRendererAPI, Renderer, MistAPIUsable } from "./Renderer";
 import { WebGL2VertexArray } from "./api/WebGL2/WebGL2VertexArray";
 
 export interface MistVertexArrayBase extends MistAPIUsable {
-	setVertexBuffer(buffer: MistVertexBuffer): void;
-	setIndexBuffer(buffer: MistIndexBuffer): void;
+	addVertexBuffer(vertexBuffer: MistVertexBuffer): void;
+	setIndexBuffer(indexBuffer: MistIndexBuffer): void;
+	getVertexBuffers(): MistVertexBuffer[];
+	getIndexBuffer(): MistIndexBuffer;
 }
 
 export class VertexArrayFactory {

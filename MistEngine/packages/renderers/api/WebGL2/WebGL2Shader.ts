@@ -19,17 +19,17 @@ export class WebGL2Shader implements MistShader {
 		const fragmentShader = this.createShader("FRAGMENT", fragmentShaderSource);
 		this.program = this.createProgram(vertexShader, fragmentShader);
 	}
-	use(): void {
+	public use(): void {
 		this._gl.useProgram(this.program);
 	}
-	detach(): void {
+	public detach(): void {
 		this._gl.useProgram(null);
 	}
-	delete(): void {
+	public delete(): void {
 		this._gl.deleteProgram(this.program);
 	}
 
-	setUniform3f(name: string, x: number, y: number, z: number): void {
+	public setUniform3f(name: string, x: number, y: number, z: number): void {
 		const location = this.getUniformLocation(name);
 		this._gl.uniform3f(location, x, y, z);
 	}

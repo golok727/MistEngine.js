@@ -16,23 +16,23 @@ export class WebGL2Renderer implements Renderer<WebGL2RenderingContext> {
 		registerContext(this);
 	}
 
-	getNativeContext(): WebGL2RenderingContext {
+	public getNativeContext(): WebGL2RenderingContext {
 		return this.GetContext().inner;
 	}
 
-	getWidth(): number {
+	public getWidth(): number {
 		return this.canvas.width;
 	}
 
-	getHeight(): number {
+	public getHeight(): number {
 		return this.canvas.height;
 	}
 
-	GetContext() {
+	public GetContext() {
 		return this.context;
 	}
 
-	GetApi(): MistRendererAPI {
+	public GetApi(): MistRendererAPI {
 		return this.api;
 	}
 }
