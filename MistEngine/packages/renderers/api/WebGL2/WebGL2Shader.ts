@@ -5,7 +5,7 @@ import { MistShader } from "@mist-engine/renderers/Shader";
 
 type ShaderTypes = "VERTEX" | "FRAGMENT";
 
-export class WebGL2Shader implements MistShader {
+export class MistWebGL2Shader implements MistShader {
 	_gl: WebGL2RenderingContext;
 	private program: WebGLProgram;
 	private uniformCache: Map<string, number>;
@@ -32,6 +32,10 @@ export class WebGL2Shader implements MistShader {
 		this._gl.deleteProgram(this.program);
 	}
 
+	public setUniform1i(name: string, v: number): void {
+		const location = this.getUniformLocation(name);
+		this._gl.uniform1i(location, v);
+	}
 	public setUniform3f(name: string, x: number, y: number, z: number): void {
 		const location = this.getUniformLocation(name);
 		this._gl.uniform3f(location, x, y, z);

@@ -1,7 +1,7 @@
 import { MistAPIUsable, MistRendererAPI, Renderer } from "./Renderer";
 import {
 	WebGL2IndexBuffer,
-	WebGL2VertexBuffer,
+	MistWebGL2VertexBuffer,
 } from "./api/WebGL2/WebGL2Buffer";
 
 export enum ShaderDataType {
@@ -129,7 +129,7 @@ export class MistVertexBufferFactory {
 	): MistVertexBuffer {
 		switch (renderer.GetApi()) {
 			case MistRendererAPI.WebGL2:
-				return new WebGL2VertexBuffer(renderer, data);
+				return new MistWebGL2VertexBuffer(renderer, data);
 			case MistRendererAPI.WebGPU:
 				throw new Error(
 					`Renderer API ${renderer.GetApi()} is under construction`

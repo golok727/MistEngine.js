@@ -3,7 +3,7 @@ import "./polyfill";
 import {
 	MistRendererAPI,
 	Renderer,
-	WebGL2Renderer,
+	MistWebGL2Renderer,
 } from "@mist-engine/renderers";
 
 import { LayerStack } from "./LayerStack";
@@ -36,7 +36,7 @@ export class MistApp {
 		// Select renderer API
 		switch (rendererAPI) {
 			case MistRendererAPI.WebGL2:
-				this.renderer = new WebGL2Renderer(canvas);
+				this.renderer = new MistWebGL2Renderer(canvas);
 				break;
 
 			case MistRendererAPI.WebGPU:
@@ -110,11 +110,11 @@ export const CreateMistApp = async (
 	setup: () => Promise<MistApp> | MistApp
 ) => {
 	mistIntro__();
-	let _preApp = setup();
+	let mayBePromiseApp = setup();
 	let app: MistApp;
-	if (_preApp instanceof Promise) app = await _preApp;
-	else app = _preApp;
-
+	if (mayBePromiseApp instanceof Promise) app = await mayBePromiseApp;
+	else app = mayBePromiseApp;
 	app.Run();
+
 	logger.log("{0}\n\t {1}", "Radha Vallabh Shri Harivansh", "Radhey Shyam");
 };

@@ -24,15 +24,18 @@ export {
 	ShaderDataType,
 	VertexArray,
 	Shader,
+	Texture,
+	preloadTexture,
 } from "@mist-engine/renderers";
 
 export type {
-	WebGL2RenderingAPI,
-	WebGL2Renderer,
+	MistWebGL2RenderingAPI,
+	MistWebGL2Renderer,
 	MistIndexBuffer,
 	MistVertexBuffer,
 	MistVertexArray,
 	MistShader,
+	MistTexture,
 } from "@mist-engine/renderers";
 
 export {

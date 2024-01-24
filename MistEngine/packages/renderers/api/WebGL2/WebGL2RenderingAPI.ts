@@ -1,7 +1,7 @@
 import { MistVertexArray } from "@mist-engine/renderers/VertexArray";
 import { RenderingAPI } from "@mist-engine/renderers/RenderingApi";
 
-export class WebGL2RenderingAPI
+export class MistWebGL2RenderingAPI
 	implements RenderingAPI<WebGL2RenderingContext>
 {
 	private canvas: HTMLCanvasElement;

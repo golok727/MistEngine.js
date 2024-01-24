@@ -7,6 +7,9 @@ import {
 	ShaderDataType,
 	MistShader,
 	MistVertexArray,
+	preloadTexture,
+	Texture,
+	MistTexture,
 } from "@mist-engine/index";
 
 import "./style.css";
@@ -27,6 +30,7 @@ type DrawableObject = {
 };
 
 class TestLayer extends Layer {
+	private trainTexture!: MistTexture;
 	private squareObj!: DrawableObject;
 	private triangleObj!: DrawableObject;
 	private projection!: Matrix4;
@@ -39,6 +43,8 @@ class TestLayer extends Layer {
 	override onAttach(app: SandboxApp): void {
 		const renderer = app.getRenderer();
 		const aspect = renderer.getWidth() / renderer.getHeight();
+
+		this.trainTexture = Texture.Create(renderer, "/train.png");
 
 		// prettier-ignore
 		this.projection = Matrix4.Ortho(-1.0 * aspect, 1.0 *aspect, -1.0 , 1.0, -1.0, 1.0 )
@@ -53,6 +59,7 @@ class TestLayer extends Layer {
 			void main()
 			{		
 				TexCoord = a_TexCoord;
+				TexCoord.y = 1.0 - TexCoord.y; // Flip the y coordinate
 				vec4 position = vec4(a_Position, 1.0);
 				gl_Position = u_Projection * position;
 			}
@@ -60,15 +67,15 @@ class TestLayer extends Layer {
 
 		const sqFragmentShader = `
 			#version 300 es
-			precision mediump float;
+			precision highp float;
 			
 			in vec2 TexCoord; 
 			uniform vec3 u_Color;
-
+			uniform sampler2D u_Texture;
 			out vec4 fragColor; 
 			void main()
 			{
-				fragColor = vec4(TexCoord.x, TexCoord.y, 0.0, 1.0);
+				fragColor = texture(u_Texture, TexCoord);
 			}
 		`;
 
@@ -163,6 +170,10 @@ class TestLayer extends Layer {
 
 		triangleObj.va.addVertexBuffer(triangleObjVb);
 		triangleObj.va.setIndexBuffer(triangleObjIb);
+
+		squareObj.shader.use();
+		squareObj.shader.setUniform1i("u_Texture", 0);
+		this.trainTexture.use(0);
 	}
 
 	override onUpdate(app: SandboxApp, _delta: number): void {
@@ -188,9 +199,9 @@ class TestLayer extends Layer {
 		this.squareObj.shader.setUniformMat4("u_Projection", this.projection);
 		renderer.Submit(this.squareObj.va);
 
-		this.triangleObj.shader.use();
-		this.triangleObj.shader.setUniformMat4("u_Projection", this.projection);
-		renderer.Submit(this.triangleObj.va);
+		// this.triangleObj.shader.use();
+		// this.triangleObj.shader.setUniformMat4("u_Projection", this.projection);
+		// renderer.Submit(this.triangleObj.va);
 
 		renderer.EndScene();
 	}
@@ -205,6 +216,7 @@ class SandboxApp extends MistApp {
 	}
 }
 
-CreateMistApp(() => {
+CreateMistApp(async () => {
+	await preloadTexture("/train.png");
 	return new SandboxApp();
 });

@@ -1,14 +1,11 @@
-export { ShaderFactory as Shader } from "./Shader";
-export type { MistShader } from "./Shader";
-
 export { MistRendererAPI } from "./Renderer";
-export { WebGL2Renderer } from "./api/WebGL2/WebGL2Renderer";
-export { WebGL2RenderingAPI } from "./api/WebGL2/WebGL2RenderingAPI";
+export { MistWebGL2Renderer } from "./api/WebGL2/WebGL2Renderer";
+export { MistWebGL2RenderingAPI } from "./api/WebGL2/WebGL2RenderingAPI";
 
 export type { MistVertexArray } from "./VertexArray";
 export type { MistIndexBuffer, MistVertexBuffer } from "./Buffer";
-
-export { VertexArrayFactory as VertexArray } from "./VertexArray";
+export type { MistShader } from "./Shader";
+export type { MistTexture } from "./Texture";
 
 export {
 	MistVertexBufferFactory as VertexBuffer,
@@ -16,5 +13,10 @@ export {
 	BufferLayout,
 	ShaderDataType,
 } from "./Buffer";
+export { VertexArrayFactory as VertexArray } from "./VertexArray";
+export { ShaderFactory as Shader } from "./Shader";
+export { TextureFactory as Texture } from "./Texture";
+
+export { preloadTexture } from "./Store";
 
 export type { Renderer } from "./Renderer";

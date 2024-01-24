@@ -1,9 +1,10 @@
 import { Matrix4 } from "@mist-engine/math/mat4";
 import { MistAPIUsable, MistRendererAPI, Renderer } from "./Renderer";
-import { WebGL2Shader } from "@mist-engine/renderers/api/WebGL2/WebGL2Shader";
+import { MistWebGL2Shader } from "@mist-engine/renderers/api/WebGL2/WebGL2Shader";
 
 export interface MistShader extends MistAPIUsable {
 	setUniform3f(name: string, x: number, y: number, z: number): void;
+	setUniform1i(name: string, v: number): void;
 	setUniformMat4(name: string, m: Matrix4): void;
 }
 
@@ -15,7 +16,7 @@ export class ShaderFactory {
 	): MistShader {
 		switch (renderer.GetApi()) {
 			case MistRendererAPI.WebGL2:
-				return new WebGL2Shader(
+				return new MistWebGL2Shader(
 					renderer,
 					this.cleanShaderCode(vertexShaderSrc),
 					this.cleanShaderCode(fragmentShaderSrc)

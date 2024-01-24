@@ -13,7 +13,7 @@
 #### Rust + Tauri
 
 - File management
-- Mist file
+- Mist Game file
 
 ### Core Engine (Mist)
 
@@ -24,8 +24,6 @@ Allow WEBGL-2 and WEBGPU
   - WebGL2 Renderer
   - WebGPU Renderer
 
-- Detached Event System
-
 - Textures
 
 - Shaders
@@ -33,12 +31,10 @@ Allow WEBGL-2 and WEBGPU
   - Custom Shader Parsing
 
 - Camera
-
   - Orthographic
   - Perspective
 
 - Layers
-
   - Game Layers
   - Overlays
   - In game UI

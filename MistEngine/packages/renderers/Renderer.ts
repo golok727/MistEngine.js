@@ -20,6 +20,7 @@ export interface Renderer<Ctx = unknown> {
 
 export interface MistAPIUsable {
 	use(): void;
+	use(slot: number): void;
 	detach(): void;
 	delete(): void;
 }

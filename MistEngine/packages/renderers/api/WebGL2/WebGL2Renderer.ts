@@ -1,18 +1,18 @@
 import { MistRendererAPI, Renderer } from "@mist-engine/renderers/Renderer";
 import { registerContext } from "@mist-engine/renderers/RenderingApi";
 
-import { WebGL2RenderingAPI } from "./WebGL2RenderingAPI";
+import { MistWebGL2RenderingAPI } from "./WebGL2RenderingAPI";
 import { MistVertexArray } from "@mist-engine/renderers/VertexArray";
 
-export class WebGL2Renderer implements Renderer<WebGL2RenderingContext> {
+export class MistWebGL2Renderer implements Renderer<WebGL2RenderingContext> {
 	private canvas: HTMLCanvasElement;
 	private readonly API: MistRendererAPI;
-	private renderAPI: WebGL2RenderingAPI;
+	private renderAPI: MistWebGL2RenderingAPI;
 
 	constructor(canvas: HTMLCanvasElement) {
 		this.canvas = canvas;
 		this.API = MistRendererAPI.WebGL2;
-		this.renderAPI = new WebGL2RenderingAPI(this.canvas);
+		this.renderAPI = new MistWebGL2RenderingAPI(this.canvas);
 
 		registerContext(this);
 	}

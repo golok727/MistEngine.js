@@ -6,7 +6,7 @@ import {
 import { Renderer } from "@mist-engine/renderers/Renderer";
 import { getGLRenderingContext } from "@mist-engine/renderers/RenderingApi";
 
-export class WebGL2VertexBuffer implements MistVertexBuffer {
+export class MistWebGL2VertexBuffer implements MistVertexBuffer {
 	private buffer: WebGLBuffer;
 	private layout!: BufferLayout;
 	private _gl: WebGL2RenderingContext;

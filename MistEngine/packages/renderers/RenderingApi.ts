@@ -1,6 +1,6 @@
 import { MistVertexArray } from ".";
 import { MistRendererAPI, Renderer } from "./Renderer";
-import { WebGL2RenderingAPI } from "./api/WebGL2/WebGL2RenderingAPI";
+import { MistWebGL2RenderingAPI } from "./api/WebGL2/WebGL2RenderingAPI";
 
 export interface RenderingAPI<Ctx = unknown> {
 	get inner(): Ctx;
@@ -21,7 +21,7 @@ export function getGLRenderingContext(
 	const context = renderer.GetRenderAPI();
 
 	// Check if the context is webgl2 context
-	if (!(context instanceof WebGL2RenderingAPI)) {
+	if (!(context instanceof MistWebGL2RenderingAPI)) {
 		throw new Error(
 			"This buffer should be used within the WebGL2 rendering context"
 		);

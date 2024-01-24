@@ -1,6 +1,6 @@
 import { MistIndexBuffer, MistVertexBuffer } from "./Buffer";
 import { MistRendererAPI, Renderer, MistAPIUsable } from "./Renderer";
-import { WebGL2VertexArray } from "./api/WebGL2/WebGL2VertexArray";
+import { MistWebGL2VertexArray } from "./api/WebGL2/WebGL2VertexArray";
 
 export interface MistVertexArray extends MistAPIUsable {
 	addVertexBuffer(vertexBuffer: MistVertexBuffer): void;
@@ -13,7 +13,7 @@ export class VertexArrayFactory {
 	static Create(renderer: Renderer): MistVertexArray {
 		switch (renderer.GetApi()) {
 			case MistRendererAPI.WebGL2:
-				return new WebGL2VertexArray(renderer);
+				return new MistWebGL2VertexArray(renderer);
 			case MistRendererAPI.WebGPU:
 				throw new Error("VertexArray for WEBGL2 is not implemented yet");
 			default:
