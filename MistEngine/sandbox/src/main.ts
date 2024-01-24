@@ -168,18 +168,18 @@ class TestLayer extends Layer {
 		/* should be handled by the renderer */
 		renderAPI.SetViewport(0, 0, renderer.getWidth(), renderer.getHeight());
 
-		renderAPI.ClearColor(0.1, 0.1, 0.1, 1.0);
+		renderAPI.SetClearColor(0.1, 0.1, 0.1, 1.0);
 		renderAPI.Clear();
 
+		renderer.BeginScene();
+
 		this.squareObj.shader.use();
-		const squareVa = this.squareObj.va;
-		squareVa.use();
-		renderAPI.DrawIndexed(squareVa);
+		renderer.Submit(this.squareObj.va);
 
 		this.triangleObj.shader.use();
-		const triangleVa = this.triangleObj.va;
-		triangleVa.use();
-		renderAPI.DrawIndexed(triangleVa);
+		renderer.Submit(this.triangleObj.va);
+
+		renderer.EndScene();
 	}
 
 	override onDetach(_app: SandboxApp): void {}

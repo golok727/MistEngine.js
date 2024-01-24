@@ -1,4 +1,4 @@
-import { MistVertexArray } from "@mist-engine/renderers";
+import { MistVertexArray } from "@mist-engine/renderers/VertexArray";
 import { RenderingAPI } from "@mist-engine/renderers/RenderingApi";
 
 export class WebGL2RenderingAPI
@@ -16,7 +16,7 @@ export class WebGL2RenderingAPI
 		return this.context;
 	}
 
-	public ClearColor(r: number, g: number, b: number, a: number): void {
+	public SetClearColor(r: number, g: number, b: number, a: number): void {
 		const gl = this.context;
 		gl.clearColor(r, g, b, a);
 	}

@@ -2,6 +2,7 @@ import { MistRendererAPI, Renderer } from "@mist-engine/renderers/Renderer";
 import { registerContext } from "@mist-engine/renderers/RenderingApi";
 
 import { WebGL2RenderingAPI } from "./WebGL2RenderingAPI";
+import { MistVertexArray } from "@mist-engine/renderers/VertexArray";
 
 export class WebGL2Renderer implements Renderer<WebGL2RenderingContext> {
 	private canvas: HTMLCanvasElement;
@@ -18,7 +19,11 @@ export class WebGL2Renderer implements Renderer<WebGL2RenderingContext> {
 
 	BeginScene(): void {}
 
-	Submit(): void {}
+	Submit(vertexArray: MistVertexArray): void {
+		const renderAPI = this.GetRenderAPI();
+		vertexArray.use();
+		renderAPI.DrawIndexed(vertexArray);
+	}
 
 	EndScene(): void {}
 

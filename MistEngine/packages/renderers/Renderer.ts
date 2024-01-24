@@ -1,3 +1,4 @@
+import { MistVertexArray } from "./VertexArray";
 import { RenderingAPI } from "./RenderingApi";
 
 export enum MistRendererAPI {
@@ -13,7 +14,7 @@ export interface Renderer<Ctx = unknown> {
 	getHeight(): number;
 	getNativeContext(): Ctx;
 	BeginScene(): void;
-	Submit(): void;
+	Submit(vertexArray: MistVertexArray): void;
 	EndScene(): void;
 }
 

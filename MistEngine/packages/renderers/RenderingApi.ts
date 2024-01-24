@@ -4,7 +4,7 @@ import { WebGL2RenderingAPI } from "./api/WebGL2/WebGL2RenderingAPI";
 
 export interface RenderingAPI<Ctx = unknown> {
 	get inner(): Ctx;
-	ClearColor(r: number, g: number, b: number, a: number): void;
+	SetClearColor(r: number, g: number, b: number, a: number): void;
 	Clear(): void;
 	SetViewport(x: number, y: number, width: number, height: number): void;
 	DrawIndexed(vertexArray: MistVertexArray): void;

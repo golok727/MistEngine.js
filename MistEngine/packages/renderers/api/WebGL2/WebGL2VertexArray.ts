@@ -1,4 +1,4 @@
-import { Renderer } from "@mist-engine/renderers";
+import { Renderer } from "@mist-engine/renderers/Renderer";
 import {
 	MistIndexBuffer,
 	MistVertexBuffer,
