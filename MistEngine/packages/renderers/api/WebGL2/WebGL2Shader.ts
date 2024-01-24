@@ -1,9 +1,9 @@
 import { Renderer } from "@mist-engine/renderers/Renderer";
 import { getGLContext } from "@mist-engine/renderers/Context";
-import { Shader } from "@mist-engine/renderers/Shader";
+import { MistShader } from "@mist-engine/renderers/Shader";
 
 type ShaderTypes = "VERTEX" | "FRAGMENT";
-export class WebGL2Shader implements Shader {
+export class WebGL2Shader implements MistShader {
 	_gl: WebGL2RenderingContext;
 	private program: WebGLProgram;
 	private uniformCache: Map<string, number>;

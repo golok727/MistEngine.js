@@ -1,4 +1,4 @@
-import { MistRendererAPI, Renderer } from "./Renderer";
+import { MistAPIUsable, MistRendererAPI, Renderer } from "./Renderer";
 import {
 	WebGL2IndexBuffer,
 	WebGL2VertexBuffer,
@@ -105,18 +105,15 @@ export class BufferLayout {
 /*
 	Interfaces for Making API specific Buffer
  */
-interface MistBufferT {
-	Bind(): void;
-	UnBind(): void;
-	delete(): void;
-}
 
-export interface MistVertexBuffer extends MistBufferT {
+interface MistBufferBase extends MistAPIUsable {}
+
+export interface MistVertexBuffer extends MistBufferBase {
 	setLayout(layout: BufferLayout): void;
 	getLayout(): BufferLayout;
 }
 
-export interface MistIndexBuffer extends MistBufferT {}
+export interface MistIndexBuffer extends MistBufferBase {}
 
 export class BufferFactory {
 	/**

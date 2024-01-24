@@ -14,3 +14,9 @@ export interface Renderer<Ctx = unknown> {
 	getHeight(): number;
 	getNativeContext(): Ctx;
 }
+
+export interface MistAPIUsable {
+	use(): void;
+	detach(): void;
+	delete(): void;
+}

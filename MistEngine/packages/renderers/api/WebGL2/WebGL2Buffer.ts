@@ -37,11 +37,11 @@ export class WebGL2VertexBuffer implements MistVertexBuffer {
 		this._gl.deleteBuffer(this.buffer);
 	}
 
-	Bind(): void {
+	use(): void {
 		this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this.buffer);
 	}
 
-	UnBind(): void {
+	detach(): void {
 		this._gl.bindBuffer(this._gl.ARRAY_BUFFER, null);
 	}
 }
@@ -64,11 +64,11 @@ export class WebGL2IndexBuffer implements MistIndexBuffer {
 		this.buffer = buffer;
 	}
 
-	Bind(): void {
+	use(): void {
 		this._gl.bindBuffer(this._gl.ELEMENT_ARRAY_BUFFER, this.buffer);
 	}
 
-	UnBind(): void {
+	detach(): void {
 		this._gl.bindBuffer(this._gl.ELEMENT_ARRAY_BUFFER, null);
 	}
 

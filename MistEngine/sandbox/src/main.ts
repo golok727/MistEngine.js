@@ -4,6 +4,7 @@ import {
 	MistShader,
 	BufferLayout,
 	ShaderDataType,
+	MistVertexArray,
 } from "@mist-engine/renderers";
 
 import "./style.css";
@@ -71,38 +72,21 @@ class TestLayer extends Layer {
 		]);
 
 		const indices = new Uint32Array([0, 1, 2, 2, 3, 0]);
-
-		const vao = gl.createVertexArray();
-		if (!vao) throw "Error creating vertex arrays";
-		gl.bindVertexArray(vao);
+		const vao = MistVertexArray.Create(renderer);
 
 		const vb = MistBuffer.Vertex(renderer, triangle);
 		vb.setLayout(layout);
 
-		const ibo = MistBuffer.Index(renderer, indices);
+		const ib = MistBuffer.Index(renderer, indices);
 
-		//TODO abstract to vertex array
-		const vbLayout = vb.getLayout();
-		for (const element of vbLayout) {
-			gl.enableVertexAttribArray(element.location);
-			gl.vertexAttribPointer(
-				element.location,
-				element.componentCount,
-				gl.FLOAT, // DO getDLDataType
-				false,
-				vbLayout.stride,
-				element.offset
-			);
-		}
-
-		gl.bindVertexArray(null);
-		vb.UnBind();
-		ibo.UnBind();
+		vao.setVertexBuffer(vb);
+		vao.setIndexBuffer(ib);
+		vao.detach();
 
 		basicShader.use();
+		vao.use();
 		// basicShader.setUniform3f("u_Color", 0.7, 0.2, 0.1);
 		// Begin
-		gl.bindVertexArray(vao);
 	}
 
 	override onUpdate(app: SandboxApp, _delta: number): void {

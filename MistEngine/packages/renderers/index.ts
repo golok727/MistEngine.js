@@ -4,6 +4,7 @@ export { MistRendererAPI } from "./Renderer";
 export { WebGL2Renderer } from "./api/WebGL2/WebGL2Renderer";
 export { WebGL2Context } from "./api/WebGL2/WebGL2Context";
 
+export { VertexArrayFactory as MistVertexArray } from "./VertexArray";
 export {
 	BufferFactory as MistBuffer,
 	BufferLayout,

@@ -1,9 +1,7 @@
-import { MistRendererAPI, Renderer } from "./Renderer";
+import { MistAPIUsable, MistRendererAPI, Renderer } from "./Renderer";
 import { WebGL2Shader } from "@mist-engine/renderers/api/WebGL2/WebGL2Shader";
-export interface Shader {
-	use(): void;
-	detach(): void;
-	delete(): void;
+
+export interface MistShader extends MistAPIUsable {
 	setUniform3f(name: string, x: number, y: number, z: number): void;
 }
 
@@ -12,7 +10,7 @@ export class ShaderFactory {
 		renderer: Renderer,
 		vertexShaderSrc: string,
 		fragmentShaderSrc: string
-	): Shader {
+	): MistShader {
 		switch (renderer.GetApi()) {
 			case MistRendererAPI.WebGL2:
 				return new WebGL2Shader(
