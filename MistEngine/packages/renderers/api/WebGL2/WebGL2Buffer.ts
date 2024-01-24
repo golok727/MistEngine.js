@@ -1,9 +1,14 @@
-import { MistBufferT } from "@mist-engine/renderers/Buffer";
+import {
+	BufferLayout,
+	MistIndexBuffer,
+	MistVertexBuffer,
+} from "@mist-engine/renderers/Buffer";
 import { Renderer } from "@mist-engine/renderers/Renderer";
 import { getGLContext } from "@mist-engine/renderers/Context";
 
-export class WebGL2VertexBuffer implements MistBufferT {
+export class WebGL2VertexBuffer implements MistVertexBuffer {
 	private buffer: WebGLBuffer;
+	private layout!: BufferLayout;
 	private _gl: WebGL2RenderingContext;
 
 	constructor(renderer: Renderer, data: Float32Array) {
@@ -20,6 +25,14 @@ export class WebGL2VertexBuffer implements MistBufferT {
 		this.buffer = buffer;
 	}
 
+	setLayout(layout: BufferLayout): void {
+		this.layout = layout;
+	}
+
+	getLayout(): BufferLayout {
+		return this.layout;
+	}
+
 	delete(): void {
 		this._gl.deleteBuffer(this.buffer);
 	}
@@ -28,12 +41,12 @@ export class WebGL2VertexBuffer implements MistBufferT {
 		this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this.buffer);
 	}
 
-	unBind(): void {
+	UnBind(): void {
 		this._gl.bindBuffer(this._gl.ARRAY_BUFFER, null);
 	}
 }
 
-export class WebGL2IndexBuffer implements MistBufferT {
+export class WebGL2IndexBuffer implements MistIndexBuffer {
 	private buffer: WebGLBuffer;
 	private _gl: WebGL2RenderingContext;
 
@@ -55,7 +68,7 @@ export class WebGL2IndexBuffer implements MistBufferT {
 		this._gl.bindBuffer(this._gl.ELEMENT_ARRAY_BUFFER, this.buffer);
 	}
 
-	unBind(): void {
+	UnBind(): void {
 		this._gl.bindBuffer(this._gl.ELEMENT_ARRAY_BUFFER, null);
 	}
 

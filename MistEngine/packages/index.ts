@@ -19,6 +19,8 @@ export { Layer } from "@mist-engine/core/Layer";
 export {
 	MistRendererAPI,
 	MistBuffer,
+	BufferLayout,
+	ShaderDataType,
 	MistShader,
 } from "@mist-engine/renderers";
 export type { WebGL2Context, WebGL2Renderer } from "@mist-engine/renderers";

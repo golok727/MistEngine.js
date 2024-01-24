@@ -1,4 +1,10 @@
-import { WebGL2Context, MistBuffer, MistShader } from "@mist-engine/renderers";
+import {
+	WebGL2Context,
+	MistBuffer,
+	MistShader,
+	BufferLayout,
+	ShaderDataType,
+} from "@mist-engine/renderers";
 
 import "./style.css";
 
@@ -24,33 +30,44 @@ class TestLayer extends Layer {
 		// SHADER
 		const vs = `
 			#version 300 es
-			layout ( location = 0 ) in  vec3 a_Pos;
+			layout ( location = 0 ) in  vec3 a_Position;
+			layout(location = 1) in vec2 a_TexCoord; 
+			out vec2 TexCoord;
 			void main()
-			{	
-				gl_Position = vec4(a_Pos, 1.0);
+			{		
+				TexCoord = a_TexCoord;
+				gl_Position = vec4(a_Position, 1.0);
 			}
 		`;
 
 		const fs = `
 			#version 300 es
 			precision mediump float;
-			out vec4 fragColor;
+			
+			in vec2 TexCoord; 
 			uniform vec3 u_Color;
+
+			out vec4 fragColor; 
 			void main()
 			{
-				fragColor = vec4(u_Color, 1.0);
+				fragColor = vec4(TexCoord.x, TexCoord.y, 0.0, 1.0);
 			}
 		`;
 		const basicShader = MistShader.Create(app.getRenderer(), vs, fs);
 
 		const triangle = new Float32Array([
-			-0.5, -0.5, 0.0 /* Bottom left */,
+			-0.5, -0.5, 0.0, 0.0, 0.0 /* Bottom left */,
 
-			0.5, -0.5, 0.0 /* Bottom right */,
+			0.5, -0.5, 0.0, 1.0, 0.0 /* Bottom right */,
 
-			0.5, 0.5, 0.0 /* Top Right */,
+			0.5, 0.5, 0.0, 1.0, 1.0 /* Top Right */,
 
-			-0.5, 0.5, 0.0 /* Top Left */,
+			-0.5, 0.5, 0.0, 0.0, 1.0 /* Top Left */,
+		]);
+
+		const layout = new BufferLayout([
+			{ name: "a_Position", type: ShaderDataType.Float3, location: 0 },
+			{ name: "a_TexCoord", type: ShaderDataType.Float2, location: 1 },
 		]);
 
 		const indices = new Uint32Array([0, 1, 2, 2, 3, 0]);
@@ -60,37 +77,30 @@ class TestLayer extends Layer {
 		gl.bindVertexArray(vao);
 
 		const vb = MistBuffer.Vertex(renderer, triangle);
+		vb.setLayout(layout);
+
 		const ibo = MistBuffer.Index(renderer, indices);
 
-		/*	
-		Layout Design
-			attributes: [
-				{
-					shaderLocation: number
-					offset: number
-					format: (DATA_TYPE)
-				}
-			]
-			stride: number,
+		//TODO abstract to vertex array
+		const vbLayout = vb.getLayout();
+		for (const element of vbLayout) {
+			gl.enableVertexAttribArray(element.location);
+			gl.vertexAttribPointer(
+				element.location,
+				element.componentCount,
+				gl.FLOAT, // DO getDLDataType
+				false,
+				vbLayout.stride,
+				element.offset
+			);
 		}
-		*/
-
-		gl.enableVertexAttribArray(0);
-		gl.vertexAttribPointer(
-			0,
-			3,
-			gl.FLOAT,
-			false,
-			3 * Float32Array.BYTES_PER_ELEMENT,
-			0
-		);
 
 		gl.bindVertexArray(null);
-		vb.unBind();
-		ibo.unBind();
+		vb.UnBind();
+		ibo.UnBind();
 
 		basicShader.use();
-		basicShader.setUniform3f("u_Color", 0.7, 0.2, 0.1);
+		// basicShader.setUniform3f("u_Color", 0.7, 0.2, 0.1);
 		// Begin
 		gl.bindVertexArray(vao);
 	}

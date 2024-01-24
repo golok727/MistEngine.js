@@ -9,4 +9,4 @@ interface Window {
 	__MIST__: MistGlobal;
 }
 
-var __MIST__: Window["__MIST__"];
+declare var __MIST__: Window["__MIST__"];
