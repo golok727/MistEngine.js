@@ -14,5 +14,8 @@ export class Layer {
 	public onUpdate(_app: MistApp, deltaTime: number) {
 		deltaTime;
 	}
+
+	public onEvent(_type: string, _app: MistApp) {}
+
 	public onDetach(_app: MistApp) {}
 }

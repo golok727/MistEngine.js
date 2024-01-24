@@ -42,7 +42,6 @@ export class MistApp {
 			case MistRendererAPI.WebGPU:
 				logger.error("Implement WebGPU Renderer");
 				throw "";
-				break;
 
 			default:
 				throw new Error(`Renderer Api ${rendererAPI} is not supported!`);
@@ -77,13 +76,12 @@ export class MistApp {
 
 		const deltaTime = this.lastTime ? time - this.lastTime : this.lastTime;
 
-		requestAnimationFrame(this.loop.bind(this));
-
 		for (const layer of this.layerStack.reversed()) {
 			layer.onUpdate(this, deltaTime);
 		}
 
 		this.lastTime = time;
+		requestAnimationFrame(this.loop.bind(this));
 	}
 
 	// Layer Stuff

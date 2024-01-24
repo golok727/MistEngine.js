@@ -7,12 +7,12 @@ import { MistVertexArray } from "@mist-engine/renderers/VertexArray";
 export class WebGL2Renderer implements Renderer<WebGL2RenderingContext> {
 	private canvas: HTMLCanvasElement;
 	private readonly API: MistRendererAPI;
-	private context: WebGL2RenderingAPI;
+	private renderAPI: WebGL2RenderingAPI;
 
 	constructor(canvas: HTMLCanvasElement) {
 		this.canvas = canvas;
 		this.API = MistRendererAPI.WebGL2;
-		this.context = new WebGL2RenderingAPI(this.canvas);
+		this.renderAPI = new WebGL2RenderingAPI(this.canvas);
 
 		registerContext(this);
 	}
@@ -40,7 +40,7 @@ export class WebGL2Renderer implements Renderer<WebGL2RenderingContext> {
 	}
 
 	public GetRenderAPI() {
-		return this.context;
+		return this.renderAPI;
 	}
 
 	public GetApi(): MistRendererAPI {
