@@ -50,6 +50,9 @@ export class WebGL2VertexArray implements MistVertexArray {
 		vertexBuffer.use();
 
 		const layout = vertexBuffer.getLayout();
+		if (layout === undefined)
+			throw new Error("Vertex buffer has no layout set");
+
 		for (const element of layout) {
 			gl.enableVertexAttribArray(element.location);
 			gl.vertexAttribPointer(

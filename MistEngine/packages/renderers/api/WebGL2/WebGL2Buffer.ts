@@ -49,10 +49,12 @@ export class WebGL2VertexBuffer implements MistVertexBuffer {
 export class WebGL2IndexBuffer implements MistIndexBuffer {
 	private buffer: WebGLBuffer;
 	private _gl: WebGL2RenderingContext;
+	private readonly count: number;
 
 	constructor(renderer: Renderer, data: Uint32Array) {
 		const gl = getGLContext(renderer);
 		this._gl = gl;
+		this.count = data.length;
 
 		const buffer = gl.createBuffer();
 		if (!buffer) throw new Error("Error creating index buffer");
@@ -62,6 +64,10 @@ export class WebGL2IndexBuffer implements MistIndexBuffer {
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, data, gl.STATIC_DRAW);
 
 		this.buffer = buffer;
+	}
+
+	public getCount(): number {
+		return this.count;
 	}
 
 	public use(): void {

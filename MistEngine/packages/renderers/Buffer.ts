@@ -52,6 +52,8 @@ export class BufferLayout {
 	private _stride = 0;
 
 	constructor(layout: BufferLayoutConstructor[]) {
+		if (layout.length === 0) throw new Error("Layout cannot be empty");
+
 		this.bufferElements = this.constructBufferElements(layout);
 		this.calculateOffsetsAndStrides();
 	}
@@ -113,7 +115,9 @@ export interface MistVertexBuffer extends MistBufferBase {
 	getLayout(): BufferLayout;
 }
 
-export interface MistIndexBuffer extends MistBufferBase {}
+export interface MistIndexBuffer extends MistBufferBase {
+	getCount(): number;
+}
 
 export class MistVertexBufferFactory {
 	/**

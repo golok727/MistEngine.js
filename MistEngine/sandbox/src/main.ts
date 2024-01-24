@@ -6,12 +6,14 @@ import {
 	Shader,
 	BufferLayout,
 	ShaderDataType,
+	MistShader,
+	MistVertexArray,
 } from "@mist-engine/index";
 
 import "./style.css";
 
 import {
-	CreateMist,
+	CreateMistApp,
 	Layer,
 	MistApp,
 	MistRendererAPI,
@@ -19,10 +21,21 @@ import {
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 
+type DrawableObject = {
+	va: MistVertexArray;
+	shader: MistShader;
+};
+
 class TestLayer extends Layer {
 	private gl!: WebGL2RenderingContext;
+
+	private squareObj!: DrawableObject;
+	private triangleObj!: DrawableObject;
+
 	constructor() {
 		super("TestLayer");
+		this.squareObj = { ...this.squareObj };
+		this.triangleObj = { ...this.triangleObj };
 	}
 
 	override onAttach(app: SandboxApp): void {
@@ -30,8 +43,8 @@ class TestLayer extends Layer {
 		const renderer = app.getRenderer();
 		this.gl = (renderer.GetContext() as WebGL2Context).inner;
 
-		// SHADER
-		const vs = `
+		// Square Shader
+		const sqVertexShader = `
 			#version 300 es
 			layout ( location = 0 ) in  vec3 a_Position;
 			layout(location = 1) in vec2 a_TexCoord; 
@@ -43,7 +56,7 @@ class TestLayer extends Layer {
 			}
 		`;
 
-		const fs = `
+		const sqFragmentShader = `
 			#version 300 es
 			precision mediump float;
 			
@@ -56,9 +69,44 @@ class TestLayer extends Layer {
 				fragColor = vec4(TexCoord.x, TexCoord.y, 0.0, 1.0);
 			}
 		`;
-		const basicShader = Shader.Create(app.getRenderer(), vs, fs);
 
-		const triangle = new Float32Array([
+		const triVertexShader = `
+			#version 300 es
+			layout ( location = 0 ) in  vec3 a_Position;
+			layout(location = 1) in vec4 a_Color; 
+
+			out vec4 color;
+			void main()
+			{		
+				color = a_Color; 
+				gl_Position = vec4(a_Position, 1.0);
+			}
+		`;
+
+		const triFragmentShader = `
+			#version 300 es
+			precision mediump float;
+			
+			in vec4 color; 
+			out vec4 fragColor; 
+			void main()
+			{
+				fragColor = color;
+			}
+		`;
+		this.triangleObj.shader = Shader.Create(
+			renderer,
+			triVertexShader,
+			triFragmentShader
+		);
+
+		this.squareObj.shader = Shader.Create(
+			renderer,
+			sqVertexShader,
+			sqFragmentShader
+		);
+
+		const squareVertices = new Float32Array([
 			-0.5, -0.5, 0.0, 0.0, 0.0 /* Bottom left */,
 
 			0.5, -0.5, 0.0, 1.0, 0.0 /* Bottom right */,
@@ -67,28 +115,49 @@ class TestLayer extends Layer {
 
 			-0.5, 0.5, 0.0, 0.0, 1.0 /* Top Left */,
 		]);
+		const squareIndices = new Uint32Array([0, 1, 2, 2, 3, 0]);
 
-		const layout = new BufferLayout([
+		const squareLayout = new BufferLayout([
 			{ name: "a_Position", type: ShaderDataType.Float3, location: 0 },
 			{ name: "a_TexCoord", type: ShaderDataType.Float2, location: 1 },
 		]);
+		const squareObj = this.squareObj;
 
-		const indices = new Uint32Array([0, 1, 2, 2, 3, 0]);
-		const vao = VertexArray.Create(renderer);
+		squareObj.va = VertexArray.Create(renderer);
+		const squareObjVb = VertexBuffer.Create(renderer, squareVertices);
+		squareObjVb.setLayout(squareLayout);
 
-		const vb = VertexBuffer.Create(renderer, triangle);
-		vb.setLayout(layout);
+		const squareObjIb = IndexBuffer.Create(renderer, squareIndices);
 
-		const ib = IndexBuffer.Create(renderer, indices);
+		squareObj.va.addVertexBuffer(squareObjVb);
+		squareObj.va.setIndexBuffer(squareObjIb);
 
-		vao.addVertexBuffer(vb);
-		vao.setIndexBuffer(ib);
-		vao.detach();
+		// Triangle
+		const triangleVertices = new Float32Array([
+			-1.0, -0.5, 0.0, 1.0, 1.0, 1.0, 1.0 /* Bottom left */,
 
-		basicShader.use();
-		vao.use();
-		// basicShader.setUniform3f("u_Color", 0.7, 0.2, 0.1);
-		// Begin
+			0.0, -0.5, 0.0, 1.0, 1.0, 1.0, 1.0 /* Bottom right */,
+
+			-0.5, 0.5, 0.0, 1.0, 1.0, 1.0, 1.0 /* Top Right */,
+		]);
+
+		const triangleIndices = new Uint32Array([0, 1, 2]);
+
+		const triangleLayout = new BufferLayout([
+			{ name: "a_Position", type: ShaderDataType.Float3, location: 0 },
+			{ name: "a_Color", type: ShaderDataType.Float4, location: 1 },
+		]);
+		const { triangleObj } = this;
+
+		triangleObj.va = VertexArray.Create(renderer);
+
+		const triangleObjVb = VertexBuffer.Create(renderer, triangleVertices);
+		triangleObjVb.setLayout(triangleLayout);
+
+		const triangleObjIb = IndexBuffer.Create(renderer, triangleIndices);
+
+		triangleObj.va.addVertexBuffer(triangleObjVb);
+		triangleObj.va.setIndexBuffer(triangleObjIb);
 	}
 
 	override onUpdate(app: SandboxApp, _delta: number): void {
@@ -102,7 +171,26 @@ class TestLayer extends Layer {
 
 		context.clearColor(0.1, 0.1, 0.1, 1.0);
 		context.clear();
-		gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_INT, 0);
+
+		this.squareObj.shader.use();
+		const squareVa = this.squareObj.va;
+		squareVa.use();
+		gl.drawElements(
+			gl.TRIANGLES,
+			squareVa.getIndexBuffer().getCount(),
+			gl.UNSIGNED_INT,
+			0
+		);
+
+		this.triangleObj.shader.use();
+		const triangleVa = this.triangleObj.va;
+		triangleVa.use();
+		gl.drawElements(
+			gl.TRIANGLES,
+			triangleVa.getIndexBuffer().getCount(),
+			gl.UNSIGNED_INT,
+			0
+		);
 	}
 
 	override onDetach(_app: SandboxApp): void {}
@@ -115,6 +203,6 @@ class SandboxApp extends MistApp {
 	}
 }
 
-CreateMist(() => {
+CreateMistApp(() => {
 	return new SandboxApp();
 });

@@ -14,7 +14,7 @@
  ---------------------------------------------------------------
 */
 
-export { MistApp, CreateMist } from "@mist-engine/core/Application";
+export { MistApp, CreateMistApp } from "@mist-engine/core/Application";
 export { Layer } from "@mist-engine/core/Layer";
 export {
 	MistRendererAPI,

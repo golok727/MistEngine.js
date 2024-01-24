@@ -108,7 +108,9 @@ export class MistApp {
 	}
 }
 
-export const CreateMist = async (setup: () => Promise<MistApp> | MistApp) => {
+export const CreateMistApp = async (
+	setup: () => Promise<MistApp> | MistApp
+) => {
 	mistIntro__();
 	let _preApp = setup();
 	let app: MistApp;
