@@ -1,3 +1,5 @@
+import "./polyfill";
+
 import {
 	MistRendererAPI,
 	Renderer,
@@ -37,9 +39,10 @@ export class MistApp {
 				this.renderer = new WebGL2Renderer(canvas);
 				break;
 
-			// case MistRendererAPI.WebGPU:
-			// 	logger.log("Implement WebGPU Renderer");
-			// 	break;
+			case MistRendererAPI.WebGPU:
+				logger.error("Implement WebGPU Renderer");
+				throw "";
+				break;
 
 			default:
 				throw new Error(`Renderer Api ${rendererAPI} is not supported!`);
@@ -52,6 +55,9 @@ export class MistApp {
 
 	public getRenderer() {
 		return this.renderer;
+	}
+	public getRenderingContext() {
+		return this.renderer.GetContext();
 	}
 
 	private setRunning(enable: boolean) {

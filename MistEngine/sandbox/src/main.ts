@@ -91,7 +91,6 @@ class TestLayer extends Layer {
 
 		basicShader.use();
 		basicShader.setUniform3f("u_Color", 0.7, 0.2, 0.1);
-
 		// Begin
 		gl.bindVertexArray(vao);
 	}
@@ -99,9 +98,11 @@ class TestLayer extends Layer {
 	override onUpdate(app: SandboxApp, _delta: number): void {
 		// Each Frame
 		const renderer = app.getRenderer();
-		const context = renderer.GetContext();
+		const context = app.getRenderingContext();
 
-		const gl = (renderer.GetContext() as WebGL2Context).inner;
+		const gl = (context as WebGL2Context).inner;
+
+		/* should be handled by the renderer */
 		context.setViewport(0, 0, renderer.getWidth(), renderer.getHeight());
 
 		context.clearColor(0.1, 0.1, 0.1, 1.0);

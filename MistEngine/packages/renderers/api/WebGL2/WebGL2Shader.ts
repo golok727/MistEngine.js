@@ -1,4 +1,5 @@
-import { Renderer, getGLContext } from "@mist-engine/renderers/Renderer";
+import { Renderer } from "@mist-engine/renderers/Renderer";
+import { getGLContext } from "@mist-engine/renderers/Context";
 import { Shader } from "@mist-engine/renderers/Shader";
 
 type ShaderTypes = "VERTEX" | "FRAGMENT";

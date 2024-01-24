@@ -1,5 +1,6 @@
 import { MistBufferT } from "@mist-engine/renderers/Buffer";
-import { Renderer, getGLContext } from "@mist-engine/renderers/Renderer";
+import { Renderer } from "@mist-engine/renderers/Renderer";
+import { getGLContext } from "@mist-engine/renderers/Context";
 
 export class WebGL2VertexBuffer implements MistBufferT {
 	private buffer: WebGLBuffer;
