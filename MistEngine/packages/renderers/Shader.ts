@@ -1,8 +1,10 @@
+import { Matrix4 } from "@mist-engine/math/mat4";
 import { MistAPIUsable, MistRendererAPI, Renderer } from "./Renderer";
 import { WebGL2Shader } from "@mist-engine/renderers/api/WebGL2/WebGL2Shader";
 
 export interface MistShader extends MistAPIUsable {
 	setUniform3f(name: string, x: number, y: number, z: number): void;
+	setUniformMat4(name: string, m: Matrix4): void;
 }
 
 export class ShaderFactory {

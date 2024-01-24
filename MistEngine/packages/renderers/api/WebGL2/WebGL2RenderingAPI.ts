@@ -9,7 +9,10 @@ export class WebGL2RenderingAPI
 
 	constructor(canvas: HTMLCanvasElement) {
 		this.canvas = canvas;
-		this.init();
+
+		const context = this.canvas.getContext("webgl2");
+		if (!context) throw new Error("Error getting WebGL2 context");
+		this.context = context;
 	}
 
 	get inner(): WebGL2RenderingContext {
@@ -19,6 +22,18 @@ export class WebGL2RenderingAPI
 	public SetClearColor(r: number, g: number, b: number, a: number): void {
 		const gl = this.context;
 		gl.clearColor(r, g, b, a);
+	}
+
+	public Resize(onResize?: () => void): void {
+		const canvas = this.context.canvas as HTMLCanvasElement;
+		const w = canvas.clientWidth;
+		const h = canvas.clientHeight;
+		if (w !== canvas.width || h !== canvas.height) {
+			const dpr = window.devicePixelRatio;
+			canvas.width = Math.round(w * dpr);
+			canvas.height = Math.round(h * dpr);
+			onResize && onResize();
+		}
 	}
 
 	public Clear(): void {
@@ -44,16 +59,5 @@ export class WebGL2RenderingAPI
 	): void {
 		const gl = this.context;
 		gl.viewport(x, y, width, height);
-	}
-
-	private init() {
-		const pixelRatio = window.devicePixelRatio ?? 1;
-		this.canvas.width = this.canvas.offsetWidth * pixelRatio;
-		this.canvas.height = this.canvas.offsetHeight * pixelRatio;
-
-		const context = this.canvas.getContext("webgl2");
-		if (!context) throw new Error("Error getting WebGL2 context");
-
-		this.context = context;
 	}
 }
