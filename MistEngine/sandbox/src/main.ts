@@ -1,5 +1,4 @@
 import {
-	// WebGL2RenderingAPI,
 	VertexArray,
 	IndexBuffer,
 	VertexBuffer,
@@ -27,8 +26,6 @@ type DrawableObject = {
 };
 
 class TestLayer extends Layer {
-	// private gl!: WebGL2RenderingContext;
-
 	private squareObj!: DrawableObject;
 	private triangleObj!: DrawableObject;
 
@@ -41,7 +38,6 @@ class TestLayer extends Layer {
 	override onAttach(app: SandboxApp): void {
 		console.log("Layer Attach: ", this.name);
 		const renderer = app.getRenderer();
-		// this.gl = (renderer.GetRenderAPI() as WebGL2RenderingAPI).inner;
 
 		// Square Shader
 		const sqVertexShader = `
