@@ -18,12 +18,22 @@ export { MistApp, CreateMist } from "@mist-engine/core/Application";
 export { Layer } from "@mist-engine/core/Layer";
 export {
 	MistRendererAPI,
-	MistBuffer,
+	VertexBuffer,
+	IndexBuffer,
 	BufferLayout,
 	ShaderDataType,
+	VertexArray,
+	Shader,
+} from "@mist-engine/renderers";
+
+export type {
+	WebGL2Context,
+	WebGL2Renderer,
+	MistIndexBuffer,
+	MistVertexBuffer,
+	MistVertexArray,
 	MistShader,
 } from "@mist-engine/renderers";
-export type { WebGL2Context, WebGL2Renderer } from "@mist-engine/renderers";
 
 export {
 	MthX,

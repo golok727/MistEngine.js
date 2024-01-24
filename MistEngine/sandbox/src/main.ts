@@ -1,11 +1,12 @@
 import {
 	WebGL2Context,
-	MistBuffer,
-	MistShader,
+	VertexArray,
+	IndexBuffer,
+	VertexBuffer,
+	Shader,
 	BufferLayout,
 	ShaderDataType,
-	MistVertexArray,
-} from "@mist-engine/renderers";
+} from "@mist-engine/index";
 
 import "./style.css";
 
@@ -19,6 +20,7 @@ import {
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 
 class TestLayer extends Layer {
+	private gl!: WebGL2RenderingContext;
 	constructor() {
 		super("TestLayer");
 	}
@@ -26,7 +28,7 @@ class TestLayer extends Layer {
 	override onAttach(app: SandboxApp): void {
 		console.log("Layer Attach: ", this.name);
 		const renderer = app.getRenderer();
-		const gl = (renderer.GetContext() as WebGL2Context).inner;
+		this.gl = (renderer.GetContext() as WebGL2Context).inner;
 
 		// SHADER
 		const vs = `
@@ -54,7 +56,7 @@ class TestLayer extends Layer {
 				fragColor = vec4(TexCoord.x, TexCoord.y, 0.0, 1.0);
 			}
 		`;
-		const basicShader = MistShader.Create(app.getRenderer(), vs, fs);
+		const basicShader = Shader.Create(app.getRenderer(), vs, fs);
 
 		const triangle = new Float32Array([
 			-0.5, -0.5, 0.0, 0.0, 0.0 /* Bottom left */,
@@ -72,12 +74,12 @@ class TestLayer extends Layer {
 		]);
 
 		const indices = new Uint32Array([0, 1, 2, 2, 3, 0]);
-		const vao = MistVertexArray.Create(renderer);
+		const vao = VertexArray.Create(renderer);
 
-		const vb = MistBuffer.Vertex(renderer, triangle);
+		const vb = VertexBuffer.Create(renderer, triangle);
 		vb.setLayout(layout);
 
-		const ib = MistBuffer.Index(renderer, indices);
+		const ib = IndexBuffer.Create(renderer, indices);
 
 		vao.addVertexBuffer(vb);
 		vao.setIndexBuffer(ib);
@@ -91,10 +93,9 @@ class TestLayer extends Layer {
 
 	override onUpdate(app: SandboxApp, _delta: number): void {
 		// Each Frame
+		const gl = this.gl;
 		const renderer = app.getRenderer();
 		const context = app.getRenderingContext();
-
-		const gl = (context as WebGL2Context).inner;
 
 		/* should be handled by the renderer */
 		context.setViewport(0, 0, renderer.getWidth(), renderer.getHeight());

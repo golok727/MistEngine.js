@@ -5,9 +5,9 @@ import {
 	shaderDataTypeToGLBaseDataType,
 } from "@mist-engine/renderers/Buffer";
 import { getGLContext } from "@mist-engine/renderers/Context";
-import { MistVertexArrayBase } from "@mist-engine/renderers/VertexArray";
+import { MistVertexArray } from "@mist-engine/renderers/VertexArray";
 
-export class WebGL2VertexArray implements MistVertexArrayBase {
+export class WebGL2VertexArray implements MistVertexArray {
 	private _gl: WebGL2RenderingContext;
 	private vao: WebGLVertexArrayObject;
 	private indexBuffer!: MistIndexBuffer;
