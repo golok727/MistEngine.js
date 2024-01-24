@@ -5,8 +5,8 @@ import {
 } from "./api/WebGL2/WebGL2Buffer";
 
 export enum ShaderDataType {
-	Bool,
 	Float = 0,
+	Bool,
 	Float2,
 	Float3,
 	Float4,
