@@ -107,13 +107,13 @@ class TestLayer extends Layer {
 		);
 
 		const squareVertices = new Float32Array([
-			-0.5, -0.5, 0.0, 0.0, 0.0 /* Bottom left */,
+			-0.75, -0.75, 0.0, 0.0, 0.0 /* Bottom left */,
 
-			0.5, -0.5, 0.0, 1.0, 0.0 /* Bottom right */,
+			0.75, -0.75, 0.0, 1.0, 0.0 /* Bottom right */,
 
-			0.5, 0.5, 0.0, 1.0, 1.0 /* Top Right */,
+			0.75, 0.75, 0.0, 1.0, 1.0 /* Top Right */,
 
-			-0.5, 0.5, 0.0, 0.0, 1.0 /* Top Left */,
+			-0.75, 0.75, 0.0, 0.0, 1.0 /* Top Left */,
 		]);
 		const squareIndices = new Uint32Array([0, 1, 2, 2, 3, 0]);
 
@@ -134,11 +134,11 @@ class TestLayer extends Layer {
 
 		// Triangle
 		const triangleVertices = new Float32Array([
-			-1.0, -0.5, 0.0, 1.0, 1.0, 1.0, 1.0 /* Bottom left */,
+			-0.5, -0.5, 0.0, 1.0, 1.0, 0.0, 0.0 /* Bottom left */,
 
-			0.0, -0.5, 0.0, 1.0, 1.0, 1.0, 1.0 /* Bottom right */,
+			0.5, -0.5, 0.0, 1.0, 0.0, 1.0, 0.0 /* Bottom right */,
 
-			-0.5, 0.5, 0.0, 1.0, 1.0, 1.0, 1.0 /* Top Right */,
+			0.0, 0.5, 0.0, 1.0, 0.0, 0.0, 1.0 /* Top Right */,
 		]);
 
 		const triangleIndices = new Uint32Array([0, 1, 2]);

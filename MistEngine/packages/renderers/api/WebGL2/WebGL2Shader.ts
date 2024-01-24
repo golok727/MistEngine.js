@@ -60,6 +60,12 @@ export class WebGL2Shader implements MistShader {
 		gl.linkProgram(program);
 		if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
 			const info = gl.getProgramInfoLog(program);
+			gl.deleteProgram(program);
+
+			shaders.forEach((shader) => {
+				gl.deleteShader(shader);
+			});
+
 			throw new Error(`Error linking program :${info}`);
 		}
 
@@ -81,6 +87,7 @@ export class WebGL2Shader implements MistShader {
 
 		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
 			const info = gl.getShaderInfoLog(shader);
+			gl.deleteShader(shader);
 			throw new Error(`Error compiling shader ${type}:\n${info}`);
 		}
 		return shader;
