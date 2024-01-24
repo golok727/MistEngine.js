@@ -56,8 +56,8 @@ export class MistApp {
 	public getRenderer() {
 		return this.renderer;
 	}
-	public getRenderingContext() {
-		return this.renderer.GetContext();
+	public getRenderingAPI() {
+		return this.renderer.GetRenderAPI();
 	}
 
 	private setRunning(enable: boolean) {

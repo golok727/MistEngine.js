@@ -27,7 +27,7 @@ export {
 } from "@mist-engine/renderers";
 
 export type {
-	WebGL2Context,
+	WebGL2RenderingAPI,
 	WebGL2Renderer,
 	MistIndexBuffer,
 	MistVertexBuffer,

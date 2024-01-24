@@ -1,5 +1,5 @@
 import { Renderer } from "@mist-engine/renderers/Renderer";
-import { getGLContext } from "@mist-engine/renderers/Context";
+import { getGLRenderingContext } from "@mist-engine/renderers/RenderingApi";
 import { MistShader } from "@mist-engine/renderers/Shader";
 
 type ShaderTypes = "VERTEX" | "FRAGMENT";
@@ -14,7 +14,7 @@ export class WebGL2Shader implements MistShader {
 		fragmentShaderSource: string
 	) {
 		this.uniformCache = new Map();
-		this._gl = getGLContext(renderer);
+		this._gl = getGLRenderingContext(renderer);
 		const vertexShader = this.createShader("VERTEX", vertexShaderSource);
 		const fragmentShader = this.createShader("FRAGMENT", fragmentShaderSource);
 		this.program = this.createProgram(vertexShader, fragmentShader);

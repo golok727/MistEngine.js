@@ -4,7 +4,7 @@ import {
 	MistVertexBuffer,
 	shaderDataTypeToGLBaseDataType,
 } from "@mist-engine/renderers/Buffer";
-import { getGLContext } from "@mist-engine/renderers/Context";
+import { getGLRenderingContext } from "@mist-engine/renderers/RenderingApi";
 import { MistVertexArray } from "@mist-engine/renderers/VertexArray";
 
 export class WebGL2VertexArray implements MistVertexArray {
@@ -14,7 +14,7 @@ export class WebGL2VertexArray implements MistVertexArray {
 	private vertexBuffers: MistVertexBuffer[];
 
 	constructor(renderer: Renderer) {
-		this._gl = getGLContext(renderer);
+		this._gl = getGLRenderingContext(renderer);
 		this.vertexBuffers = [];
 
 		const vao = this._gl.createVertexArray();

@@ -1,5 +1,5 @@
 import {
-	WebGL2Context,
+	// WebGL2RenderingAPI,
 	VertexArray,
 	IndexBuffer,
 	VertexBuffer,
@@ -27,7 +27,7 @@ type DrawableObject = {
 };
 
 class TestLayer extends Layer {
-	private gl!: WebGL2RenderingContext;
+	// private gl!: WebGL2RenderingContext;
 
 	private squareObj!: DrawableObject;
 	private triangleObj!: DrawableObject;
@@ -41,7 +41,7 @@ class TestLayer extends Layer {
 	override onAttach(app: SandboxApp): void {
 		console.log("Layer Attach: ", this.name);
 		const renderer = app.getRenderer();
-		this.gl = (renderer.GetContext() as WebGL2Context).inner;
+		// this.gl = (renderer.GetRenderAPI() as WebGL2RenderingAPI).inner;
 
 		// Square Shader
 		const sqVertexShader = `
@@ -162,35 +162,24 @@ class TestLayer extends Layer {
 
 	override onUpdate(app: SandboxApp, _delta: number): void {
 		// Each Frame
-		const gl = this.gl;
 		const renderer = app.getRenderer();
-		const context = app.getRenderingContext();
+		const renderAPI = renderer.GetRenderAPI();
 
 		/* should be handled by the renderer */
-		context.setViewport(0, 0, renderer.getWidth(), renderer.getHeight());
+		renderAPI.SetViewport(0, 0, renderer.getWidth(), renderer.getHeight());
 
-		context.clearColor(0.1, 0.1, 0.1, 1.0);
-		context.clear();
+		renderAPI.ClearColor(0.1, 0.1, 0.1, 1.0);
+		renderAPI.Clear();
 
 		this.squareObj.shader.use();
 		const squareVa = this.squareObj.va;
 		squareVa.use();
-		gl.drawElements(
-			gl.TRIANGLES,
-			squareVa.getIndexBuffer().getCount(),
-			gl.UNSIGNED_INT,
-			0
-		);
+		renderAPI.DrawIndexed(squareVa);
 
 		this.triangleObj.shader.use();
 		const triangleVa = this.triangleObj.va;
 		triangleVa.use();
-		gl.drawElements(
-			gl.TRIANGLES,
-			triangleVa.getIndexBuffer().getCount(),
-			gl.UNSIGNED_INT,
-			0
-		);
+		renderAPI.DrawIndexed(triangleVa);
 	}
 
 	override onDetach(_app: SandboxApp): void {}

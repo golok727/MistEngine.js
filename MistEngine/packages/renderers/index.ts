@@ -3,7 +3,7 @@ export type { MistShader } from "./Shader";
 
 export { MistRendererAPI } from "./Renderer";
 export { WebGL2Renderer } from "./api/WebGL2/WebGL2Renderer";
-export { WebGL2Context } from "./api/WebGL2/WebGL2Context";
+export { WebGL2RenderingAPI } from "./api/WebGL2/WebGL2RenderingAPI";
 
 export type { MistVertexArray } from "./VertexArray";
 export type { MistIndexBuffer, MistVertexBuffer } from "./Buffer";

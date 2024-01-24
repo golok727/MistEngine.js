@@ -1,22 +1,26 @@
+import { MistVertexArray } from ".";
 import { MistRendererAPI, Renderer } from "./Renderer";
-import { WebGL2Context } from "./api/WebGL2/WebGL2Context";
+import { WebGL2RenderingAPI } from "./api/WebGL2/WebGL2RenderingAPI";
 
-export interface Context<Ctx = unknown> {
+export interface RenderingAPI<Ctx = unknown> {
 	get inner(): Ctx;
-	clearColor(r: number, g: number, b: number, a: number): void;
-	clear(): void;
-	setViewport(x: number, y: number, width: number, height: number): void;
+	ClearColor(r: number, g: number, b: number, a: number): void;
+	Clear(): void;
+	SetViewport(x: number, y: number, width: number, height: number): void;
+	DrawIndexed(vertexArray: MistVertexArray): void;
 }
 
-export function getGpuContext(renderer: Renderer) {
+export function getGpuRenderingContext(renderer: Renderer): GPUCanvasContext {
 	throw new Error(`getGpuContext for ${renderer.GetApi} is not implemented`);
 }
 
-export function getGLContext(renderer: Renderer): WebGL2RenderingContext {
-	const context = renderer.GetContext();
+export function getGLRenderingContext(
+	renderer: Renderer
+): WebGL2RenderingContext {
+	const context = renderer.GetRenderAPI();
 
 	// Check if the context is webgl2 context
-	if (!(context instanceof WebGL2Context)) {
+	if (!(context instanceof WebGL2RenderingAPI)) {
 		throw new Error(
 			"This buffer should be used within the WebGL2 rendering context"
 		);

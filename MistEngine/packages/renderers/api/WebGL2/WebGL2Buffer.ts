@@ -4,7 +4,7 @@ import {
 	MistVertexBuffer,
 } from "@mist-engine/renderers/Buffer";
 import { Renderer } from "@mist-engine/renderers/Renderer";
-import { getGLContext } from "@mist-engine/renderers/Context";
+import { getGLRenderingContext } from "@mist-engine/renderers/RenderingApi";
 
 export class WebGL2VertexBuffer implements MistVertexBuffer {
 	private buffer: WebGLBuffer;
@@ -12,7 +12,7 @@ export class WebGL2VertexBuffer implements MistVertexBuffer {
 	private _gl: WebGL2RenderingContext;
 
 	constructor(renderer: Renderer, data: Float32Array) {
-		const gl = getGLContext(renderer);
+		const gl = getGLRenderingContext(renderer);
 		this._gl = gl;
 
 		const buffer = gl.createBuffer();
@@ -52,7 +52,7 @@ export class WebGL2IndexBuffer implements MistIndexBuffer {
 	private readonly count: number;
 
 	constructor(renderer: Renderer, data: Uint32Array) {
-		const gl = getGLContext(renderer);
+		const gl = getGLRenderingContext(renderer);
 		this._gl = gl;
 		this.count = data.length;
 

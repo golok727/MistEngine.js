@@ -1,4 +1,4 @@
-import { Context } from "./Context";
+import { RenderingAPI } from "./RenderingApi";
 
 export enum MistRendererAPI {
 	WebGL2 = "WebGL2",
@@ -7,11 +7,14 @@ export enum MistRendererAPI {
 }
 
 export interface Renderer<Ctx = unknown> {
-	GetContext(): Context<Ctx>;
+	GetRenderAPI(): RenderingAPI<Ctx>;
 	GetApi(): MistRendererAPI;
 	getWidth(): number;
 	getHeight(): number;
 	getNativeContext(): Ctx;
+	BeginScene(): void;
+	Submit(): void;
+	EndScene(): void;
 }
 
 export interface MistAPIUsable {

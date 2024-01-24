@@ -1,6 +1,9 @@
-import { Context } from "@mist-engine/renderers/Context";
+import { MistVertexArray } from "@mist-engine/renderers";
+import { RenderingAPI } from "@mist-engine/renderers/RenderingApi";
 
-export class WebGL2Context implements Context<WebGL2RenderingContext> {
+export class WebGL2RenderingAPI
+	implements RenderingAPI<WebGL2RenderingContext>
+{
 	private canvas: HTMLCanvasElement;
 	context!: WebGL2RenderingContext;
 
@@ -13,17 +16,27 @@ export class WebGL2Context implements Context<WebGL2RenderingContext> {
 		return this.context;
 	}
 
-	public clearColor(r: number, g: number, b: number, a: number): void {
+	public ClearColor(r: number, g: number, b: number, a: number): void {
 		const gl = this.context;
 		gl.clearColor(r, g, b, a);
 	}
 
-	public clear(): void {
+	public Clear(): void {
 		const gl = this.context;
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	}
 
-	public setViewport(
+	public DrawIndexed(vertexArray: MistVertexArray): void {
+		const gl = this.context;
+		gl.drawElements(
+			gl.TRIANGLES,
+			vertexArray.getIndexBuffer().getCount(),
+			gl.UNSIGNED_INT,
+			0
+		);
+	}
+
+	public SetViewport(
 		x: number,
 		y: number,
 		width: number,
