@@ -183,8 +183,11 @@ class TestLayer extends Layer {
 
 		renderAPI.Resize(() => {
 			const aspect = renderer.getWidth() / renderer.getHeight();
+			this.squareObj.shader.clearCache(this.projection);
+
+			// recalculates the projection matrix the projection matrix
 			// prettier-ignore
-			this.projection = Matrix4.Ortho(-1.0 * aspect, 1.0 *aspect, -1.0 , 1.0, -1.0, 1.0 )
+			this.projection.makeOrthographic(-1.0 * aspect, 1.0 *aspect, -1.0 , 1.0, -1.0, 1.0 )
 		});
 
 		/* should be handled by the renderer */

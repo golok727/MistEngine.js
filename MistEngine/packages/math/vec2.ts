@@ -27,20 +27,25 @@ export default class Vector2 extends VectorBase<V2> {
 		return this;
 	}
 
+	set(...args: V2) {
+		this.x = args[0];
+		this.y = args[1];
+	}
+
 	clone() {
 		return new Vector2(...this.toArray());
 	}
 
 	// Math
 	add(v: Vector2 | V2) {
-		const [x, y] = this.parseComponents(v);
+		const [x, y] = this.parseArgs(v);
 		this.x += x;
 		this.y += y;
 		return this;
 	}
 
 	sub(v: Vector2 | V2) {
-		const [x, y] = this.parseComponents(v);
+		const [x, y] = this.parseArgs(v);
 		this.x -= x;
 		this.y -= y;
 		return this;
@@ -53,7 +58,7 @@ export default class Vector2 extends VectorBase<V2> {
 			return this;
 		}
 
-		const [x, y] = this.parseComponents(v);
+		const [x, y] = this.parseArgs(v);
 		this.x *= x;
 		this.y *= y;
 
@@ -61,7 +66,7 @@ export default class Vector2 extends VectorBase<V2> {
 	}
 
 	div(v: Vector2 | V2) {
-		const [x, y] = this.parseComponents(v);
+		const [x, y] = this.parseArgs(v);
 
 		if (x === 0 || y === 0) {
 			throw new Error("Division by zero"); // TODO better errors
@@ -96,12 +101,12 @@ export default class Vector2 extends VectorBase<V2> {
 	}
 
 	dot(v: Vector2 | V2): number {
-		const [x, y] = this.parseComponents(v);
+		const [x, y] = this.parseArgs(v);
 		return this.x * x + this.y * y;
 	}
 
 	cross(v: Vector2 | V2): number {
-		const [x, y] = this.parseComponents(v);
+		const [x, y] = this.parseArgs(v);
 		return this.x * x - this.y * y;
 	}
 
@@ -130,7 +135,7 @@ export default class Vector2 extends VectorBase<V2> {
 		return this;
 	}
 
-	private parseComponents(v: Vector2 | V2): V2 {
+	private parseArgs(v: Vector2 | V2): V2 {
 		if (v instanceof Vector2) return v.toArray();
 		else return v;
 	}

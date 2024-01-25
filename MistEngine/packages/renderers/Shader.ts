@@ -3,6 +3,7 @@ import { MistAPIUsable, MistRendererAPI, Renderer } from "./Renderer";
 import { MistWebGL2Shader } from "@mist-engine/renderers/api/WebGL2/WebGL2Shader";
 
 export interface MistShader extends MistAPIUsable {
+	clearCache(matrix: Matrix4): void;
 	setUniform3f(name: string, x: number, y: number, z: number): void;
 	setUniform1i(name: string, v: number): void;
 	setUniformMat4(name: string, m: Matrix4): void;

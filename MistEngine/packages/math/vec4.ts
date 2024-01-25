@@ -39,12 +39,19 @@ export default class Vector4 extends VectorBase<V4> {
 		return this;
 	}
 
+	set(...args: V4) {
+		this.x = args[0];
+		this.y = args[1];
+		this.z = args[2];
+		this.w = args[3];
+	}
+
 	clone(): Vector4 {
 		return new Vector4(...this.toArray());
 	}
 
 	add(v: Vector4) {
-		const [x, y, z, w] = this.parseComponents(v);
+		const [x, y, z, w] = this.parseArgs(v);
 		this.x += x;
 		this.y += y;
 		this.z += z;
@@ -53,7 +60,7 @@ export default class Vector4 extends VectorBase<V4> {
 	}
 
 	sub(v: Vector4) {
-		const [x, y, z, w] = this.parseComponents(v);
+		const [x, y, z, w] = this.parseArgs(v);
 		this.x -= x;
 		this.y -= y;
 		this.z -= z;
@@ -70,7 +77,7 @@ export default class Vector4 extends VectorBase<V4> {
 			return this;
 		}
 
-		const [x, y, z, w] = this.parseComponents(v);
+		const [x, y, z, w] = this.parseArgs(v);
 		this.x *= x;
 		this.y *= y;
 		this.z *= z;
@@ -80,7 +87,7 @@ export default class Vector4 extends VectorBase<V4> {
 	}
 
 	div(v: Vector4) {
-		const [x, y, z, w] = this.parseComponents(v);
+		const [x, y, z, w] = this.parseArgs(v);
 
 		if (x === 0 || y === 0 || z === 0 || w === 0) {
 			throw new Error("Division by zero"); // TODO better errors
@@ -95,7 +102,7 @@ export default class Vector4 extends VectorBase<V4> {
 	}
 
 	dot(v: Vector4 | V4) {
-		const [x, y, z, w] = this.parseComponents(v);
+		const [x, y, z, w] = this.parseArgs(v);
 
 		return this.x * x + this.y * y + this.z * z + this.w * w;
 	}
@@ -122,7 +129,7 @@ export default class Vector4 extends VectorBase<V4> {
 		return magnitude !== 0 ? this.div(Vector4.new(magnitude)) : this;
 	}
 
-	private parseComponents(v: Vector4 | V4): V4 {
+	private parseArgs(v: Vector4 | V4): V4 {
 		if (v instanceof Vector4) return v.toArray();
 		else return v;
 	}

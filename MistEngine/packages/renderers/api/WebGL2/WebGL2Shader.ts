@@ -5,10 +5,11 @@ import { MistShader } from "@mist-engine/renderers/Shader";
 
 type ShaderTypes = "VERTEX" | "FRAGMENT";
 
+const matrixCache = new WeakMap<Matrix4, Float32Array>();
 export class MistWebGL2Shader implements MistShader {
 	_gl: WebGL2RenderingContext;
 	private program: WebGLProgram;
-	private uniformCache: Map<string, number>;
+	private uniformCache: Map<string, WebGLUniformLocation>;
 
 	constructor(
 		renderer: Renderer,
@@ -22,6 +23,11 @@ export class MistWebGL2Shader implements MistShader {
 		const fragmentShader = this.createShader("FRAGMENT", fragmentShaderSource);
 		this.program = this.createProgram(vertexShader, fragmentShader);
 	}
+
+	public clearCache(matrix: Matrix4): void {
+		matrixCache.delete(matrix);
+	}
+
 	public use(): void {
 		this._gl.useProgram(this.program);
 	}
@@ -36,6 +42,7 @@ export class MistWebGL2Shader implements MistShader {
 		const location = this.getUniformLocation(name);
 		this._gl.uniform1i(location, v);
 	}
+
 	public setUniform3f(name: string, x: number, y: number, z: number): void {
 		const location = this.getUniformLocation(name);
 		this._gl.uniform3f(location, x, y, z);
@@ -43,7 +50,13 @@ export class MistWebGL2Shader implements MistShader {
 
 	public setUniformMat4(name: string, m: Matrix4): void {
 		const location = this.getUniformLocation(name);
-		this._gl.uniformMatrix4fv(location, false, new Float32Array(m.toArray()));
+		const cache = matrixCache.get(m);
+		if (cache !== undefined) this._gl.uniformMatrix4fv(location, false, cache);
+		else {
+			const data = new Float32Array(m.toArray());
+			matrixCache.set(m, data);
+			this._gl.uniformMatrix4fv(location, false, data);
+		}
 	}
 
 	private getUniformLocation(name: string): WebGLUniformLocation | null {
@@ -51,12 +64,13 @@ export class MistWebGL2Shader implements MistShader {
 		if (cache !== undefined) return cache;
 
 		const location = this._gl.getUniformLocation(this.program, name);
-		//TODO  Make it only in development
-		if (location === null) {
+
+		if (location === null && import.meta.env.DEV) {
 			console.warn(`Uniform ${name} not found`);
 			return location;
 		}
 
+		this.uniformCache.set(name, location!);
 		return location;
 	}
 

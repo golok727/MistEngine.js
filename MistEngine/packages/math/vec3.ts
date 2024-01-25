@@ -34,12 +34,18 @@ export default class Vector3 extends VectorBase<V3> {
 		return this;
 	}
 
+	set(...args: V3) {
+		this.x = args[0];
+		this.y = args[1];
+		this.z = args[2];
+	}
+
 	clone() {
 		return new Vector3(...this.toArray());
 	}
 
 	add(v: Vector3 | V3) {
-		const [x, y, z] = this.parseComponents(v);
+		const [x, y, z] = this.parseArgs(v);
 		this.x += x;
 		this.y += y;
 		this.z += z;
@@ -48,7 +54,7 @@ export default class Vector3 extends VectorBase<V3> {
 	}
 
 	sub(v: Vector3 | V3) {
-		const [x, y, z] = this.parseComponents(v);
+		const [x, y, z] = this.parseArgs(v);
 
 		this.x -= x;
 		this.y -= y;
@@ -64,7 +70,7 @@ export default class Vector3 extends VectorBase<V3> {
 			return this;
 		}
 
-		const [x, y, z] = this.parseComponents(v);
+		const [x, y, z] = this.parseArgs(v);
 		this.x *= x;
 		this.y *= y;
 		this.z *= z;
@@ -73,7 +79,7 @@ export default class Vector3 extends VectorBase<V3> {
 	}
 
 	div(v: Vector3 | V3) {
-		let [x, y, z] = this.parseComponents(v);
+		let [x, y, z] = this.parseArgs(v);
 
 		if (x === 0 || y === 0 || z === 0) {
 			throw new Error("Division by zero"); // TODO better errors
@@ -107,13 +113,13 @@ export default class Vector3 extends VectorBase<V3> {
 	}
 
 	dot(v: Vector3 | V3): number {
-		const [x, y, z] = this.parseComponents(v);
+		const [x, y, z] = this.parseArgs(v);
 
 		return this.x * x + this.y * y + this.z * z;
 	}
 
 	cross(v: Vector3 | V3): Vector3 {
-		const [x, y, z] = this.parseComponents(v);
+		const [x, y, z] = this.parseArgs(v);
 
 		return new Vector3(
 			this.y * z - this.z * y,
@@ -135,7 +141,7 @@ export default class Vector3 extends VectorBase<V3> {
 	}
 
 	rotate(angle: number, axis: Vector3 | V3): Vector3 {
-		const [x, y, z] = this.parseComponents(axis);
+		const [x, y, z] = this.parseArgs(axis);
 
 		const cosA = Math.cos(angle);
 		const sinA = Math.sin(angle);
@@ -160,7 +166,7 @@ export default class Vector3 extends VectorBase<V3> {
 		return this;
 	}
 
-	private parseComponents(v: Vector3 | V3): V3 {
+	private parseArgs(v: Vector3 | V3): V3 {
 		if (v instanceof Vector3) return v.toArray();
 		else return v;
 	}
