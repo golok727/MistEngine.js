@@ -5,7 +5,6 @@ import { MistShader } from "@mist-engine/renderers/Shader";
 
 type ShaderTypes = "VERTEX" | "FRAGMENT";
 
-const matrixCache = new WeakMap<Matrix4, Float32Array>();
 export class MistWebGL2Shader implements MistShader {
 	_gl: WebGL2RenderingContext;
 	private program: WebGLProgram;
@@ -22,10 +21,6 @@ export class MistWebGL2Shader implements MistShader {
 		const vertexShader = this.createShader("VERTEX", vertexShaderSource);
 		const fragmentShader = this.createShader("FRAGMENT", fragmentShaderSource);
 		this.program = this.createProgram(vertexShader, fragmentShader);
-	}
-
-	public clearCache(matrix: Matrix4): void {
-		matrixCache.delete(matrix);
 	}
 
 	public use(): void {
@@ -50,13 +45,8 @@ export class MistWebGL2Shader implements MistShader {
 
 	public setUniformMat4(name: string, m: Matrix4): void {
 		const location = this.getUniformLocation(name);
-		const cache = matrixCache.get(m);
-		if (cache !== undefined) this._gl.uniformMatrix4fv(location, false, cache);
-		else {
-			const data = new Float32Array(m.toArray());
-			matrixCache.set(m, data);
-			this._gl.uniformMatrix4fv(location, false, data);
-		}
+		const data = new Float32Array(m.toArray());
+		this._gl.uniformMatrix4fv(location, false, data);
 	}
 
 	private getUniformLocation(name: string): WebGLUniformLocation | null {

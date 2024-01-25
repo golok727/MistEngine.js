@@ -11,6 +11,8 @@ import {
 	Texture,
 	MistTexture,
 	vec3,
+	Vector2,
+	Vector3,
 } from "@mist-engine/index";
 
 import "./style.css";
@@ -28,6 +30,9 @@ const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 type DrawableObject = {
 	va: MistVertexArray;
 	shader: MistShader;
+	position: Vector3;
+	scale: Vector3;
+	angle: number;
 };
 
 class TestLayer extends Layer {
@@ -35,13 +40,66 @@ class TestLayer extends Layer {
 	private squareObj!: DrawableObject;
 	private triangleObj!: DrawableObject;
 	private projection!: Matrix4;
-	private position = vec3(0, 0, 0);
-	private scale = vec3(1);
-	private rotation = Matrix4.Rotate(Math.PI / 4, vec3(0, 0, 1));
+
+	private axis = vec3(0, 0, 1);
 	constructor() {
 		super("TestLayer");
-		this.squareObj = { ...this.squareObj };
-		this.triangleObj = { ...this.triangleObj };
+
+		this.squareObj = {
+			...this.squareObj,
+			position: vec3(0, 0, 0),
+			scale: vec3(1, 1, 1),
+			angle: 0,
+		};
+
+		this.triangleObj = {
+			...this.triangleObj,
+			position: vec3(-0, 0, 1.0),
+			scale: vec3(0.4, 0.4, 1),
+			angle: 0,
+		};
+	}
+	onKeyDown(ev: KeyboardEvent) {
+		const angleV = 0.1;
+		const speed = 0.01;
+
+		switch (ev.key) {
+			case "ArrowLeft":
+			case "A":
+			case "a":
+				this.triangleObj.angle -= angleV;
+				break;
+
+			case "ArrowRight":
+			case "D":
+			case "d":
+				this.triangleObj.angle += angleV;
+				break;
+
+			case "ArrowUp":
+			case "W":
+			case "w": {
+				const angle = this.triangleObj.angle;
+				this.triangleObj.position.add([
+					speed * Math.sin(angle),
+					speed * Math.cos(angle),
+					0,
+				]);
+				break;
+			}
+
+			case "ArrowDown":
+			case "S":
+			case "s": {
+				const angle = this.triangleObj.angle;
+				this.triangleObj.position.add([
+					-speed * Math.sin(angle),
+					-speed * Math.cos(angle),
+					0,
+				]);
+				break;
+			}
+		}
 	}
 
 	override onAttach(app: SandboxApp): void {
@@ -52,6 +110,7 @@ class TestLayer extends Layer {
 
 		// prettier-ignore
 		this.projection = Matrix4.Ortho(-1.0 * aspect, 1.0 *aspect, -1.0 , 1.0, -1.0, 1.0 )
+		window.addEventListener("keydown", this.onKeyDown.bind(this));
 		// Square Shader
 		const sqVertexShader = `
 			#version 300 es
@@ -186,19 +245,11 @@ class TestLayer extends Layer {
 		const renderAPI = renderer.GetRenderAPI();
 
 		renderAPI.Resize(() => {
-			this.squareObj.shader.clearCache(this.projection);
 			const aspect = renderer.getWidth() / renderer.getHeight();
-			this.squareObj.shader.clearCache(this.projection);
 
 			// recalculates the projection matrix with the new aspect
 			// prettier-ignore
 			this.projection.makeOrthographic(-1.0 * aspect, 1.0 *aspect, -1.0 , 1.0, -1.0, 1.0 )
-
-			this.projection.multiplyMat(
-				Matrix4.Translate(this.position),
-				Matrix4.Scale(this.scale),
-				this.rotation
-			);
 		});
 
 		/* should be handled by the renderer */
@@ -210,12 +261,27 @@ class TestLayer extends Layer {
 		renderer.BeginScene();
 
 		this.squareObj.shader.use();
-		this.squareObj.shader.setUniformMat4("u_Projection", this.projection);
+		const squareProj = this.projection
+			.clone()
+			.multiplyMat(
+				Matrix4.Translate(this.squareObj.position),
+				Matrix4.Scale(this.squareObj.scale),
+				Matrix4.Rotate(this.squareObj.angle, this.axis)
+			);
+		this.squareObj.shader.setUniformMat4("u_Projection", squareProj);
 		renderer.Submit(this.squareObj.va);
 
-		// this.triangleObj.shader.use();
-		// this.triangleObj.shader.setUniformMat4("u_Projection", this.projection);
-		// renderer.Submit(this.triangleObj.va);
+		const triProj = this.projection
+			.clone()
+			.multiplyMat(
+				Matrix4.Translate(this.triangleObj.position),
+				Matrix4.Scale(this.triangleObj.scale),
+				Matrix4.Rotate(this.triangleObj.angle, this.axis)
+			);
+
+		this.triangleObj.shader.use();
+		this.triangleObj.shader.setUniformMat4("u_Projection", triProj);
+		renderer.Submit(this.triangleObj.va);
 
 		renderer.EndScene();
 	}

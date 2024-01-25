@@ -67,13 +67,14 @@ export class Matrix4 {
 			iy = i * y;
 
 		// prettier-ignore
-		m.set
-		(
-			c + ix*x,   y*ix - z*s,  ix*x + y*s, 0, 
-			ix*y + z*s, c + iy*y,    iy*z - z*s , 0, 
-			ix*z - y*s, iy*z + x*s,  c + i * z * z, 0, 
+		m.set(
+
+			ix * x + c, ix * y - s * z, ix * z + s * y, 0,
+			ix * y + s * z, iy * y + c, iy * z - s * x, 0,
+			ix * z - s * y, iy * z + s * x, i * z * z + c, 0,
 			0, 0, 0, 1
-		)
+
+		);
 
 		return m;
 	}
