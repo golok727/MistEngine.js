@@ -6,8 +6,8 @@ import {
 	MistWebGL2Renderer,
 } from "@mist-engine/renderers";
 
-import { LayerStack } from "./LayerStack";
-import { Layer } from "./Layer";
+import { LayerStack } from "@mist-engine/core/LayerStack";
+import { Layer } from "@mist-engine/core/Layer";
 
 import { MistLogger } from "@mist-engine/logger";
 

@@ -29,7 +29,6 @@ export class MistWebGLTexture implements MistTexture {
 	}
 	private setup(image: HTMLImageElement) {
 		const gl = this._gl;
-		console.log(gl);
 
 		const texture = gl.createTexture();
 		if (!texture) throw new Error("Error creating texture");
@@ -50,11 +49,12 @@ export class MistWebGLTexture implements MistTexture {
 	use(): void;
 	use(slot: number): void;
 	use(slot?: number): void {
-		slot = slot ?? 0;
-		console.log(this.isLoaded);
-		const gl = this._gl;
-		gl.activeTexture(gl.TEXTURE0 + slot);
-		gl.bindTexture(gl.TEXTURE_2D, this.texture);
+		if (this.isLoaded) {
+			slot = slot ?? 0;
+			const gl = this._gl;
+			gl.activeTexture(gl.TEXTURE0 + slot);
+			gl.bindTexture(gl.TEXTURE_2D, this.texture);
+		}
 	}
 
 	detach(): void {

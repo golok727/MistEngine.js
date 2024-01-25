@@ -10,6 +10,7 @@ import {
 	preloadTexture,
 	Texture,
 	MistTexture,
+	vec3,
 } from "@mist-engine/index";
 
 import "./style.css";
@@ -34,6 +35,9 @@ class TestLayer extends Layer {
 	private squareObj!: DrawableObject;
 	private triangleObj!: DrawableObject;
 	private projection!: Matrix4;
+	private position = vec3(0, 0, 0);
+	private scale = vec3(1);
+	private rotation = Matrix4.Rotate(Math.PI / 4, vec3(0, 0, 1));
 	constructor() {
 		super("TestLayer");
 		this.squareObj = { ...this.squareObj };
@@ -48,7 +52,6 @@ class TestLayer extends Layer {
 
 		// prettier-ignore
 		this.projection = Matrix4.Ortho(-1.0 * aspect, 1.0 *aspect, -1.0 , 1.0, -1.0, 1.0 )
-
 		// Square Shader
 		const sqVertexShader = `
 			#version 300 es
@@ -96,7 +99,7 @@ class TestLayer extends Layer {
 
 		const triFragmentShader = `
 			#version 300 es
-			precision mediump float;
+			precision highp float;
 			
 			in vec4 color; 
 			out vec4 fragColor; 
@@ -105,6 +108,7 @@ class TestLayer extends Layer {
 				fragColor = color;
 			}
 		`;
+
 		this.triangleObj.shader = Shader.Create(
 			renderer,
 			triVertexShader,
@@ -182,12 +186,19 @@ class TestLayer extends Layer {
 		const renderAPI = renderer.GetRenderAPI();
 
 		renderAPI.Resize(() => {
+			this.squareObj.shader.clearCache(this.projection);
 			const aspect = renderer.getWidth() / renderer.getHeight();
 			this.squareObj.shader.clearCache(this.projection);
 
-			// recalculates the projection matrix the projection matrix
+			// recalculates the projection matrix with the new aspect
 			// prettier-ignore
 			this.projection.makeOrthographic(-1.0 * aspect, 1.0 *aspect, -1.0 , 1.0, -1.0, 1.0 )
+
+			this.projection.multiplyMat(
+				Matrix4.Translate(this.position),
+				Matrix4.Scale(this.scale),
+				this.rotation
+			);
 		});
 
 		/* should be handled by the renderer */
