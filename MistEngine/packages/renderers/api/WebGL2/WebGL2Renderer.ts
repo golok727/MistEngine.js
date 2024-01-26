@@ -1,5 +1,4 @@
 import { MistRendererAPI, Renderer } from "@mist-engine/renderers/Renderer";
-import { registerContextToGlobalMist } from "@mist-engine/renderers/RenderingApi";
 
 import MistWebGL2RenderingAPI from "./WebGL2RenderingAPI";
 import { MistVertexArray } from "@mist-engine/renderers/VertexArray";
@@ -13,8 +12,6 @@ export class MistWebGL2Renderer implements Renderer<WebGL2RenderingContext> {
 		this.canvas = canvas;
 		this.API = MistRendererAPI.WebGL2;
 		this.renderAPI = new MistWebGL2RenderingAPI(this.canvas);
-
-		registerContextToGlobalMist(this);
 	}
 
 	BeginScene(): void {}

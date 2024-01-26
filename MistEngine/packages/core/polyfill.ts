@@ -1,3 +1,3 @@
 if (window.__MIST__ === undefined) {
-	window.__MIST__ = { contexts: new WeakMap() };
+	window.__MIST__ = { ...window.__MIST__ };
 }

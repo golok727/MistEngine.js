@@ -5,8 +5,6 @@ interface MistGlobal {
 	contexts: WeakMap<Renderer, Context>;
 }
 
-interface Window {
-	__MIST__: MistGlobal;
-}
+interface Window {}
 
 declare var __MIST__: Window["__MIST__"];
