@@ -1,6 +1,6 @@
-import { MistVertexArray } from ".";
+import { MistVertexArray } from "./VertexArray";
 import { MistRendererAPI, Renderer } from "./Renderer";
-import { MistWebGL2RenderingAPI } from "./api/WebGL2/WebGL2RenderingAPI";
+import MistWebGL2RenderingAPI from "./api/WebGL2/WebGL2RenderingAPI";
 
 export interface RenderingAPI<Ctx = unknown> {
 	get inner(): Ctx;
@@ -18,19 +18,19 @@ export function getGpuRenderingContext(renderer: Renderer): GPUCanvasContext {
 export function getGLRenderingContext(
 	renderer: Renderer
 ): WebGL2RenderingContext {
-	const context = renderer.GetRenderAPI();
+	const renderAPI = renderer.GetRenderAPI();
 
 	// Check if the context is webgl2 context
-	if (!(context instanceof MistWebGL2RenderingAPI)) {
+	if (!(renderAPI instanceof MistWebGL2RenderingAPI)) {
 		throw new Error(
 			"This buffer should be used within the WebGL2 rendering context"
 		);
 	}
 
-	return context.inner;
+	return renderAPI.inner;
 }
 
-export function registerContext(renderer: Renderer) {
+export function registerContextToGlobalMist(renderer: Renderer) {
 	if (!window.__MIST__)
 		throw new Error("For some reason mist is not initialized ");
 	const nativeContext = renderer.getNativeContext();

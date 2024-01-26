@@ -1,6 +1,8 @@
 import { Layer } from "./Layer";
+
 export class LayerStack {
 	private layerStack: Layer[];
+
 	constructor() {
 		this.layerStack = [];
 	}

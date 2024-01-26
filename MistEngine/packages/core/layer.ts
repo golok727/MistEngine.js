@@ -1,4 +1,4 @@
-import { MistApp } from "..";
+import { Context } from "./Context";
 
 export class Layer {
 	private _name: string;
@@ -10,12 +10,18 @@ export class Layer {
 		return this._name;
 	}
 
-	public onAttach(_app: MistApp) {}
-	public onUpdate(_app: MistApp, deltaTime: number) {
-		deltaTime;
+	protected getContext(): Context {
+		const _this = this as LayerWithContext<this>;
+		return _this.__context__;
 	}
 
-	public onEvent(_type: string, _app: MistApp) {}
+	public onAttach() {}
 
-	public onDetach(_app: MistApp) {}
+	public onUpdate(_deltaTime: number) {}
+
+	public onEvent(_type: String) {}
+
+	public onDetach() {}
 }
+
+export type LayerWithContext<T = Layer> = T & { readonly __context__: Context };

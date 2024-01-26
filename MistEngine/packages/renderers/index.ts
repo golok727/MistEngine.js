@@ -1,6 +1,6 @@
 export { MistRendererAPI } from "./Renderer";
 export { MistWebGL2Renderer } from "./api/WebGL2/WebGL2Renderer";
-export { MistWebGL2RenderingAPI } from "./api/WebGL2/WebGL2RenderingAPI";
+export { default as MistWebGL2RenderingAPI } from "./api/WebGL2/WebGL2RenderingAPI";
 
 export type { MistVertexArray } from "./VertexArray";
 export type { MistIndexBuffer, MistVertexBuffer } from "./Buffer";

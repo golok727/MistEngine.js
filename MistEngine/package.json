@@ -17,6 +17,7 @@
 		"vitest": "^1.2.0"
 	},
 	"dependencies": {
-		"@webgpu/types": "^0.1.40"
+		"@webgpu/types": "^0.1.40",
+		"nanoid": "^5.0.4"
 	}
 }

@@ -11,7 +11,6 @@ import {
 	Texture,
 	MistTexture,
 	vec3,
-	Vector2,
 	Vector3,
 } from "@mist-engine/index";
 
@@ -102,11 +101,12 @@ class TestLayer extends Layer {
 		}
 	}
 
-	override onAttach(app: SandboxApp): void {
-		const renderer = app.getRenderer();
-		const aspect = renderer.getWidth() / renderer.getHeight();
+	override onAttach(): void {
+		const { Renderer, RenderAPI } = this.getContext();
 
-		this.trainTexture = Texture.Create(renderer, "/train.png");
+		const aspect = Renderer.getWidth() / Renderer.getHeight();
+
+		this.trainTexture = Texture.Create(Renderer, "/train.png");
 
 		// prettier-ignore
 		this.projection = Matrix4.Ortho(-1.0 * aspect, 1.0 *aspect, -1.0 , 1.0, -1.0, 1.0 )
@@ -169,13 +169,13 @@ class TestLayer extends Layer {
 		`;
 
 		this.triangleObj.shader = Shader.Create(
-			renderer,
+			Renderer,
 			triVertexShader,
 			triFragmentShader
 		);
 
 		this.squareObj.shader = Shader.Create(
-			renderer,
+			Renderer,
 			sqVertexShader,
 			sqFragmentShader
 		);
@@ -198,11 +198,11 @@ class TestLayer extends Layer {
 		]);
 		const squareObj = this.squareObj;
 
-		squareObj.va = VertexArray.Create(renderer);
-		const squareObjVb = VertexBuffer.Create(renderer, squareVertices);
+		squareObj.va = VertexArray.Create(Renderer);
+		const squareObjVb = VertexBuffer.Create(Renderer, squareVertices);
 		squareObjVb.setLayout(squareLayout);
 
-		const squareObjIb = IndexBuffer.Create(renderer, squareIndices);
+		const squareObjIb = IndexBuffer.Create(Renderer, squareIndices);
 
 		squareObj.va.addVertexBuffer(squareObjVb);
 		squareObj.va.setIndexBuffer(squareObjIb);
@@ -224,12 +224,12 @@ class TestLayer extends Layer {
 		]);
 		const { triangleObj } = this;
 
-		triangleObj.va = VertexArray.Create(renderer);
+		triangleObj.va = VertexArray.Create(Renderer);
 
-		const triangleObjVb = VertexBuffer.Create(renderer, triangleVertices);
+		const triangleObjVb = VertexBuffer.Create(Renderer, triangleVertices);
 		triangleObjVb.setLayout(triangleLayout);
 
-		const triangleObjIb = IndexBuffer.Create(renderer, triangleIndices);
+		const triangleObjIb = IndexBuffer.Create(Renderer, triangleIndices);
 
 		triangleObj.va.addVertexBuffer(triangleObjVb);
 		triangleObj.va.setIndexBuffer(triangleObjIb);
@@ -239,13 +239,12 @@ class TestLayer extends Layer {
 		this.trainTexture.use(0);
 	}
 
-	override onUpdate(app: SandboxApp, _delta: number): void {
+	override onUpdate(_delta: number): void {
 		// Each Frame
-		const renderer = app.getRenderer();
-		const renderAPI = renderer.GetRenderAPI();
+		const { RenderAPI, Renderer } = this.getContext();
 
-		renderAPI.Resize(() => {
-			const aspect = renderer.getWidth() / renderer.getHeight();
+		RenderAPI.Resize(() => {
+			const aspect = Renderer.getWidth() / Renderer.getHeight();
 
 			// recalculates the projection matrix with the new aspect
 			// prettier-ignore
@@ -253,12 +252,12 @@ class TestLayer extends Layer {
 		});
 
 		/* should be handled by the renderer */
-		renderAPI.SetViewport(0, 0, renderer.getWidth(), renderer.getHeight());
+		RenderAPI.SetViewport(0, 0, Renderer.getWidth(), Renderer.getHeight());
 
-		renderAPI.SetClearColor(0.1, 0.1, 0.1, 1.0);
-		renderAPI.Clear();
+		RenderAPI.SetClearColor(0.1, 0.1, 0.1, 1.0);
+		RenderAPI.Clear();
 
-		renderer.BeginScene();
+		Renderer.BeginScene();
 
 		this.squareObj.shader.use();
 		const squareProj = this.projection
@@ -269,7 +268,7 @@ class TestLayer extends Layer {
 				Matrix4.Rotate(this.squareObj.angle, this.axis)
 			);
 		this.squareObj.shader.setUniformMat4("u_Projection", squareProj);
-		renderer.Submit(this.squareObj.va);
+		Renderer.Submit(this.squareObj.va);
 
 		const triProj = this.projection
 			.clone()
@@ -281,12 +280,12 @@ class TestLayer extends Layer {
 
 		this.triangleObj.shader.use();
 		this.triangleObj.shader.setUniformMat4("u_Projection", triProj);
-		renderer.Submit(this.triangleObj.va);
+		Renderer.Submit(this.triangleObj.va);
 
-		renderer.EndScene();
+		Renderer.EndScene();
 	}
 
-	override onDetach(_app: SandboxApp): void {}
+	override onDetach(): void {}
 }
 
 class SandboxApp extends MistApp {

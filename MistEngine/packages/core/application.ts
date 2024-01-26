@@ -9,9 +9,12 @@ import {
 import { LayerStack } from "@mist-engine/core/LayerStack";
 import { Layer } from "@mist-engine/core/Layer";
 
+import type { LayerWithContext } from "@mist-engine/core/Layer";
+
 import { MistLogger } from "@mist-engine/logger";
 
-import { mistIntro__ } from "@mist-engine/utils";
+import { mistIntro__, uuid } from "@mist-engine/utils";
+import { Context } from "./Context";
 
 const logger = new MistLogger({ name: "App" });
 
@@ -22,6 +25,7 @@ export type ApplicationConstructorProps = {
 };
 
 export class MistApp {
+	private _id: string;
 	private appName: string;
 	private renderer: Renderer;
 	private layerStack: LayerStack;
@@ -29,6 +33,7 @@ export class MistApp {
 	private lastTime: number;
 
 	constructor({ name, canvas, rendererAPI }: ApplicationConstructorProps) {
+		this._id = uuid();
 		this.appName = name;
 		this.layerStack = new LayerStack();
 		this.running = false;
@@ -77,7 +82,7 @@ export class MistApp {
 		const deltaTime = this.lastTime ? time - this.lastTime : this.lastTime;
 
 		for (const layer of this.layerStack.reversed()) {
-			layer.onUpdate(this, deltaTime);
+			layer.onUpdate(deltaTime);
 		}
 
 		this.lastTime = time;
@@ -90,8 +95,8 @@ export class MistApp {
 		...args: ConstructorParameters<T>
 	) {
 		const layer = new layerConstructor(...args);
-
-		layer.onAttach(this);
+		this.attachAppToLayer(layer as LayerWithContext);
+		layer.onAttach();
 		this.layerStack.pushLayer(layer);
 	}
 
@@ -100,9 +105,23 @@ export class MistApp {
 		...args: ConstructorParameters<T>
 	) {
 		const overlay = new overlayConstructor(...args);
+		this.attachAppToLayer(overlay as LayerWithContext);
 
-		overlay.onAttach(this);
+		overlay.onAttach();
 		this.layerStack.pushOverlay(overlay);
+	}
+
+	private attachAppToLayer(layer: LayerWithContext) {
+		const context: Context = {
+			App: this,
+			RenderAPI: this.renderer.GetRenderAPI(),
+			Renderer: this.renderer,
+		};
+
+		Object.defineProperty(layer, "__context__", {
+			value: context,
+			writable: false,
+		});
 	}
 }
 
