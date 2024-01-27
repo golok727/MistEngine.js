@@ -15,7 +15,7 @@
 */
 
 export { MistApp, CreateMistApp } from "@mist-engine/core/Application";
-export { Layer } from "@mist-engine/core/Layer";
+export { default as Layer } from "@mist-engine/core/Layer";
 export {
 	MistRendererAPI,
 	VertexBuffer,

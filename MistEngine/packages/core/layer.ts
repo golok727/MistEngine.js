@@ -1,6 +1,6 @@
 import { Context } from "./Context";
 
-export class Layer {
+export default class Layer {
 	private _name: string;
 	constructor(name: string) {
 		this._name = name;

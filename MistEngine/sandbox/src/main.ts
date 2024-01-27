@@ -24,7 +24,10 @@ import {
 	MistRendererAPI,
 } from "@mist-engine/index";
 
+import MistKey from "@mist-engine/core/input/MistKey";
+
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+const fpsSpan = document.getElementById("fps-text") as HTMLSpanElement;
 
 type DrawableObject = {
 	va: MistVertexArray;
@@ -34,7 +37,13 @@ type DrawableObject = {
 	angle: number;
 };
 
+function updateFPSText(fps: number) {
+	fpsSpan.textContent = fps.toFixed(2);
+}
+
 class TestLayer extends Layer {
+	private frameTimes: number[] = [];
+	private lastTime = 0;
 	private trainTexture!: MistTexture;
 	private squareObj!: DrawableObject;
 	private triangleObj!: DrawableObject;
@@ -43,7 +52,6 @@ class TestLayer extends Layer {
 	private axis = vec3(0, 0, 1);
 	constructor() {
 		super("TestLayer");
-
 		this.squareObj = {
 			...this.squareObj,
 			position: vec3(0, 0, 0),
@@ -58,60 +66,89 @@ class TestLayer extends Layer {
 			angle: 0,
 		};
 	}
-	onKeyDown(ev: KeyboardEvent) {
-		const angleV = 0.1;
-		const speed = 0.01;
 
-		switch (ev.key) {
-			case "ArrowLeft":
-			case "A":
-			case "a":
-				this.triangleObj.angle -= angleV;
-				break;
+	updateFPSDebugText(delta: number) {
+		if (!delta) return;
+		const fps = 1000 / delta;
+		this.frameTimes.push(fps);
 
-			case "ArrowRight":
-			case "D":
-			case "d":
-				this.triangleObj.angle += angleV;
-				break;
+		const now = performance.now();
 
-			case "ArrowUp":
-			case "W":
-			case "w": {
-				const angle = this.triangleObj.angle;
-				this.triangleObj.position.add([
-					speed * Math.sin(angle),
-					speed * Math.cos(angle),
-					0,
-				]);
-				break;
+		if (now - this.lastTime > 1000) {
+			if (this.frameTimes.length) {
+				const averageFps =
+					this.frameTimes.reduce((s, c) => s + c, 0) / this.frameTimes.length;
+				updateFPSText(averageFps);
 			}
 
-			case "ArrowDown":
-			case "S":
-			case "s": {
-				const angle = this.triangleObj.angle;
-				this.triangleObj.position.add([
-					-speed * Math.sin(angle),
-					-speed * Math.cos(angle),
-					0,
-				]);
-				break;
-			}
+			// Reset for the next second
+			this.frameTimes = [];
+			this.lastTime = now;
+		}
+	}
+
+	updateObject(delta: number) {
+		const { Input, Renderer } = this.getContext();
+		// console.log((1000 / delta).toFixed(2) + " FPS");
+		const angleV = 0.003;
+		const speed = 0.001;
+
+		if (Input.wheel.isActive) {
+			this.triangleObj.angle += angleV * Input.wheel.dirY * 40;
+		}
+
+		// Test Mouse
+		if (Input.isMouseDown && Input.isPressed(MistKey.Control)) {
+			this.triangleObj.position.set(
+				(Input.mouseX / Renderer.getWidth()) * 2.0 - 1.0,
+				-((Input.mouseY / Renderer.getHeight()) * 2.0 - 1.0),
+				1
+			);
+		}
+
+		// Test Keyboard
+		if (Input.anyPressed(MistKey.ArrowRight, MistKey.d)) {
+			this.triangleObj.angle += angleV * delta;
+		}
+
+		if (Input.anyPressed(MistKey.ArrowLeft, MistKey.a)) {
+			this.triangleObj.angle -= angleV * delta;
+		}
+
+		if (Input.anyPressed(MistKey.ArrowUp, MistKey.w)) {
+			const angle = this.triangleObj.angle;
+			this.triangleObj.position.add([
+				speed * Math.sin(angle) * delta,
+				speed * Math.cos(angle) * delta,
+				0,
+			]);
+		}
+
+		if (Input.anyPressed(MistKey.ArrowDown, MistKey.s)) {
+			const angle = this.triangleObj.angle;
+			this.triangleObj.position.add([
+				-speed * Math.sin(angle) * delta,
+				-speed * Math.cos(angle) * delta,
+				0,
+			]);
 		}
 	}
 
 	override onAttach(): void {
-		const { Renderer, RenderAPI } = this.getContext();
+		const { Renderer } = this.getContext();
 
 		const aspect = Renderer.getWidth() / Renderer.getHeight();
 
 		this.trainTexture = Texture.Create(Renderer, "/train.png");
 
-		// prettier-ignore
-		this.projection = Matrix4.Ortho(-1.0 * aspect, 1.0 *aspect, -1.0 , 1.0, -1.0, 1.0 )
-		window.addEventListener("keydown", this.onKeyDown.bind(this));
-		// Square Shader
+		this.projection = Matrix4.Ortho(
+			-1.0 * aspect,
+			1.0 * aspect,
+			-1.0,
+			1.0,
+			-1.0,
+			1.0
+		);
 		const sqVertexShader = `
 			#version 300 es
 			layout ( location = 0 ) in  vec3 a_Position;
@@ -239,18 +276,20 @@ class TestLayer extends Layer {
 		this.trainTexture.use(0);
 	}
 
-	override onUpdate(_delta: number): void {
+	override onUpdate(delta: number): void {
 		// Each Frame
 		const { RenderAPI, Renderer } = this.getContext();
 
+		this.updateFPSDebugText(delta);
+
 		RenderAPI.Resize(() => {
 			const aspect = Renderer.getWidth() / Renderer.getHeight();
-
 			// recalculates the projection matrix with the new aspect
 			// prettier-ignore
 			this.projection.makeOrthographic(-1.0 * aspect, 1.0 *aspect, -1.0 , 1.0, -1.0, 1.0 )
 		});
 
+		this.updateObject(delta);
 		/* should be handled by the renderer */
 		RenderAPI.SetViewport(0, 0, Renderer.getWidth(), Renderer.getHeight());
 

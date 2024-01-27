@@ -6,14 +6,15 @@ import {
 	MistWebGL2Renderer,
 } from "@mist-engine/renderers";
 
-import { LayerStack } from "@mist-engine/core/LayerStack";
-import { Layer } from "@mist-engine/core/Layer";
+import LayerStack from "@mist-engine/core/LayerStack";
+import Layer from "@mist-engine/core/Layer";
+import MistInput from "@mist-engine/core/input/Input";
 
 import type { LayerWithContext } from "@mist-engine/core/Layer";
 
 import { MistLogger } from "@mist-engine/logger";
 
-import { mistIntro__, uuid } from "@mist-engine/utils";
+import { mistIntro__ } from "@mist-engine/utils";
 import { Context } from "./Context";
 
 const logger = new MistLogger({ name: "App" });
@@ -25,18 +26,23 @@ export type ApplicationConstructorProps = {
 };
 
 export class MistApp {
-	private _id: string;
+	// private _id: string;
+	private _allowPerformanceMetrics: boolean;
+	private currentFrameId?: number;
 	private appName: string;
 	private renderer: Renderer;
+	private input: MistInput;
 	private layerStack: LayerStack;
-	private running: boolean;
+	private isRunning: boolean;
 	private lastTime: number;
 
 	constructor({ name, canvas, rendererAPI }: ApplicationConstructorProps) {
-		this._id = uuid();
+		// this._id = uuid();
+		this._allowPerformanceMetrics = !import.meta.env.PROD; // for now
 		this.appName = name;
 		this.layerStack = new LayerStack();
-		this.running = false;
+		this.input = new MistInput(canvas);
+		this.isRunning = false;
 		this.lastTime = 0;
 		// Select renderer API
 		switch (rendererAPI) {
@@ -51,6 +57,9 @@ export class MistApp {
 			default:
 				throw new Error(`Renderer Api ${rendererAPI} is not supported!`);
 		}
+		// Initialize input polling
+		this.initPerformanceMatrices();
+		MistInput.Init();
 	}
 
 	get name() {
@@ -60,33 +69,73 @@ export class MistApp {
 	public getRenderer() {
 		return this.renderer;
 	}
+
 	public getRenderingAPI() {
 		return this.renderer.GetRenderAPI();
 	}
 
+	private initPerformanceMatrices() {
+		if (this._allowPerformanceMetrics)
+			Object.assign(this, {
+				__performance: {
+					averageFPS: 0,
+					fpsMeasureStack: [],
+				},
+			});
+	}
+
+	private updatePerformanceMatrices(now: number) {}
+
 	private setRunning(enable: boolean) {
-		this.running = enable;
+		this.isRunning = enable;
 	}
 
 	public Run() {
-		this.setRunning(true); //!
+		if (this.isRunning)
+			throw new Error(`App: '${this.name}' is already running!`);
+		this.setRunning(true);
 		logger.log("Using {0}", this.renderer.GetApi());
+		this.currentFrameId = requestAnimationFrame(this.loop.bind(this));
+	}
 
-		requestAnimationFrame(this.loop.bind(this));
+	// TODO IMPLEMENTATION
+	public Pause() {
+		this.setRunning(false);
+	}
+
+	public ShutDown() {}
+
+	public Restart() {
+		this._restartApp();
 	}
 
 	// Main Loop
-	private loop(time: number) {
-		if (!this.running) return;
+	private loop(timestamp: number) {
+		if (!this.isRunning) return;
 
-		const deltaTime = this.lastTime ? time - this.lastTime : this.lastTime;
+		if (this._allowPerformanceMetrics)
+			this.updatePerformanceMatrices(timestamp);
 
-		for (const layer of this.layerStack.reversed()) {
-			layer.onUpdate(deltaTime);
+		if (!this.lastTime) this.lastTime = timestamp;
+
+		const interval = 1000 / 90;
+		const deltaTime = timestamp - this.lastTime;
+
+		if (deltaTime > interval) {
+			for (const layer of this.layerStack.reversed()) {
+				layer.onUpdate(deltaTime);
+			}
+			this.lastTime = timestamp - (deltaTime % interval);
 		}
 
-		this.lastTime = time;
-		requestAnimationFrame(this.loop.bind(this));
+		this.currentFrameId = requestAnimationFrame(this.loop.bind(this));
+	}
+
+	private _restartApp() {
+		if (this.currentFrameId) cancelAnimationFrame(this.currentFrameId);
+		this.setRunning(false);
+		this.currentFrameId = undefined;
+		this.Run();
 	}
 
 	// Layer Stuff
@@ -95,7 +144,7 @@ export class MistApp {
 		...args: ConstructorParameters<T>
 	) {
 		const layer = new layerConstructor(...args);
-		this.attachAppToLayer(layer as LayerWithContext);
+		this.provideContextToLayer(layer as LayerWithContext);
 		layer.onAttach();
 		this.layerStack.pushLayer(layer);
 	}
@@ -105,17 +154,18 @@ export class MistApp {
 		...args: ConstructorParameters<T>
 	) {
 		const overlay = new overlayConstructor(...args);
-		this.attachAppToLayer(overlay as LayerWithContext);
+		this.provideContextToLayer(overlay as LayerWithContext);
 
 		overlay.onAttach();
 		this.layerStack.pushOverlay(overlay);
 	}
 
-	private attachAppToLayer(layer: LayerWithContext) {
+	private provideContextToLayer(layer: LayerWithContext) {
 		const context: Context = {
 			App: this,
 			RenderAPI: this.renderer.GetRenderAPI(),
 			Renderer: this.renderer,
+			Input: this.input,
 		};
 
 		Object.defineProperty(layer, "__context__", {

@@ -1,6 +1,6 @@
-import { Layer } from "./Layer";
+import Layer from "./Layer";
 
-export class LayerStack {
+export default class LayerStack {
 	private layerStack: Layer[];
 
 	constructor() {
