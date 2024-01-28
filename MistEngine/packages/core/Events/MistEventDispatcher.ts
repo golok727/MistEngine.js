@@ -2,23 +2,21 @@
   Extended From: 
   https://github.com/mrdoob/eventdispatcher.js
  */
-
 interface MistEventDispatcherBase {
 	addEventListener(type: string, listener: MistEventListenerCallback): void;
 	removeEventListener(type: string, listener: MistEventListenerCallback): void;
 	hasEventListener(type: string, listener: MistEventListenerCallback): boolean;
-	// dispatchEvent(event: MistEvent): void;
 }
 
 export default class MistEventDispatcher implements MistEventDispatcherBase {
-	private _listeners!: Record<string, Set<MistEventListenerCallback<any>>>;
+	private __listeners__!: Record<string, Set<MistEventListenerCallback<any>>>;
 
 	addEventListener<K extends keyof MistEventMap>(
 		type: K,
 		listener: MistEventListenerCallback<MistEventMap[K]>
 	): void {
-		if (this._listeners === undefined) this._listeners = {};
-		const listeners = this._listeners;
+		if (this.__listeners__ === undefined) this.__listeners__ = {};
+		const listeners = this.__listeners__;
 
 		if (listeners[type] === undefined) {
 			listeners[type] = new Set();
@@ -31,9 +29,9 @@ export default class MistEventDispatcher implements MistEventDispatcherBase {
 		type: K,
 		listener: MistEventListenerCallback<MistEventMap[K]>
 	): boolean {
-		if (this._listeners === undefined) return false;
+		if (this.__listeners__ === undefined) return false;
 
-		const listeners = this._listeners;
+		const listeners = this.__listeners__;
 
 		return listeners[type] !== undefined && listeners[type].has(listener);
 	}
@@ -42,18 +40,18 @@ export default class MistEventDispatcher implements MistEventDispatcherBase {
 		type: K,
 		listener: MistEventListenerCallback<MistEventMap[K]>
 	): void {
-		if (this._listeners === undefined) return;
+		if (this.__listeners__ === undefined) return;
 
-		const listeners = this._listeners;
+		const listeners = this.__listeners__;
 		const listenerArray = listeners[type];
 
 		listenerArray.delete(listener);
 	}
 
 	protected dispatchEvent<E extends MistEvent>(event: E): void {
-		if (this._listeners === undefined) return;
+		if (this.__listeners__ === undefined) return;
 
-		const listeners = this._listeners;
+		const listeners = this.__listeners__;
 		const listenerSet = listeners[event.type];
 
 		if (listenerSet !== undefined) {

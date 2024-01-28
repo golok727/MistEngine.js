@@ -37,6 +37,7 @@ export class MistWebGL2Renderer
 		if (w !== canvas.width || h !== canvas.height) {
 			canvas.width = w;
 			canvas.height = h;
+
 			this.dispatchEvent({
 				type: MistEventType.RendererResize,
 				width: canvas.width,

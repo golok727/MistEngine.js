@@ -65,6 +65,7 @@ class TestLayer extends Layer {
 			scale: vec3(0.4, 0.4, 1),
 			angle: 0,
 		};
+		this.projection = new Matrix4();
 	}
 
 	updateFPSDebugText(delta: number) {
@@ -140,16 +141,6 @@ class TestLayer extends Layer {
 		Renderer.addEventListener(
 			MistEventType.RendererResize,
 			this.onRendererResize
-		);
-
-		const aspect = Renderer.getWidth() / Renderer.getHeight();
-		this.projection = Matrix4.Ortho(
-			-1.0 * aspect,
-			1.0 * aspect,
-			-1.0,
-			1.0,
-			-1.0,
-			1.0
 		);
 
 		this.trainTexture = Texture.Create(Renderer, "/train.png");
@@ -285,15 +276,8 @@ class TestLayer extends Layer {
 		ev
 	) => {
 		const aspect = ev.width / ev.height;
-		console.log(ev.width, ev.height);
-		this.projection.makeOrthographic(
-			-1.0 * aspect,
-			1.0 * aspect,
-			-1.0,
-			1.0,
-			-1.0,
-			1.0
-		);
+		// prettier-ignore
+		this.projection.makeOrthographic(-1.0 * aspect, 1.0 *aspect, -1.0 , 1.0, -1.0, 1.0 )
 	};
 
 	override onUpdate(delta: number): void {
@@ -301,14 +285,6 @@ class TestLayer extends Layer {
 		const { RenderAPI, Renderer } = this.getContext();
 
 		this.updateFPSDebugText(delta);
-
-		// RenderAPI.Resize(() => {
-		// 	console.log("Resize");
-		// 	const aspect = Renderer.getWidth() / Renderer.getHeight();
-		// 	// recalculates the projection matrix with the new aspect
-		// 	// prettier-ignore
-		// 	this.projection.makeOrthographic(-1.0 * aspect, 1.0 *aspect, -1.0 , 1.0, -1.0, 1.0 )
-		// });
 
 		this.updateObject(delta);
 		/* should be handled by the renderer */
@@ -345,7 +321,13 @@ class TestLayer extends Layer {
 		Renderer.EndScene();
 	}
 
-	override onDetach(): void {}
+	override onDetach(): void {
+		const { Renderer } = this.getContext();
+		Renderer.removeEventListener(
+			MistEventType.RendererResize,
+			this.onRendererResize
+		);
+	}
 }
 
 class SandboxApp extends MistApp {

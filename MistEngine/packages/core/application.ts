@@ -102,16 +102,25 @@ export class MistApp extends MistEventDispatcher {
 		logger.log("Using {0}", this.renderer.GetApi());
 		this.currentFrameId = requestAnimationFrame(this.loop.bind(this));
 	}
-
-	// TODO IMPLEMENTATION
+	/*
+	  Pauses a application and can restart with the Run() fn 
+	 */
 	public Pause() {
-		this.setRunning(false);
+		this._stop();
 	}
 
+	/*
+	 Completely kills the App and remove alls the input events. Global keyboard events are preserved 
+	 */
 	public ShutDown() {
+		this._stop();
 		this.dispatchEvent({ type: MistEventType.AppShutDown, target: this });
+		this.input.destroy();
 	}
 
+	/*
+	  Stops and restarts the app 
+	 */
 	public Restart() {
 		this._restartApp();
 	}
@@ -139,10 +148,14 @@ export class MistApp extends MistEventDispatcher {
 		this.currentFrameId = requestAnimationFrame(this.loop.bind(this));
 	}
 
-	private _restartApp() {
+	private _stop() {
 		if (this.currentFrameId) cancelAnimationFrame(this.currentFrameId);
 		this.setRunning(false);
 		this.currentFrameId = undefined;
+	}
+
+	private _restartApp() {
+		this._stop();
 		this.dispatchEvent({ type: MistEventType.AppRestart, target: this });
 		this.Run();
 	}
@@ -168,7 +181,10 @@ export class MistApp extends MistEventDispatcher {
 		overlay.onAttach();
 		this.layerStack.pushOverlay(overlay);
 	}
-
+	
+	/*
+		Provide context for each layer when a layer is created
+ */
 	private provideContextToLayer(layer: LayerWithContext) {
 		const context: Context = {
 			App: this,
@@ -193,6 +209,5 @@ export const CreateMistApp = async (
 	if (mayBePromiseApp instanceof Promise) app = await mayBePromiseApp;
 	else app = mayBePromiseApp;
 	app.Run();
-
 	logger.log("{0}\n\t {1}", "Radha Vallabh Shri Harivansh", "Radhey Shyam");
 };
