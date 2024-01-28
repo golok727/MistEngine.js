@@ -8,7 +8,7 @@ import {
 
 import LayerStack from "@mist-engine/core/LayerStack";
 import Layer from "@mist-engine/core/Layer";
-import MistInput from "@mist-engine/core/input/Input";
+import MistInput from "@mist-engine/core/Input/Input";
 
 import type { LayerWithContext } from "@mist-engine/core/Layer";
 

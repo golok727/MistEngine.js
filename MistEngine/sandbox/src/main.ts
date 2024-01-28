@@ -24,7 +24,7 @@ import {
 	MistRendererAPI,
 } from "@mist-engine/index";
 
-import MistKey from "@mist-engine/core/input/MistKey";
+import MistKey from "@mist-engine/core/Input/MistKey";
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const fpsSpan = document.getElementById("fps-text") as HTMLSpanElement;
