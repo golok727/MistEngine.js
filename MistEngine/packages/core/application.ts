@@ -95,6 +95,9 @@ export class MistApp extends MistEventDispatcher {
 	public Run() {
 		if (this.isRunning)
 			throw new Error(`App: '${this.name}' is already running!`);
+
+		this.dispatchEvent({ type: MistEventType.AppStart, target: this });
+
 		this.setRunning(true);
 		logger.log("Using {0}", this.renderer.GetApi());
 		this.currentFrameId = requestAnimationFrame(this.loop.bind(this));
@@ -105,7 +108,9 @@ export class MistApp extends MistEventDispatcher {
 		this.setRunning(false);
 	}
 
-	public ShutDown() {}
+	public ShutDown() {
+		this.dispatchEvent({ type: MistEventType.AppShutDown, target: this });
+	}
 
 	public Restart() {
 		this._restartApp();
@@ -124,6 +129,7 @@ export class MistApp extends MistEventDispatcher {
 		const deltaTime = timestamp - this.lastTime;
 
 		if (deltaTime > interval) {
+			this.renderer.Resize();
 			for (const layer of this.layerStack.reversed()) {
 				layer.onUpdate(deltaTime);
 			}
@@ -137,6 +143,7 @@ export class MistApp extends MistEventDispatcher {
 		if (this.currentFrameId) cancelAnimationFrame(this.currentFrameId);
 		this.setRunning(false);
 		this.currentFrameId = undefined;
+		this.dispatchEvent({ type: MistEventType.AppRestart, target: this });
 		this.Run();
 	}
 

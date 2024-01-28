@@ -24,18 +24,6 @@ export default class MistWebGL2RenderingAPI
 		gl.clearColor(r, g, b, a);
 	}
 
-	public Resize(onResize?: () => void): void {
-		const canvas = this.context.canvas as HTMLCanvasElement;
-		const w = canvas.clientWidth;
-		const h = canvas.clientHeight;
-		if (w !== canvas.width || h !== canvas.height) {
-			const dpr = window.devicePixelRatio || 1;
-			canvas.width = Math.round(w * dpr);
-			canvas.height = Math.round(h * dpr);
-			onResize && onResize();
-		}
-	}
-
 	public Clear(): void {
 		const gl = this.context;
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);

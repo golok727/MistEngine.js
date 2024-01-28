@@ -137,10 +137,12 @@ class TestLayer extends Layer {
 	override onAttach(): void {
 		const { Renderer } = this.getContext();
 
+		Renderer.addEventListener(
+			MistEventType.RendererResize,
+			this.onRendererResize
+		);
+
 		const aspect = Renderer.getWidth() / Renderer.getHeight();
-
-		this.trainTexture = Texture.Create(Renderer, "/train.png");
-
 		this.projection = Matrix4.Ortho(
 			-1.0 * aspect,
 			1.0 * aspect,
@@ -149,6 +151,9 @@ class TestLayer extends Layer {
 			-1.0,
 			1.0
 		);
+
+		this.trainTexture = Texture.Create(Renderer, "/train.png");
+
 		const sqVertexShader = `
 			#version 300 es
 			layout ( location = 0 ) in  vec3 a_Position;
@@ -276,18 +281,34 @@ class TestLayer extends Layer {
 		this.trainTexture.use(0);
 	}
 
+	onRendererResize: MistEventListenerCallback<MistRendererResizeEvent> = (
+		ev
+	) => {
+		const aspect = ev.width / ev.height;
+		console.log(ev.width, ev.height);
+		this.projection.makeOrthographic(
+			-1.0 * aspect,
+			1.0 * aspect,
+			-1.0,
+			1.0,
+			-1.0,
+			1.0
+		);
+	};
+
 	override onUpdate(delta: number): void {
 		// Each Frame
 		const { RenderAPI, Renderer } = this.getContext();
 
 		this.updateFPSDebugText(delta);
 
-		RenderAPI.Resize(() => {
-			const aspect = Renderer.getWidth() / Renderer.getHeight();
-			// recalculates the projection matrix with the new aspect
-			// prettier-ignore
-			this.projection.makeOrthographic(-1.0 * aspect, 1.0 *aspect, -1.0 , 1.0, -1.0, 1.0 )
-		});
+		// RenderAPI.Resize(() => {
+		// 	console.log("Resize");
+		// 	const aspect = Renderer.getWidth() / Renderer.getHeight();
+		// 	// recalculates the projection matrix with the new aspect
+		// 	// prettier-ignore
+		// 	this.projection.makeOrthographic(-1.0 * aspect, 1.0 *aspect, -1.0 , 1.0, -1.0, 1.0 )
+		// });
 
 		this.updateObject(delta);
 		/* should be handled by the renderer */

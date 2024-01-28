@@ -7,7 +7,6 @@ export interface RenderingAPI<Ctx = unknown> {
 	SetClearColor(r: number, g: number, b: number, a: number): void;
 	Clear(): void;
 	SetViewport(x: number, y: number, width: number, height: number): void;
-	Resize(onResize?: () => void): void;
 	DrawIndexed(vertexArray: MistVertexArray): void;
 }
 
