@@ -1,4 +1,4 @@
-import "./polyfill";
+import "./MistGlobalFill";
 
 import {
 	MistRendererAPI,
@@ -16,6 +16,7 @@ import { MistLogger } from "@mist-engine/logger";
 
 import { mistIntro__ } from "@mist-engine/utils";
 import { Context } from "./Context";
+import { MistEventDispatcher } from "@mist-engine/core/Events";
 
 const logger = new MistLogger({ name: "App" });
 
@@ -25,7 +26,7 @@ export type ApplicationConstructorProps = {
 	rendererAPI: Omit<"None", MistRendererAPI>;
 };
 
-export class MistApp {
+export class MistApp extends MistEventDispatcher {
 	// private _id: string;
 	private _allowPerformanceMetrics: boolean;
 	private currentFrameId?: number;
@@ -38,6 +39,7 @@ export class MistApp {
 
 	constructor({ name, canvas, rendererAPI }: ApplicationConstructorProps) {
 		// this._id = uuid();
+		super();
 		this._allowPerformanceMetrics = !import.meta.env.PROD; // for now
 		this.appName = name;
 		this.layerStack = new LayerStack();
@@ -84,7 +86,7 @@ export class MistApp {
 			});
 	}
 
-	private updatePerformanceMatrices(now: number) {}
+	private updatePerformanceMatrices(_now: number) {}
 
 	private setRunning(enable: boolean) {
 		this.isRunning = enable;
