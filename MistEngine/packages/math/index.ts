@@ -39,6 +39,9 @@ export class MthX {
 	static clamp(value: number, min: number, max: number) {
 		return this.min(max, this.max(min, value));
 	}
+	static isBetween(value: number, l: number, r: number) {
+		return value >= l && value <= r;
+	}
 
 	static min = Math.min;
 	static max = Math.max;
@@ -55,4 +58,5 @@ export class MthX {
 	static sqrt = Math.sqrt;
 	static pow = Math.pow;
 	static log = Math.log;
+	static sign = Math.sign;
 }

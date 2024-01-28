@@ -12,8 +12,9 @@ export interface Renderer<Ctx = unknown> extends MistEventDispatcher {
 	GetRenderAPI(): RenderingAPI<Ctx>;
 	GetApi(): MistRendererAPI;
 	Resize(): void;
-	getWidth(): number;
-	getHeight(): number;
+	get width(): number;
+	get height(): number;
+	get aspect(): number;
 	getNativeContext(): Ctx;
 	BeginScene(): void;
 	Submit(vertexArray: MistVertexArray): void;

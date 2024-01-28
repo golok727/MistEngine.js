@@ -46,7 +46,10 @@ class TestLayer extends Layer {
 	private lastTime = 0;
 	private trainTexture!: MistTexture;
 	private squareObj!: DrawableObject;
-	private triangleObj!: DrawableObject;
+	private triangleObj!: DrawableObject & {
+		velocity: number;
+		acceleration: number;
+	};
 	private projection!: Matrix4;
 
 	private axis = vec3(0, 0, 1);
@@ -64,6 +67,8 @@ class TestLayer extends Layer {
 			position: vec3(-0, 0, 1.0),
 			scale: vec3(0.4, 0.4, 1),
 			angle: 0,
+			velocity: 0,
+			acceleration: 0,
 		};
 		this.projection = new Matrix4();
 	}
@@ -90,24 +95,51 @@ class TestLayer extends Layer {
 
 	updateObject(delta: number) {
 		const { Input, Renderer } = this.getContext();
-		// console.log((1000 / delta).toFixed(2) + " FPS");
-		const angleV = 0.003;
-		const speed = 0.001;
 
+		const angleV = 0.003;
+		const friction = 0.011;
+		const brakingForce = 0.05; // Adjust the braking force for smoother braking
+
+		// Update velocity with acceleration
+		this.triangleObj.velocity += this.triangleObj.acceleration * 0.001;
+
+		// Apply friction
+		const frictionForce = this.triangleObj.velocity * friction;
+		this.triangleObj.velocity -= frictionForce * delta;
+		this.triangleObj.acceleration -= frictionForce * delta * 10;
+
+		// Gradually reduce acceleration when braking
+		if (Input.isPressed(MistKey.Space)) {
+			const dir = Math.sign(this.triangleObj.velocity);
+			this.triangleObj.acceleration -= brakingForce * delta * dir;
+
+			// Ensure acceleration does not flip sign abruptly
+			if (Math.sign(this.triangleObj.acceleration) !== dir) {
+				this.triangleObj.acceleration = 0;
+			}
+		}
+
+		// Update position with velocity
+		const angle = this.triangleObj.angle;
+		this.triangleObj.position.add([
+			this.triangleObj.velocity * Math.sin(angle) * delta,
+			this.triangleObj.velocity * Math.cos(angle) * delta,
+			0,
+		]);
+
+		// Handle user input for rotation and acceleration
 		if (Input.wheel.isActive) {
 			this.triangleObj.angle += angleV * Input.wheel.dirY * 40;
 		}
 
-		// Test Mouse
 		if (Input.isMouseDown && Input.isPressed(MistKey.Control)) {
 			this.triangleObj.position.set(
-				(Input.mouseX / Renderer.getWidth()) * 2.0 - 1.0,
-				-((Input.mouseY / Renderer.getHeight()) * 2.0 - 1.0),
+				((Input.mouseX / Renderer.width) * 2.0 - 1.0) * Renderer.aspect,
+				-((Input.mouseY / Renderer.height) * 2.0 - 1.0),
 				1
 			);
 		}
 
-		// Test Keyboard
 		if (Input.anyPressed(MistKey.ArrowRight, MistKey.d)) {
 			this.triangleObj.angle += angleV * delta;
 		}
@@ -117,22 +149,14 @@ class TestLayer extends Layer {
 		}
 
 		if (Input.anyPressed(MistKey.ArrowUp, MistKey.w)) {
-			const angle = this.triangleObj.angle;
-			this.triangleObj.position.add([
-				speed * Math.sin(angle) * delta,
-				speed * Math.cos(angle) * delta,
-				0,
-			]);
+			this.triangleObj.acceleration += 0.001;
 		}
 
 		if (Input.anyPressed(MistKey.ArrowDown, MistKey.s)) {
-			const angle = this.triangleObj.angle;
-			this.triangleObj.position.add([
-				-speed * Math.sin(angle) * delta,
-				-speed * Math.cos(angle) * delta,
-				0,
-			]);
+			this.triangleObj.acceleration -= 0.001;
 		}
+
+		console.log(this.triangleObj.acceleration, this.triangleObj.velocity);
 	}
 
 	override onAttach(): void {
@@ -275,7 +299,7 @@ class TestLayer extends Layer {
 	onRendererResize: MistEventListenerCallback<MistRendererResizeEvent> = (
 		ev
 	) => {
-		const aspect = ev.width / ev.height;
+		const aspect = ev.target.aspect;
 		// prettier-ignore
 		this.projection.makeOrthographic(-1.0 * aspect, 1.0 *aspect, -1.0 , 1.0, -1.0, 1.0 )
 	};
@@ -288,7 +312,7 @@ class TestLayer extends Layer {
 
 		this.updateObject(delta);
 		/* should be handled by the renderer */
-		RenderAPI.SetViewport(0, 0, Renderer.getWidth(), Renderer.getHeight());
+		RenderAPI.SetViewport(0, 0, Renderer.width, Renderer.height);
 
 		RenderAPI.SetClearColor(0.1, 0.1, 0.1, 1.0);
 		RenderAPI.Clear();

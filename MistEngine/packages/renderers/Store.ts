@@ -6,7 +6,6 @@ export class Store {
 	/**
 	 * This API is fairly new which will be changed later
 	 * @param url Url of the image to load
-	 * @param name Name to store it as. It will ve prefixed with @mist-tex/name duplicate names will be overwritten or use folder like structure
 	 */
 	public static async addTexture(src: string) {
 		try {
@@ -24,7 +23,6 @@ export class Store {
 /**
  * This API is fairly new which will be changed later
  * @param url Url of the image to load
- * @param name Name to store it as. It will ve prefixed with @mist-tex/name duplicate names will be overwritten or use folder like structure
  */
 export async function preloadTexture(src: string) {
 	await Store.addTexture(src);

@@ -51,11 +51,15 @@ export class MistWebGL2Renderer
 		return this.GetRenderAPI().inner;
 	}
 
-	public getWidth(): number {
+	public get width(): number {
 		return this.canvas.width;
 	}
 
-	public getHeight(): number {
+	public get aspect(): number {
+		return this.canvas.width / this.canvas.height;
+	}
+
+	public get height(): number {
 		return this.canvas.height;
 	}
 
