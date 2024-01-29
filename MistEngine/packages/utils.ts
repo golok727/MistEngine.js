@@ -38,16 +38,11 @@ export async function loadImageAsync(src: string): Promise<HTMLImageElement> {
 }
 
 export function mistIntro__() {
+	const mist = `%c
+	        *     (    (                     )          (        )       \n      (  \`    )\\ ) )\\ )  *   )        ( /(  (       )\\ )  ( /(       \n      )\\))(  (()/((()/(\` )  /(   (    )\\()) )\\ )   (()/(  )\\()) (    \n     ((_)()\\  /(_))/(_))( )(_))  )\\  ((_)\ (()/(    /(_))((_)\  )\\   \n     (_()((_)(_)) (_)) (_(_())  ((_)  _((_) /(_))_ (_))   _((_)((_)  \n     |  \\/  ||_ _|/ __||_   _|  | __|| \\| |(_)) __||_ _| | \\| || __| \n     | |\\/| | | | \\__ \\  | |    | _| | .\` |  | (_ | | |  | .\` || _|  \n     |_|  |_||___||___/  |_|    |___||_|\\_|   \\___||___| |_|\\_||___| \n                       
+	`;
 	console.log(
-		"%c❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️️️️️️️",
-		"font-size: 2rem;"
-	);
-	console.log(
-		"%cMist Engine",
-		"font-weight: bold; font-size: 3rem; color: transparent; background: linear-gradient(to right, orange, red); padding: 5px; background-clip: text;"
-	);
-	console.log(
-		"%c❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️❄️️️️️️️️️️️️",
-		"font-size: 2rem;"
+		mist,
+		"font-weight: bold;  color: transparent; background: linear-gradient(to right, orange, red); padding: 5px; background-clip: text;"
 	);
 }

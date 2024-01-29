@@ -1,37 +1,13 @@
-import {
-	VertexArray,
-	IndexBuffer,
-	VertexBuffer,
-	Shader,
-	BufferLayout,
-	ShaderDataType,
-	MistShader,
-	MistVertexArray,
-	preloadTexture,
-	Texture,
-	MistTexture,
-	vec3,
-	Vector3,
-} from "@mist-engine/index";
-
 import "./style.css";
-
-import {
-	CreateMistApp,
-	Layer,
-	Matrix4,
-	MistApp,
-	MistRendererAPI,
-} from "@mist-engine/index";
-
+import Mist, { Vector3, Matrix4, vec3 } from "@mist-engine/index";
 import MistKey from "@mist-engine/core/Input/MistKey";
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const fpsSpan = document.getElementById("fps-text") as HTMLSpanElement;
 
 type DrawableObject = {
-	va: MistVertexArray;
-	shader: MistShader;
+	va: Mist.MistVertexArray;
+	shader: Mist.MistShader;
 	position: Vector3;
 	scale: Vector3;
 	angle: number;
@@ -41,10 +17,10 @@ function updateFPSText(fps: number) {
 	fpsSpan.textContent = fps.toFixed(2);
 }
 
-class TestLayer extends Layer {
+class TestLayer extends Mist.Layer {
 	private frameTimes: number[] = [];
 	private lastTime = 0;
-	private trainTexture!: MistTexture;
+	private trainTexture!: Mist.MistTexture;
 	private squareObj!: DrawableObject;
 	private triangleObj!: DrawableObject & {
 		velocity: number;
@@ -155,8 +131,6 @@ class TestLayer extends Layer {
 		if (Input.anyPressed(MistKey.ArrowDown, MistKey.s)) {
 			this.triangleObj.acceleration -= 0.001;
 		}
-
-		console.log(this.triangleObj.acceleration, this.triangleObj.velocity);
 	}
 
 	override onAttach(): void {
@@ -167,7 +141,7 @@ class TestLayer extends Layer {
 			this.onRendererResize
 		);
 
-		this.trainTexture = Texture.Create(Renderer, "/train.png");
+		this.trainTexture = Mist.Texture.Create(Renderer, "/train.png");
 
 		const sqVertexShader = `
 			#version 300 es
@@ -225,13 +199,13 @@ class TestLayer extends Layer {
 			}
 		`;
 
-		this.triangleObj.shader = Shader.Create(
+		this.triangleObj.shader = Mist.Shader.Create(
 			Renderer,
 			triVertexShader,
 			triFragmentShader
 		);
 
-		this.squareObj.shader = Shader.Create(
+		this.squareObj.shader = Mist.Shader.Create(
 			Renderer,
 			sqVertexShader,
 			sqFragmentShader
@@ -249,17 +223,17 @@ class TestLayer extends Layer {
 		]);
 		const squareIndices = new Uint32Array([0, 1, 2, 2, 3, 0]);
 
-		const squareLayout = new BufferLayout([
-			{ name: "a_Position", type: ShaderDataType.Float3, location: 0 },
-			{ name: "a_TexCoord", type: ShaderDataType.Float2, location: 1 },
+		const squareLayout = new Mist.BufferLayout([
+			{ name: "a_Position", type: Mist.ShaderDataType.Float3, location: 0 },
+			{ name: "a_TexCoord", type: Mist.ShaderDataType.Float2, location: 1 },
 		]);
 		const squareObj = this.squareObj;
 
-		squareObj.va = VertexArray.Create(Renderer);
-		const squareObjVb = VertexBuffer.Create(Renderer, squareVertices);
+		squareObj.va = Mist.VertexArray.Create(Renderer);
+		const squareObjVb = Mist.VertexBuffer.Create(Renderer, squareVertices);
 		squareObjVb.setLayout(squareLayout);
 
-		const squareObjIb = IndexBuffer.Create(Renderer, squareIndices);
+		const squareObjIb = Mist.IndexBuffer.Create(Renderer, squareIndices);
 
 		squareObj.va.addVertexBuffer(squareObjVb);
 		squareObj.va.setIndexBuffer(squareObjIb);
@@ -275,18 +249,18 @@ class TestLayer extends Layer {
 
 		const triangleIndices = new Uint32Array([0, 1, 2]);
 
-		const triangleLayout = new BufferLayout([
-			{ name: "a_Position", type: ShaderDataType.Float3, location: 0 },
-			{ name: "a_Color", type: ShaderDataType.Float4, location: 1 },
+		const triangleLayout = new Mist.BufferLayout([
+			{ name: "a_Position", type: Mist.ShaderDataType.Float3, location: 0 },
+			{ name: "a_Color", type: Mist.ShaderDataType.Float4, location: 1 },
 		]);
 		const { triangleObj } = this;
 
-		triangleObj.va = VertexArray.Create(Renderer);
+		triangleObj.va = Mist.VertexArray.Create(Renderer);
 
-		const triangleObjVb = VertexBuffer.Create(Renderer, triangleVertices);
+		const triangleObjVb = Mist.VertexBuffer.Create(Renderer, triangleVertices);
 		triangleObjVb.setLayout(triangleLayout);
 
-		const triangleObjIb = IndexBuffer.Create(Renderer, triangleIndices);
+		const triangleObjIb = Mist.IndexBuffer.Create(Renderer, triangleIndices);
 
 		triangleObj.va.addVertexBuffer(triangleObjVb);
 		triangleObj.va.setIndexBuffer(triangleObjIb);
@@ -354,14 +328,18 @@ class TestLayer extends Layer {
 	}
 }
 
-class SandboxApp extends MistApp {
+class SandboxApp extends Mist.MistApp {
 	constructor() {
-		super({ name: "SandboxApp", canvas, rendererAPI: MistRendererAPI.WebGL2 });
+		super({
+			name: "SandboxApp",
+			canvas,
+			rendererAPI: Mist.MistRendererAPI.WebGL2,
+		});
 		this.pushLayer(TestLayer);
 	}
 }
 
-CreateMistApp(async () => {
-	await preloadTexture("/train.png");
+Mist.CreateMistApp(async () => {
+	await Mist.preloadTexture("/train.png");
 	return new SandboxApp();
 });
