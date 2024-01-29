@@ -1,6 +1,7 @@
 import "./style.css";
-import Mist, { Vector3, Matrix4, vec3 } from "@mist-engine/index";
+import Mist, { Vector3, Matrix4, vec3, MthX } from "@mist-engine/index";
 import MistKey from "@mist-engine/core/Input/MistKey";
+import { OrthographicCamera } from "@mist-engine/cameras";
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const fpsSpan = document.getElementById("fps-text") as HTMLSpanElement;
@@ -26,9 +27,10 @@ class TestLayer extends Mist.Layer {
 		velocity: number;
 		acceleration: number;
 	};
-	private projection!: Matrix4;
+	private camera!: Mist.OrthographicCamera;
+	private cameraPosition: Vector3;
+	private cameraRotation: number;
 
-	private axis = vec3(0, 0, 1);
 	constructor() {
 		super("TestLayer");
 		this.squareObj = {
@@ -40,13 +42,12 @@ class TestLayer extends Mist.Layer {
 
 		this.triangleObj = {
 			...this.triangleObj,
-			position: vec3(-0, 0, 1.0),
+			position: vec3(-0.3, 0, 1.0),
 			scale: vec3(0.4, 0.4, 1),
 			angle: 0,
-			velocity: 0,
-			acceleration: 0,
 		};
-		this.projection = new Matrix4();
+		this.cameraPosition = vec3(0);
+		this.cameraRotation = 0;
 	}
 
 	updateFPSDebugText(delta: number) {
@@ -69,73 +70,40 @@ class TestLayer extends Mist.Layer {
 		}
 	}
 
-	updateObject(delta: number) {
-		const { Input, Renderer } = this.getContext();
+	updateCamera(delta: number) {
+		const { Input } = this.getContext();
 
-		const angleV = 0.003;
-		const friction = 0.011;
-		const brakingForce = 0.05; // Adjust the braking force for smoother braking
+		this.camera.setPosition(this.cameraPosition);
+		this.camera.setRotation(this.cameraRotation);
 
-		// Update velocity with acceleration
-		this.triangleObj.velocity += this.triangleObj.acceleration * 0.001;
+		const CAMERA_SPEED = 0.002;
+		const CAMERA_ROT_SPEED = 0.008;
 
-		// Apply friction
-		const frictionForce = this.triangleObj.velocity * friction;
-		this.triangleObj.velocity -= frictionForce * delta;
-		this.triangleObj.acceleration -= frictionForce * delta * 10;
-
-		// Gradually reduce acceleration when braking
-		if (Input.isPressed(MistKey.Space)) {
-			const dir = Math.sign(this.triangleObj.velocity);
-			this.triangleObj.acceleration -= brakingForce * delta * dir;
-
-			// Ensure acceleration does not flip sign abruptly
-			if (Math.sign(this.triangleObj.acceleration) !== dir) {
-				this.triangleObj.acceleration = 0;
-			}
+		if (Input.wheel.isActive && Input.isPressed(MistKey.Alt)) {
+			this.cameraRotation += CAMERA_ROT_SPEED * delta * Input.wheel.dirY;
 		}
 
-		// Update position with velocity
-		const angle = this.triangleObj.angle;
-		this.triangleObj.position.add([
-			this.triangleObj.velocity * Math.sin(angle) * delta,
-			this.triangleObj.velocity * Math.cos(angle) * delta,
-			0,
-		]);
-
-		// Handle user input for rotation and acceleration
-		if (Input.wheel.isActive) {
-			this.triangleObj.angle += angleV * Input.wheel.dirY * 40;
+		if (Input.arePressed(MistKey.Alt, MistKey.Num0)) {
+			this.cameraPosition = new Vector3(0);
 		}
 
-		if (Input.isMouseDown && Input.isPressed(MistKey.Control)) {
-			this.triangleObj.position.set(
-				((Input.mouseX / Renderer.width) * 2.0 - 1.0) * Renderer.aspect,
-				-((Input.mouseY / Renderer.height) * 2.0 - 1.0),
-				1
-			);
+		if (Input.anyPressed(MistKey.w, MistKey.W)) {
+			this.cameraPosition.y += CAMERA_SPEED * delta;
+		} else if (Input.anyPressed(MistKey.s, MistKey.S)) {
+			this.cameraPosition.y -= CAMERA_SPEED * delta;
 		}
 
-		if (Input.anyPressed(MistKey.ArrowRight, MistKey.d)) {
-			this.triangleObj.angle += angleV * delta;
-		}
-
-		if (Input.anyPressed(MistKey.ArrowLeft, MistKey.a)) {
-			this.triangleObj.angle -= angleV * delta;
-		}
-
-		if (Input.anyPressed(MistKey.ArrowUp, MistKey.w)) {
-			this.triangleObj.acceleration += 0.001;
-		}
-
-		if (Input.anyPressed(MistKey.ArrowDown, MistKey.s)) {
-			this.triangleObj.acceleration -= 0.001;
+		if (Input.anyPressed(MistKey.d, MistKey.D)) {
+			this.cameraPosition.x += CAMERA_SPEED * delta;
+		} else if (Input.anyPressed(MistKey.a, MistKey.A)) {
+			this.cameraPosition.x -= CAMERA_SPEED * delta;
 		}
 	}
 
 	override onAttach(): void {
 		const { Renderer } = this.getContext();
-
+		// prettier-ignore
+		this.camera = new OrthographicCamera(-1 * Renderer.aspect, 1 * Renderer.aspect, -1, 1);
 		Renderer.addEventListener(
 			MistEventType.RendererResize,
 			this.onRendererResize
@@ -147,14 +115,14 @@ class TestLayer extends Mist.Layer {
 			#version 300 es
 			layout ( location = 0 ) in  vec3 a_Position;
 			layout(location = 1) in vec2 a_TexCoord; 
-			uniform mat4 u_Projection;
+			uniform mat4 u_ViewProjection;
 			out vec2 TexCoord;
 			void main()
 			{		
 				TexCoord = a_TexCoord;
 				TexCoord.y = 1.0 - TexCoord.y; // Flip the y coordinate
 				vec4 position = vec4(a_Position, 1.0);
-				gl_Position = u_Projection * position;
+				gl_Position = u_ViewProjection * position;
 			}
 		`;
 
@@ -178,12 +146,12 @@ class TestLayer extends Mist.Layer {
 			layout(location = 1) in vec4 a_Color; 
 			out vec4 color;
 
-			uniform mat4 u_Projection;
+			uniform mat4 u_ViewProjection;
 			void main()
 			{		
 				color = a_Color; 
 				vec4 position = vec4(a_Position, 1.0);
-				gl_Position = u_Projection * position;
+				gl_Position = u_ViewProjection * position;
 			}
 		`;
 
@@ -273,9 +241,11 @@ class TestLayer extends Mist.Layer {
 	onRendererResize: MistEventListenerCallback<MistRendererResizeEvent> = (
 		ev
 	) => {
-		const aspect = ev.target.aspect;
 		// prettier-ignore
-		this.projection.makeOrthographic(-1.0 * aspect, 1.0 *aspect, -1.0 , 1.0, -1.0, 1.0 )
+		// this.projection.makeOrthographic(-1.0 * aspect, 1.0 *aspect, -1.0 , 1.0, -1.0, 1.0 )
+		const aspect = ev.target.aspect
+		// prettier-ignore
+		this.camera.updateProjection(-1 * aspect, 1 * aspect, -1, 1)
 	};
 
 	override onUpdate(delta: number): void {
@@ -283,8 +253,7 @@ class TestLayer extends Mist.Layer {
 		const { RenderAPI, Renderer } = this.getContext();
 
 		this.updateFPSDebugText(delta);
-
-		this.updateObject(delta);
+		this.updateCamera(delta);
 		/* should be handled by the renderer */
 		RenderAPI.SetViewport(0, 0, Renderer.width, Renderer.height);
 
@@ -294,26 +263,18 @@ class TestLayer extends Mist.Layer {
 		Renderer.BeginScene();
 
 		this.squareObj.shader.use();
-		const squareProj = this.projection
-			.clone()
-			.multiplyMat(
-				Matrix4.Translate(this.squareObj.position),
-				Matrix4.Scale(this.squareObj.scale),
-				Matrix4.Rotate(this.squareObj.angle, this.axis)
-			);
-		this.squareObj.shader.setUniformMat4("u_Projection", squareProj);
+
+		this.squareObj.shader.setUniformMat4(
+			"u_ViewProjection",
+			this.camera.viewProjection
+		);
 		Renderer.Submit(this.squareObj.va);
 
-		const triProj = this.projection
-			.clone()
-			.multiplyMat(
-				Matrix4.Translate(this.triangleObj.position),
-				Matrix4.Scale(this.triangleObj.scale),
-				Matrix4.Rotate(this.triangleObj.angle, this.axis)
-			);
-
 		this.triangleObj.shader.use();
-		this.triangleObj.shader.setUniformMat4("u_Projection", triProj);
+		this.triangleObj.shader.setUniformMat4(
+			"u_ViewProjection",
+			this.camera.viewProjection
+		);
 		Renderer.Submit(this.triangleObj.va);
 
 		Renderer.EndScene();

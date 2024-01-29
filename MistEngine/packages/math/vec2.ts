@@ -36,6 +36,12 @@ export default class Vector2 extends VectorBase<V2> {
 		return new Vector2(...this.toArray());
 	}
 
+	copyFrom(v: Vector2) {
+		this.x = v.x;
+		this.y = v.y;
+		return this;
+	}
+
 	// Math
 	add(v: Vector2 | V2) {
 		const [x, y] = this.parseArgs(v);

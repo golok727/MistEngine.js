@@ -44,6 +44,13 @@ export default class Vector3 extends VectorBase<V3> {
 		return new Vector3(...this.toArray());
 	}
 
+	copyFrom(v: Vector3) {
+		this.x = v.x;
+		this.y = v.y;
+		this.z = v.z;
+		return this;
+	}
+
 	add(v: Vector3 | V3) {
 		const [x, y, z] = this.parseArgs(v);
 		this.x += x;

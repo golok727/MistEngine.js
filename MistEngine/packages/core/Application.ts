@@ -46,7 +46,7 @@ export class MistApp extends MistEventDispatcher {
 		this.input = new MistInput(canvas);
 		this.isRunning = false;
 		this.lastTime = 0;
-		// Select renderer API
+
 		switch (rendererAPI) {
 			case MistRendererAPI.WebGL2:
 				this.renderer = new MistWebGL2Renderer(canvas);
@@ -59,8 +59,11 @@ export class MistApp extends MistEventDispatcher {
 			default:
 				throw new Error(`Renderer Api ${rendererAPI} is not supported!`);
 		}
-		// Initialize input polling
+
+		/*  Performance Measure Should be moved in to this */
+
 		this.initPerformanceMatrices();
+		/* Initialize Mist Input */
 		MistInput.Init();
 	}
 
@@ -134,16 +137,14 @@ export class MistApp extends MistEventDispatcher {
 
 		if (!this.lastTime) this.lastTime = timestamp;
 
-		const interval = 1000 / 90;
 		const deltaTime = timestamp - this.lastTime;
 
-		if (deltaTime > interval) {
-			this.renderer.Resize();
-			for (const layer of this.layerStack.reversed()) {
-				layer.onUpdate(deltaTime);
-			}
-			this.lastTime = timestamp - (deltaTime % interval);
+		this.renderer.Resize();
+		for (const layer of this.layerStack.reversed()) {
+			layer.onUpdate(deltaTime);
 		}
+
+		this.lastTime = timestamp;
 
 		this.currentFrameId = requestAnimationFrame(this.loop.bind(this));
 	}
@@ -181,7 +182,7 @@ export class MistApp extends MistEventDispatcher {
 		overlay.onAttach();
 		this.layerStack.pushOverlay(overlay);
 	}
-	
+
 	/*
 		Provide context for each layer when a layer is created
  */
@@ -211,3 +212,26 @@ export const CreateMistApp = async (
 	app.Run();
 	logger.log("{0}\n\t {1}", "Radha Vallabh Shri Harivansh", "Radhey Shyam");
 };
+
+// Loop with custom framerate
+// private loop(timestamp: number) {
+// 	if (!this.isRunning) return;
+
+// 	if (this._allowPerformanceMetrics)
+// 		this.updatePerformanceMatrices(timestamp);
+
+// 	if (!this.lastTime) this.lastTime = timestamp;
+
+// 	const interval = 1000 / 90;
+// 	const deltaTime = timestamp - this.lastTime;
+
+// 	if (deltaTime > interval) {
+// 		this.renderer.Resize();
+// 		for (const layer of this.layerStack.reversed()) {
+// 			layer.onUpdate(deltaTime);
+// 		}
+// 		this.lastTime = timestamp - (deltaTime % interval);
+// 	}
+
+// 	this.currentFrameId = requestAnimationFrame(this.loop.bind(this));
+// }

@@ -18,6 +18,13 @@ type ElementInputState = {
 		mouseX: number;
 		mouseY: number;
 		isDown: boolean;
+		buttons: {
+			left: boolean;
+			right: boolean;
+			middle: boolean;
+			b4: boolean;
+			b5: boolean;
+		};
 		wheel: {
 			isActive: boolean;
 			deltaX: number;
@@ -37,6 +44,7 @@ type ElementInputState = {
 export default class MistInput {
 	private static _isInitialized = false;
 	private static GlobalInputState: GlobalInputState;
+	private static preventDefaultBehavior: boolean = false;
 
 	private state: ElementInputState;
 
@@ -46,6 +54,14 @@ export default class MistInput {
 				mouseX: 0,
 				mouseY: 0,
 				isDown: false,
+				buttons: {
+					left: false,
+					middle: false,
+					right: false,
+					b4: false,
+					b5: false,
+				},
+
 				wheel: {
 					isActive: false,
 					deltaX: 0,
@@ -78,6 +94,12 @@ export default class MistInput {
 	public anyPressed(...keys: MistKey[]): boolean {
 		return keys.some((key) => MistInput.GlobalInputState.inputMap[key]);
 	}
+	/*
+		Tells Mist Input input to enable or disable default behavior
+	 */
+	public setAllowDefaultBehavior(enable: boolean) {
+		MistInput.preventDefaultBehavior = !enable;
+	}
 
 	/* Getters START */
 	get mouseX(): number {
@@ -91,6 +113,9 @@ export default class MistInput {
 	}
 	get wheel() {
 		return this.state.mouse.wheel;
+	}
+	get mouseBtn() {
+		return this.state.mouse.buttons;
 	}
 
 	/* Getters END */
@@ -136,18 +161,36 @@ export default class MistInput {
 	};
 
 	private onMouseDown = (ev: MouseEvent) => {
+		if (MistInput.preventDefaultBehavior) ev.preventDefault();
+
 		this.state.mouse.mouseX = ev.offsetX;
 		this.state.mouse.mouseY = ev.offsetY;
 		this.state.mouse.isDown = true;
+
+		this.state.mouse.buttons.left = ev.button === 0;
+		this.state.mouse.buttons.middle = ev.button === 1;
+		this.state.mouse.buttons.right = ev.button === 2;
+		this.state.mouse.buttons.b4 = ev.button === 4;
+		this.state.mouse.buttons.b5 = ev.button === 5;
 	};
 
 	private onMouseMove = (ev: MouseEvent) => {
+		if (MistInput.preventDefaultBehavior) ev.preventDefault();
+
 		this.state.mouse.mouseX = ev.offsetX;
 		this.state.mouse.mouseY = ev.offsetY;
 	};
 
-	private onMouseUp = (_ev: MouseEvent) => {
+	private onMouseUp = (ev: MouseEvent) => {
+		if (MistInput.preventDefaultBehavior) ev.preventDefault();
+
 		this.state.mouse.isDown = false;
+
+		this.state.mouse.buttons.left = false;
+		this.state.mouse.buttons.middle = false;
+		this.state.mouse.buttons.right = false;
+		this.state.mouse.buttons.b4 = false;
+		this.state.mouse.buttons.b5 = false;
 	};
 
 	private reset() {
@@ -156,6 +199,14 @@ export default class MistInput {
 				mouseX: 0,
 				mouseY: 0,
 				isDown: false,
+				buttons: {
+					left: false,
+					middle: false,
+					right: false,
+					b4: false,
+					b5: false,
+				},
+
 				wheel: {
 					isActive: false,
 					deltaX: 0,
@@ -187,6 +238,10 @@ export default class MistInput {
 
 		this.addGlobalEventListeners();
 		this._isInitialized = true;
+	}
+
+	public static setAllowDefaultBehavior(enable: boolean) {
+		this.preventDefaultBehavior = !enable;
 	}
 
 	// Returns if the input is already initialized
@@ -231,10 +286,12 @@ export default class MistInput {
 	}
 
 	private static onGlobalKeyDown = (ev: KeyboardEvent) => {
+		if (this.preventDefaultBehavior) ev.preventDefault();
 		this.GlobalInputState.inputMap[ev.key] = true;
 	};
 
 	private static onGlobalKeyUp = (ev: KeyboardEvent) => {
+		if (this.preventDefaultBehavior) ev.preventDefault();
 		this.GlobalInputState.inputMap[ev.key] = false;
 	};
 	/* Static Input Methods END */

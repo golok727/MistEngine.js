@@ -21,3 +21,6 @@ export type {
 	MistShader,
 	MistTexture,
 } from "@mist-engine/renderers";
+
+export type { Camera } from "@mist-engine/cameras";
+export { OrthographicCamera } from "@mist-engine/cameras";

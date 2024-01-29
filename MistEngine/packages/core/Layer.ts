@@ -19,7 +19,12 @@ export default class Layer {
 
 	public onUpdate(_deltaTime: number) {}
 
-	public onEvent(_type: String) {}
+	public onKeyDown() {}
+	public onKeyUp() {}
+
+	public onMouseMove() {}
+	public onMouseDown() {}
+	public onMouseUp() {}
 
 	public onDetach() {}
 }

@@ -50,6 +50,14 @@ export default class Vector4 extends VectorBase<V4> {
 		return new Vector4(...this.toArray());
 	}
 
+	copyFrom(v: Vector4) {
+		this.x = v.x;
+		this.y = v.y;
+		this.z = v.z;
+		this.w = v.w;
+		return this;
+	}
+
 	add(v: Vector4) {
 		const [x, y, z, w] = this.parseArgs(v);
 		this.x += x;
