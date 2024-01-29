@@ -46,7 +46,8 @@ class TestLayer extends Mist.Layer {
 			scale: vec3(0.4, 0.4, 1),
 			angle: 0,
 		};
-		this.cameraPosition = vec3(0);
+
+		this.cameraPosition = vec3(0, 0, 0);
 		this.cameraRotation = 0;
 	}
 
@@ -85,6 +86,7 @@ class TestLayer extends Mist.Layer {
 
 		if (Input.arePressed(MistKey.Alt, MistKey.Num0)) {
 			this.cameraPosition = new Vector3(0);
+			this.cameraRotation = 0;
 		}
 
 		if (Input.anyPressed(MistKey.w, MistKey.W)) {
@@ -234,16 +236,17 @@ class TestLayer extends Mist.Layer {
 		triangleObj.va.setIndexBuffer(triangleObjIb);
 
 		squareObj.shader.use();
-		squareObj.shader.setUniform1i("u_Texture", 0);
+
+		if (squareObj.shader.is<Mist.MistWebGL2Shader>())
+			squareObj.shader.setUniform1i("u_Texture", 0);
+
 		this.trainTexture.use(0);
 	}
 
 	onRendererResize: MistEventListenerCallback<MistRendererResizeEvent> = (
 		ev
 	) => {
-		// prettier-ignore
-		// this.projection.makeOrthographic(-1.0 * aspect, 1.0 *aspect, -1.0 , 1.0, -1.0, 1.0 )
-		const aspect = ev.target.aspect
+		const aspect = ev.target.aspect;
 		// prettier-ignore
 		this.camera.updateProjection(-1 * aspect, 1 * aspect, -1, 1)
 	};
@@ -260,22 +263,10 @@ class TestLayer extends Mist.Layer {
 		RenderAPI.SetClearColor(0.1, 0.1, 0.1, 1.0);
 		RenderAPI.Clear();
 
-		Renderer.BeginScene();
+		Renderer.BeginScene(this.camera);
 
-		this.squareObj.shader.use();
-
-		this.squareObj.shader.setUniformMat4(
-			"u_ViewProjection",
-			this.camera.viewProjection
-		);
-		Renderer.Submit(this.squareObj.va);
-
-		this.triangleObj.shader.use();
-		this.triangleObj.shader.setUniformMat4(
-			"u_ViewProjection",
-			this.camera.viewProjection
-		);
-		Renderer.Submit(this.triangleObj.va);
+		Renderer.Submit(this.squareObj.va, this.squareObj.shader);
+		Renderer.Submit(this.triangleObj.va, this.triangleObj.shader);
 
 		Renderer.EndScene();
 	}

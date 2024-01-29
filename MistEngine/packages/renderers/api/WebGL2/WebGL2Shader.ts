@@ -22,6 +22,12 @@ export class MistWebGL2Shader implements MistShader {
 		const fragmentShader = this.createShader("FRAGMENT", fragmentShaderSource);
 		this.program = this.createProgram(vertexShader, fragmentShader);
 	}
+	/*
+	 This is only for cheating typescript before i fully abstract the API
+	 */
+	public is<T extends MistShader>(): this is T {
+		return this instanceof MistWebGL2Shader;
+	}
 
 	public use(): void {
 		this._gl.useProgram(this.program);

@@ -72,7 +72,7 @@ export default class OrthographicCamera
 			Matrix4.Rotate(this._rotation, new Vector3(0, 0, 1))
 		);
 
-		this.viewMatrix = translation;
+		this.viewMatrix = translation.invert();
 
 		this.viewProjectionMatrix = new Matrix4().multiplyMat(
 			this.projectionMatrix,

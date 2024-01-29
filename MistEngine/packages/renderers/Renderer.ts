@@ -1,6 +1,9 @@
 import { MistVertexArray } from "./VertexArray";
 import { RenderingAPI } from "./RenderingApi";
 import { MistEventDispatcher } from "@mist-engine/core/Events";
+import { Camera } from "@mist-engine/cameras";
+
+import { MistShader } from "@mist-engine/renderers";
 
 export enum MistRendererAPI {
 	WebGL2 = "WebGL2",
@@ -16,9 +19,10 @@ export interface Renderer<Ctx = unknown> extends MistEventDispatcher {
 	get height(): number;
 	get aspect(): number;
 	getNativeContext(): Ctx;
-	BeginScene(): void;
-	Submit(vertexArray: MistVertexArray): void;
+	BeginScene(camera: Camera): void;
+	Submit(vertexArray: MistVertexArray, shader: MistShader): void;
 	EndScene(): void;
+	Is<T extends Renderer>(): this is T;
 }
 
 export interface MistAPIUsable {
