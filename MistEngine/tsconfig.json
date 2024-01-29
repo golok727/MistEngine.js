@@ -20,7 +20,7 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
-		"types": ["@webgpu/types", "./types/types.d.ts", "./types/events.d.ts"]
+		"types": ["@webgpu/types", "./types/types.d.ts"]
 	},
 	"include": ["packages", "sandbox", "types/types.d.ts", "types/events.d.ts"]
 }

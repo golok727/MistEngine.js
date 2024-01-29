@@ -48,9 +48,8 @@ export default class MistEventDispatcher implements MistEventDispatcherBase {
 		listenerArray.delete(listener);
 	}
 
-	protected dispatchEvent<E extends MistEvent>(event: E): void {
+	dispatchEvent<E extends MistEvent>(event: E): void {
 		if (this.__listeners__ === undefined) return;
-
 		const listeners = this.__listeners__;
 		const listenerSet = listeners[event.type];
 
@@ -60,6 +59,11 @@ export default class MistEventDispatcher implements MistEventDispatcherBase {
 			cloneSet.forEach((listener) => listener.call(this, event));
 		}
 	}
+
+	destroyDispatcher() {
+		this.__listeners__ = {};
+	}
+
 	protected makeEvent<K extends keyof MistEventMap>(
 		type: K,
 		event: Omit<MistEventMap[K], "type">

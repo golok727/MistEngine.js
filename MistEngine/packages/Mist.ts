@@ -1,6 +1,7 @@
+export { default as MistInput } from "@mist-engine/core/Input/Input";
+
 export { MistApp, CreateMistApp } from "@mist-engine/core/Application";
 export { default as Layer } from "@mist-engine/core/Layer";
-
 export type { MistWebGL2Shader } from "./renderers/api/WebGL2/WebGL2Shader";
 export {
 	MistRendererAPI,

@@ -1,58 +1,85 @@
-type MistEventTypesK =
-	| "AppReady"
-	| "AppStart"
-	| "AppShutDown"
-	| "AppRestart"
-	| "RendererResize";
-
-interface Window {
-	MistEventType: MistEventTypeT;
-}
-declare var MistEventType: Window["MistEventType"];
-
-type MistEventTypeT = {
-	[K in MistEventTypesK]: K;
-};
+//! May add handled?
 
 interface MistBaseEvent<T> {
 	target: T;
 }
-
 interface MistAppReadyEvent extends MistBaseEvent<MistApp> {
-	type: MistEventType.AppReady;
+	type: MistEventTypeT["AppReady"];
 }
 
 interface MistAppStartEvent extends MistBaseEvent<MistApp> {
-	type: MistEventType.AppStart;
+	type: MistEventTypeT["AppStart"];
 }
 
 interface MistAppShutDownEvent extends MistBaseEvent<MistApp> {
-	type: MistEventType.AppShutDown;
+	type: MistEventTypeT["AppShutDown"];
 }
 
 interface MistAppRestartEvent extends MistBaseEvent<MistApp> {
-	type: MistEventType.AppRestart;
+	type: MistEventTypeT["AppRestart"];
 }
 
 interface MistRendererResizeEvent extends MistBaseEvent<Renderer> {
-	type: MistEventType.RendererResize;
+	type: MistEventTypeT["RendererResize"];
 	width: number;
 	height: number;
 }
+class MistInput {
+	public static isPressed(key: MistKey): boolean;
+	public static arePressed(...keys: MistKey[]): boolean;
+	public static anyPressed(...keys: MistKey[]): boolean;
 
-interface MistEventMap {
-	[MistEventType.AppReady]: MistAppReadyEvent;
-	[MistEventType.AppStart]: MistAppStartEvent;
-	[MistEventType.AppShutDown]: MistAppShutDownEvent;
-	[MistEventType.AppRestart]: MistAppRestartEvent;
-	[MistEventType.RendererResize]: MistRendererResizeEvent;
+	public isPressed(key: MistKey): boolean;
+	public arePressed(...keys: MistKey[]): boolean;
+	public anyPressed(...keys: MistKey[]): boolean;
+}
+// Global Keyboard
+interface MistKeyUpEvent extends MistBaseEvent<typeof MistInput> {
+	type: MistEventTypeT["KeyUp"];
+	key: MistKey;
+	native: KeyboardEvent;
 }
 
-type MistEvent =
-	| MistAppReadyEvent
-	| MistAppStartEvent
-	| MistAppShutDownEvent
-	| MistAppRestartEvent
-	| MistRendererResizeEvent;
+interface MistKeyDownEvent extends MistBaseEvent<typeof MistInput> {
+	type: MistEventTypeT["KeyDown"];
+	key: MistKey;
+	native: KeyboardEvent;
+}
 
-type MistEventListenerCallback<E = MistEvent> = (event: E) => any;
+// Mouse
+
+interface MistMouseDownEvent extends MistBaseEvent<MistInput> {
+	type: MistEventTypeT["MouseDown"];
+	x: number;
+	y: number;
+	button: ElementInputState["mouse"]["button"];
+	native: MouseEvent;
+}
+
+interface MistMouseUpEvent extends MistBaseEvent<MistInput> {
+	type: MistEventTypeT["MouseUp"];
+	x: number;
+	y: number;
+	button: ElementInputState["mouse"]["button"];
+	native: MouseEvent;
+}
+
+interface MistMouseMoveEvent extends MistBaseEvent<MistInput> {
+	type: MistEventTypeT["MouseMove"];
+	x: number;
+	y: number;
+	isDown: boolean;
+	button: ElementInputState["mouse"]["button"];
+	native: MouseEvent;
+}
+
+interface MistMouseWheelEvent extends MistBaseEvent<MistInput> {
+	type: MistEventTypeT["MouseWheel"];
+
+	deltaX: number;
+	deltaY: number;
+	dirX: number;
+	dirY: number;
+
+	native: WheelEvent;
+}

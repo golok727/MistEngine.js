@@ -1,5 +1,5 @@
 import "./style.css";
-import Mist, { Vector3, Matrix4, vec3, MthX } from "@mist-engine/index";
+import Mist, { Vector3, vec3 } from "@mist-engine/index";
 import MistKey from "@mist-engine/core/Input/MistKey";
 import { OrthographicCamera } from "@mist-engine/cameras";
 
@@ -80,11 +80,14 @@ class TestLayer extends Mist.Layer {
 		const CAMERA_SPEED = 0.002;
 		const CAMERA_ROT_SPEED = 0.008;
 
-		if (Input.wheel.isActive && Input.isPressed(MistKey.Alt)) {
+		if (
+			Input.wheel.isActive &&
+			Input.arePressed(MistKey.Control, MistKey.Alt)
+		) {
 			this.cameraRotation += CAMERA_ROT_SPEED * delta * Input.wheel.dirY;
 		}
 
-		if (Input.arePressed(MistKey.Alt, MistKey.Num0)) {
+		if (Input.arePressed(MistKey.Control, MistKey.Num0)) {
 			this.cameraPosition = new Vector3(0);
 			this.cameraRotation = 0;
 		}
@@ -250,6 +253,18 @@ class TestLayer extends Mist.Layer {
 		// prettier-ignore
 		this.camera.updateProjection(-1 * aspect, 1 * aspect, -1, 1)
 	};
+
+	override onKeyDown(ev: MistKeyDownEvent): boolean {
+		if (ev.key == MistKey.Num0 && ev.target.isPressed(MistKey.Control))
+			ev.native.preventDefault();
+
+		return false;
+	}
+	public onMouseWheel(ev: MistMouseWheelEvent): boolean {
+		if (ev.target.isPressed(MistKey.Control)) ev.native.preventDefault();
+
+		return false;
+	}
 
 	override onUpdate(delta: number): void {
 		// Each Frame

@@ -65,6 +65,7 @@ export class MistApp extends MistEventDispatcher {
 		this.initPerformanceMatrices();
 		/* Initialize Mist Input */
 		MistInput.Init();
+		this.addInputEventListeners();
 	}
 
 	get name() {
@@ -182,6 +183,67 @@ export class MistApp extends MistEventDispatcher {
 		overlay.onAttach();
 		this.layerStack.pushOverlay(overlay);
 	}
+
+	/* 
+		Add Events for inputs
+	*/
+
+	// prettier-ignore
+	private addInputEventListeners() {
+		MistInput.globalDispatch.addEventListener(MistEventType.KeyDown, this.onInputKeyDown);
+		MistInput.globalDispatch.addEventListener(MistEventType.KeyUp, this.onInputKeyUp);
+
+		this.input.addEventListener(MistEventType.MouseDown, this.onInputMouseDown);
+		this.input.addEventListener(MistEventType.MouseMove, this.onInputMouseMove);
+		this.input.addEventListener(MistEventType.MouseUp, this.onInputMouseUp);
+		this.input.addEventListener(MistEventType.MouseWheel, this.onInputMouseWheel);
+
+		// removal of events will be handled by 
+	}
+	private onInputKeyDown: MistEventListenerCallback<MistKeyDownEvent> = (
+		ev
+	) => {
+		for (const layer of this.layerStack.reversed()) {
+			layer.onKeyDown && layer.onKeyDown(ev);
+		}
+	};
+
+	private onInputKeyUp: MistEventListenerCallback<MistKeyUpEvent> = (ev) => {
+		for (const layer of this.layerStack.reversed()) {
+			layer.onKeyUp && layer.onKeyUp(ev);
+		}
+	};
+
+	private onInputMouseDown: MistEventListenerCallback<MistMouseDownEvent> = (
+		ev
+	) => {
+		for (const layer of this.layerStack.reversed()) {
+			layer.onMouseDown && layer.onMouseDown(ev);
+		}
+	};
+
+	private onInputMouseUp: MistEventListenerCallback<MistMouseUpEvent> = (
+		ev
+	) => {
+		for (const layer of this.layerStack.reversed()) {
+			layer.onMouseUp && layer.onMouseUp(ev);
+		}
+	};
+	private onInputMouseMove: MistEventListenerCallback<MistMouseMoveEvent> = (
+		ev
+	) => {
+		for (const layer of this.layerStack.reversed()) {
+			layer.onMouseMove && layer.onMouseMove(ev);
+		}
+	};
+
+	private onInputMouseWheel: MistEventListenerCallback<MistMouseWheelEvent> = (
+		ev
+	) => {
+		for (const layer of this.layerStack.reversed()) {
+			layer.onMouseWheel && layer.onMouseWheel(ev);
+		}
+	};
 
 	/*
 		Provide context for each layer when a layer is created

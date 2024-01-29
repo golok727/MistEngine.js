@@ -6,3 +6,8 @@ interface MistGlobal {
 }
 
 declare var __MIST__: Window["__MIST__"];
+
+interface Window {
+	MistEventType: MistEventTypeT;
+}
+declare var MistEventType: Window["MistEventType"];

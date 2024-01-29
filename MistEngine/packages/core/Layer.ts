@@ -1,7 +1,15 @@
 import { Context } from "./Context";
 
-export default class Layer {
+export default abstract class Layer {
 	private _name: string;
+
+	public onKeyDown?(ev: MistKeyDownEvent): boolean;
+	public onKeyUp?(ev: MistKeyUpEvent): boolean;
+	public onMouseMove?(ev: MistMouseMoveEvent): boolean;
+	public onMouseDown?(ev: MistMouseDownEvent): boolean;
+	public onMouseUp?(ev: MistMouseUpEvent): boolean;
+	public onMouseWheel?(ev: MistMouseWheelEvent): boolean;
+
 	constructor(name: string) {
 		this._name = name;
 	}
@@ -18,13 +26,6 @@ export default class Layer {
 	public onAttach() {}
 
 	public onUpdate(_deltaTime: number) {}
-
-	public onKeyDown() {}
-	public onKeyUp() {}
-
-	public onMouseMove() {}
-	public onMouseDown() {}
-	public onMouseUp() {}
 
 	public onDetach() {}
 }

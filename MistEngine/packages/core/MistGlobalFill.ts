@@ -8,4 +8,10 @@ window.MistEventType = Object.freeze({
 	AppShutDown: "AppShutDown",
 	AppRestart: "AppRestart",
 	RendererResize: "RendererResize",
+	MouseDown: "MouseDown",
+	MouseMove: "MouseMove",
+	MouseUp: "MouseUp",
+	KeyDown: "KeyDown",
+	KeyUp: "KeyUp",
+	MouseWheel: "MouseWheel",
 });

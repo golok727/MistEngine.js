@@ -4,6 +4,7 @@
   Separated mouse events for canvas elements
 */
 
+import { MistEventDispatcher } from "../Events";
 import MistKey from "./MistKey";
 
 type MistInputMap = Record<string, boolean>;
@@ -18,7 +19,7 @@ type ElementInputState = {
 		mouseX: number;
 		mouseY: number;
 		isDown: boolean;
-		buttons: {
+		button: {
 			left: boolean;
 			right: boolean;
 			middle: boolean;
@@ -41,7 +42,8 @@ type ElementInputState = {
 	global and local input system for mist
  */
 
-export default class MistInput {
+export default class MistInput extends MistEventDispatcher {
+	public static globalDispatch = new MistEventDispatcher();
 	private static _isInitialized = false;
 	private static GlobalInputState: GlobalInputState;
 	private static preventDefaultBehavior: boolean = false;
@@ -49,12 +51,14 @@ export default class MistInput {
 	private state: ElementInputState;
 
 	constructor(element: HTMLElement) {
+		super();
+
 		this.state = {
 			mouse: {
 				mouseX: 0,
 				mouseY: 0,
 				isDown: false,
-				buttons: {
+				button: {
 					left: false,
 					middle: false,
 					right: false,
@@ -81,6 +85,7 @@ export default class MistInput {
 	public destroy() {
 		this.state.destroyFn && this.state.destroyFn();
 		this.reset();
+		this.destroyDispatcher();
 	}
 	/** Returns if a key is pressed or not */
 	public isPressed(key: MistKey): boolean {
@@ -115,7 +120,7 @@ export default class MistInput {
 		return this.state.mouse.wheel;
 	}
 	get mouseBtn() {
-		return this.state.mouse.buttons;
+		return this.state.mouse.button;
 	}
 
 	/* Getters END */
@@ -154,6 +159,16 @@ export default class MistInput {
 			this.state.mouse.wheel.dirX = Math.sign(deltaX);
 			this.state.mouse.wheel.dirY = Math.sign(deltaY);
 
+			this.dispatchEvent({
+				type: MistEventType.MouseWheel,
+				deltaX: this.state.mouse.wheel.deltaX,
+				deltaY: this.state.mouse.wheel.deltaY,
+				dirX: this.state.mouse.wheel.dirX,
+				dirY: this.state.mouse.wheel.dirY,
+				native: ev,
+				target: this,
+			});
+
 			wheelEndTimeout = setTimeout(() => {
 				this.state.mouse.wheel.isActive = false;
 			}, 100);
@@ -167,11 +182,20 @@ export default class MistInput {
 		this.state.mouse.mouseY = ev.offsetY;
 		this.state.mouse.isDown = true;
 
-		this.state.mouse.buttons.left = ev.button === 0;
-		this.state.mouse.buttons.middle = ev.button === 1;
-		this.state.mouse.buttons.right = ev.button === 2;
-		this.state.mouse.buttons.b4 = ev.button === 4;
-		this.state.mouse.buttons.b5 = ev.button === 5;
+		this.state.mouse.button.left = ev.button === 0;
+		this.state.mouse.button.middle = ev.button === 1;
+		this.state.mouse.button.right = ev.button === 2;
+		this.state.mouse.button.b4 = ev.button === 4;
+		this.state.mouse.button.b5 = ev.button === 5;
+
+		this.dispatchEvent({
+			type: MistEventType.MouseDown,
+			button: this.state.mouse.button,
+			native: ev,
+			target: this,
+			x: this.state.mouse.mouseX,
+			y: this.state.mouse.mouseX,
+		});
 	};
 
 	private onMouseMove = (ev: MouseEvent) => {
@@ -179,6 +203,16 @@ export default class MistInput {
 
 		this.state.mouse.mouseX = ev.offsetX;
 		this.state.mouse.mouseY = ev.offsetY;
+
+		this.dispatchEvent({
+			type: MistEventType.MouseMove,
+			isDown: this.state.mouse.isDown,
+			button: this.state.mouse.button,
+			native: ev,
+			target: this,
+			x: this.state.mouse.mouseX,
+			y: this.state.mouse.mouseX,
+		});
 	};
 
 	private onMouseUp = (ev: MouseEvent) => {
@@ -186,11 +220,20 @@ export default class MistInput {
 
 		this.state.mouse.isDown = false;
 
-		this.state.mouse.buttons.left = false;
-		this.state.mouse.buttons.middle = false;
-		this.state.mouse.buttons.right = false;
-		this.state.mouse.buttons.b4 = false;
-		this.state.mouse.buttons.b5 = false;
+		this.state.mouse.button.left = false;
+		this.state.mouse.button.middle = false;
+		this.state.mouse.button.right = false;
+		this.state.mouse.button.b4 = false;
+		this.state.mouse.button.b5 = false;
+
+		this.dispatchEvent({
+			type: MistEventType.MouseUp,
+			button: this.state.mouse.button,
+			native: ev,
+			target: this,
+			x: this.state.mouse.mouseX,
+			y: this.state.mouse.mouseX,
+		});
 	};
 
 	private reset() {
@@ -199,7 +242,7 @@ export default class MistInput {
 				mouseX: 0,
 				mouseY: 0,
 				isDown: false,
-				buttons: {
+				button: {
 					left: false,
 					middle: false,
 					right: false,
@@ -259,6 +302,7 @@ export default class MistInput {
 		if (!this._isInitialized) return;
 		this.GlobalInputState.destroyFn && this.GlobalInputState.destroyFn();
 		this.Reset();
+		this.globalDispatch.destroyDispatcher();
 	}
 
 	public static isPressed(key: MistKey): boolean {
@@ -288,11 +332,25 @@ export default class MistInput {
 	private static onGlobalKeyDown = (ev: KeyboardEvent) => {
 		if (this.preventDefaultBehavior) ev.preventDefault();
 		this.GlobalInputState.inputMap[ev.key] = true;
+
+		this.globalDispatch.dispatchEvent({
+			type: MistEventType.KeyDown,
+			key: ev.key as MistKey,
+			native: ev,
+			target: this,
+		});
 	};
 
 	private static onGlobalKeyUp = (ev: KeyboardEvent) => {
 		if (this.preventDefaultBehavior) ev.preventDefault();
 		this.GlobalInputState.inputMap[ev.key] = false;
+
+		this.globalDispatch.dispatchEvent({
+			type: MistEventType.KeyUp,
+			key: ev.key as MistKey,
+			native: ev,
+			target: this,
+		});
 	};
 	/* Static Input Methods END */
 }
