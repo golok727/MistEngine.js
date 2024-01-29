@@ -11,6 +11,7 @@ type MistInputMap = Record<string, boolean>;
 
 type GlobalInputState = {
 	inputMap: MistInputMap;
+	isKeyDown: boolean;
 	destroyFn?: () => void;
 };
 
@@ -42,7 +43,7 @@ type ElementInputState = {
 	global and local input system for mist
  */
 
-export default class MistInput extends MistEventDispatcher {
+class MistInput extends MistEventDispatcher {
 	public static globalDispatch = new MistEventDispatcher();
 	private static _isInitialized = false;
 	private static GlobalInputState: GlobalInputState;
@@ -90,6 +91,10 @@ export default class MistInput extends MistEventDispatcher {
 	/** Returns if a key is pressed or not */
 	public isPressed(key: MistKey): boolean {
 		return MistInput.GlobalInputState.inputMap[key];
+	}
+
+	public isKeyDown() {
+		return MistInput.GlobalInputState.isKeyDown;
 	}
 
 	public arePressed(...keys: MistKey[]): boolean {
@@ -294,7 +299,7 @@ export default class MistInput extends MistEventDispatcher {
 
 	private static Reset() {
 		this._isInitialized = false;
-		this.GlobalInputState = { inputMap: {} };
+		this.GlobalInputState = { inputMap: {}, isKeyDown: false };
 	}
 
 	// Destroy Global Inputs
@@ -303,6 +308,10 @@ export default class MistInput extends MistEventDispatcher {
 		this.GlobalInputState.destroyFn && this.GlobalInputState.destroyFn();
 		this.Reset();
 		this.globalDispatch.destroyDispatcher();
+	}
+
+	public static isKeyDown() {
+		return this.GlobalInputState.isKeyDown;
 	}
 
 	public static isPressed(key: MistKey): boolean {
@@ -332,7 +341,7 @@ export default class MistInput extends MistEventDispatcher {
 	private static onGlobalKeyDown = (ev: KeyboardEvent) => {
 		if (this.preventDefaultBehavior) ev.preventDefault();
 		this.GlobalInputState.inputMap[ev.key] = true;
-
+		this.GlobalInputState.isKeyDown = true;
 		this.globalDispatch.dispatchEvent({
 			type: MistEventType.KeyDown,
 			key: ev.key as MistKey,
@@ -344,6 +353,7 @@ export default class MistInput extends MistEventDispatcher {
 	private static onGlobalKeyUp = (ev: KeyboardEvent) => {
 		if (this.preventDefaultBehavior) ev.preventDefault();
 		this.GlobalInputState.inputMap[ev.key] = false;
+		this.GlobalInputState.isKeyDown = false;
 
 		this.globalDispatch.dispatchEvent({
 			type: MistEventType.KeyUp,
@@ -354,3 +364,5 @@ export default class MistInput extends MistEventDispatcher {
 	};
 	/* Static Input Methods END */
 }
+
+export default MistInput;
