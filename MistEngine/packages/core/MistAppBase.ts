@@ -1,4 +1,3 @@
-import { mistIntro__ } from "@mist-engine/utils";
 import {
 	MistRendererAPI,
 	MistWebGL2Renderer,
@@ -9,6 +8,9 @@ import LayerStack from "./LayerStack";
 import MistInput from "./Input/Input";
 import { Context } from "./Context";
 import Layer, { LayerWithContext } from "./Layer";
+import { MistLogger } from "@mist-engine/logger";
+
+const logger = new MistLogger({ name: "App" });
 
 export type ApplicationConstructorProps = {
 	name: string;
@@ -41,6 +43,17 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 		this.initPerformanceMatrices();
 		MistInput.Init();
 		this.addInputEventListeners();
+	}
+	get name() {
+		return this.appName;
+	}
+
+	public getRenderer() {
+		return this.renderer;
+	}
+
+	public getRenderingAPI() {
+		return this.renderer.GetRenderAPI();
 	}
 
 	protected setRunning(enable: boolean) {
@@ -95,8 +108,8 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 		this.dispatchEvent({ type: MistEventType.AppStart, target: this });
 
 		this.setRunning(true);
-		console.log("Using {0}", this.renderer.GetApi());
-		this.currentFrameId = requestAnimationFrame(this.onTick.bind(this));
+		logger.log("Using {0}", this.renderer.GetApi());
+		this.currentFrameId = requestAnimationFrame(this.loop.bind(this));
 	}
 
 	private _stop() {
