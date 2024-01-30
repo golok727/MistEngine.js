@@ -4,6 +4,7 @@ import { MistEventDispatcher } from "@mist-engine/core/Events";
 import { Camera } from "@mist-engine/cameras";
 
 import { MistShader } from "@mist-engine/renderers";
+import { Matrix4 } from "@mist-engine/math/mat4";
 
 export enum MistRendererAPI {
 	WebGL2 = "WebGL2",
@@ -17,10 +18,18 @@ export interface Renderer<API = unknown> extends MistEventDispatcher {
 	Resize(): void;
 	get width(): number;
 	get height(): number;
+
+	get canvasWidth(): number;
+	get canvasHeight(): number;
+
 	get aspect(): number;
 	getNativeContext(): API;
 	BeginScene(camera: Camera): void;
-	Submit(vertexArray: MistVertexArray, shader: MistShader): void;
+	Submit(
+		vertexArray: MistVertexArray,
+		shader: MistShader,
+		transform: Matrix4
+	): void;
 	EndScene(): void;
 	Is<T extends Renderer>(): this is T;
 }

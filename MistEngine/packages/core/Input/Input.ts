@@ -15,7 +15,7 @@ type GlobalInputState = {
 	destroyFn?: () => void;
 };
 
-type ElementInputState = {
+export type ElementInputState = {
 	mouse: {
 		mouseX: number;
 		mouseY: number;
@@ -190,8 +190,8 @@ class MistInput extends MistEventDispatcher {
 			button: this.state.mouse.button,
 			native: ev,
 			target: this,
-			x: this.state.mouse.mouseX,
-			y: this.state.mouse.mouseX,
+			x: ev.offsetX,
+			y: ev.offsetY,
 			preventDefault: ev.preventDefault.bind(ev),
 		});
 	};
@@ -206,8 +206,8 @@ class MistInput extends MistEventDispatcher {
 			button: this.state.mouse.button,
 			native: ev,
 			target: this,
-			x: this.state.mouse.mouseX,
-			y: this.state.mouse.mouseX,
+			x: ev.offsetX,
+			y: ev.offsetY,
 			preventDefault: ev.preventDefault.bind(ev),
 		});
 	};
@@ -226,8 +226,8 @@ class MistInput extends MistEventDispatcher {
 			button: this.state.mouse.button,
 			native: ev,
 			target: this,
-			x: this.state.mouse.mouseX,
-			y: this.state.mouse.mouseX,
+			x: ev.offsetX,
+			y: ev.offsetY,
 			preventDefault: ev.preventDefault.bind(ev),
 		});
 	};

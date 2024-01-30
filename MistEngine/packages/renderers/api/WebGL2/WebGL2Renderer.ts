@@ -23,6 +23,24 @@ export class MistWebGL2Renderer
 		this.renderAPI = new MistWebGL2RenderingAPI(this.canvas);
 	}
 
+	public get width(): number {
+		return this.canvas.width;
+	}
+
+	public get aspect(): number {
+		return this.canvas.width / this.canvas.height;
+	}
+
+	public get height(): number {
+		return this.canvas.height;
+	}
+
+	public get canvasWidth(): number {
+		return this.canvas.clientWidth;
+	}
+	public get canvasHeight(): number {
+		return this.canvas.clientHeight;
+	}
 	Is<T extends Renderer<unknown>>(): this is T {
 		return this instanceof MistWebGL2Renderer;
 	}
@@ -31,17 +49,24 @@ export class MistWebGL2Renderer
 		this.currentViewProjection = camera.viewProjection;
 	}
 
-	public Submit(vertexArray: MistVertexArray, shader: MistShader): void {
+	public Submit(
+		vertexArray: MistVertexArray,
+		shader: MistShader,
+		transform: Matrix4
+	): void {
 		if (this.currentViewProjection === undefined)
 			console.warn("Please Begin a scene before submitting to the Renderer");
 		const renderAPI = this.GetRenderAPI();
 		const s = shader as MistWebGL2Shader;
 
 		s.use();
+
 		s.setUniformMat4(
 			"u_ViewProjection",
 			this.currentViewProjection || new Matrix4()
 		);
+
+		s.setUniformMat4("u_Transform", transform);
 
 		vertexArray.use();
 		renderAPI.DrawIndexed(vertexArray);
@@ -71,18 +96,6 @@ export class MistWebGL2Renderer
 
 	public getNativeContext(): WebGL2RenderingContext {
 		return this.GetRenderAPI().inner;
-	}
-
-	public get width(): number {
-		return this.canvas.width;
-	}
-
-	public get aspect(): number {
-		return this.canvas.width / this.canvas.height;
-	}
-
-	public get height(): number {
-		return this.canvas.height;
 	}
 
 	public GetRenderAPI() {

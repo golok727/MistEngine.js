@@ -64,7 +64,7 @@ namespace globalThis {
 		type: MistEventTypeT["MouseDown"];
 		x: number;
 		y: number;
-		button: ElementInputState["mouse"]["button"];
+		button: import("@mist-engine/core/Input/Input.ts").ElementInputState["mouse"]["button"];
 		native: MouseEvent;
 	}
 
@@ -74,7 +74,7 @@ namespace globalThis {
 		type: MistEventTypeT["MouseUp"];
 		x: number;
 		y: number;
-		button: ElementInputState["mouse"]["button"];
+		button: import("@mist-engine/core/Input/Input.ts").ElementInputState["mouse"]["button"];
 		native: MouseEvent;
 	}
 
@@ -85,7 +85,7 @@ namespace globalThis {
 		x: number;
 		y: number;
 		isDown: boolean;
-		button: ElementInputState["mouse"]["button"];
+		button: import("@mist-engine/core/Input/Input.ts").ElementInputState["mouse"]["button"];
 		native: MouseEvent;
 	}
 
