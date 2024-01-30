@@ -1,44 +1,33 @@
-import "./MistGlobalFill";
-
+import { mistIntro__ } from "@mist-engine/utils";
 import {
 	MistRendererAPI,
-	Renderer,
 	MistWebGL2Renderer,
+	Renderer,
 } from "@mist-engine/renderers";
-
-import LayerStack from "@mist-engine/core/LayerStack";
-import Layer from "@mist-engine/core/Layer";
-import MistInput from "@mist-engine/core/Input/Input";
-
-import type { LayerWithContext } from "@mist-engine/core/Layer";
-
-import { MistLogger } from "@mist-engine/logger";
-
-import { mistIntro__ } from "@mist-engine/utils";
+import { MistEventDispatcher } from "./Events";
+import LayerStack from "./LayerStack";
+import MistInput from "./Input/Input";
 import { Context } from "./Context";
-import { MistEventDispatcher } from "@mist-engine/core/Events";
-
-const logger = new MistLogger({ name: "App" });
+import Layer, { LayerWithContext } from "./Layer";
 
 export type ApplicationConstructorProps = {
 	name: string;
 	canvas: HTMLCanvasElement;
-	rendererAPI: Omit<"None", MistRendererAPI>;
+	rendererAPI: MistRendererAPI;
 };
 
-export class MistApp extends MistEventDispatcher {
-	// private _id: string;
-	private _allowPerformanceMetrics: boolean;
-	private currentFrameId?: number;
-	private appName: string;
-	private renderer: Renderer;
-	private input: MistInput;
-	private layerStack: LayerStack;
-	private isRunning: boolean;
-	private lastTime: number;
+export default abstract class MistAppBase extends MistEventDispatcher {
+	protected appName: string;
+	protected _allowPerformanceMetrics: boolean;
+	protected input: MistInput;
+	protected layerStack: LayerStack;
+	protected renderer!: Renderer;
+
+	protected isRunning: boolean;
+	protected lastTime: number;
+	protected currentFrameId?: number;
 
 	constructor({ name, canvas, rendererAPI }: ApplicationConstructorProps) {
-		// this._id = uuid();
 		super();
 		this._allowPerformanceMetrics = !import.meta.env.PROD; // for now
 		this.appName = name;
@@ -47,68 +36,17 @@ export class MistApp extends MistEventDispatcher {
 		this.isRunning = false;
 		this.lastTime = 0;
 
-		switch (rendererAPI) {
-			case MistRendererAPI.WebGL2:
-				this.renderer = new MistWebGL2Renderer(canvas);
-				break;
-
-			case MistRendererAPI.WebGPU:
-				logger.error("Implement WebGPU Renderer");
-				throw "";
-
-			default:
-				throw new Error(`Renderer Api ${rendererAPI} is not supported!`);
-		}
-
-		/*  Performance Measure Should be moved in to this */
+		this.initRenderer(rendererAPI, canvas);
 
 		this.initPerformanceMatrices();
-		/* Initialize Mist Input */
 		MistInput.Init();
 		this.addInputEventListeners();
 	}
 
-	get name() {
-		return this.appName;
-	}
-
-	public getRenderer() {
-		return this.renderer;
-	}
-
-	public getRenderingAPI() {
-		return this.renderer.GetRenderAPI();
-	}
-
-	private initPerformanceMatrices() {
-		if (this._allowPerformanceMetrics)
-			Object.assign(this, {
-				__performance: {
-					averageFPS: 0,
-					fpsMeasureStack: [],
-				},
-			});
-	}
-
-	private updatePerformanceMatrices(_now: number) {}
-
-	private setRunning(enable: boolean) {
+	protected setRunning(enable: boolean) {
 		this.isRunning = enable;
 	}
 
-	public Run() {
-		if (this.isRunning)
-			throw new Error(`App: '${this.name}' is already running!`);
-
-		this.dispatchEvent({ type: MistEventType.AppStart, target: this });
-
-		this.setRunning(true);
-		logger.log("Using {0}", this.renderer.GetApi());
-		this.currentFrameId = requestAnimationFrame(this.loop.bind(this));
-	}
-	/*
-	  Pauses a application and can restart with the Run() fn 
-	 */
 	public Pause() {
 		this._stop();
 	}
@@ -129,7 +67,12 @@ export class MistApp extends MistEventDispatcher {
 		this._restartApp();
 	}
 
-	// Main Loop
+	protected onTick(_timestamp: number) {
+		throw new Error("onTick Method should be overridden");
+	}
+
+	private updatePerformanceMatrices(_now: number) {}
+
 	private loop(timestamp: number) {
 		if (!this.isRunning) return;
 
@@ -138,16 +81,22 @@ export class MistApp extends MistEventDispatcher {
 
 		if (!this.lastTime) this.lastTime = timestamp;
 
-		const deltaTime = timestamp - this.lastTime;
-
 		this.renderer.Resize();
-		for (const layer of this.layerStack.reversed()) {
-			layer.onUpdate(deltaTime);
-		}
+		this.onTick(timestamp);
 
 		this.lastTime = timestamp;
-
 		this.currentFrameId = requestAnimationFrame(this.loop.bind(this));
+	}
+
+	public Run() {
+		if (this.isRunning)
+			throw new Error(`App: '${this.appName}' is already running!`);
+
+		this.dispatchEvent({ type: MistEventType.AppStart, target: this });
+
+		this.setRunning(true);
+		console.log("Using {0}", this.renderer.GetApi());
+		this.currentFrameId = requestAnimationFrame(this.onTick.bind(this));
 	}
 
 	private _stop() {
@@ -162,7 +111,23 @@ export class MistApp extends MistEventDispatcher {
 		this.Run();
 	}
 
-	// Layer Stuff
+	private initRenderer(
+		rendererAPI: MistRendererAPI,
+		canvas: HTMLCanvasElement
+	) {
+		switch (rendererAPI) {
+			case MistRendererAPI.WebGL2:
+				this.renderer = new MistWebGL2Renderer(canvas);
+				break;
+
+			case MistRendererAPI.WebGPU:
+				throw new Error("Implement WebGPU Renderer");
+
+			default:
+				throw new Error(`Renderer Api ${rendererAPI} is not supported!`);
+		}
+	}
+
 	public pushLayer<T extends new (...args: any[]) => Layer>(
 		layerConstructor: T,
 		...args: ConstructorParameters<T>
@@ -184,9 +149,29 @@ export class MistApp extends MistEventDispatcher {
 		this.layerStack.pushOverlay(overlay);
 	}
 
-	/* 
-		Add Events for inputs
-	*/
+	private provideContextToLayer(layer: LayerWithContext) {
+		const context: Context = {
+			App: this as any,
+			RenderAPI: this.renderer.GetRenderAPI(),
+			Renderer: this.renderer,
+			Input: this.input,
+		};
+
+		Object.defineProperty(layer, "__context__", {
+			value: context,
+			writable: false,
+		});
+	}
+
+	private initPerformanceMatrices() {
+		if (this._allowPerformanceMetrics)
+			Object.assign(this, {
+				__performance: {
+					averageFPS: 0,
+					fpsMeasureStack: [],
+				},
+			});
+	}
 
 	// prettier-ignore
 	private addInputEventListeners() {
@@ -244,33 +229,4 @@ export class MistApp extends MistEventDispatcher {
 			layer.onMouseWheel && layer.onMouseWheel(ev);
 		}
 	};
-
-	/*
-		Provide context for each layer when a layer is created
- */
-	private provideContextToLayer(layer: LayerWithContext) {
-		const context: Context = {
-			App: this,
-			RenderAPI: this.renderer.GetRenderAPI(),
-			Renderer: this.renderer,
-			Input: this.input,
-		};
-
-		Object.defineProperty(layer, "__context__", {
-			value: context,
-			writable: false,
-		});
-	}
 }
-
-export const CreateMistApp = async (
-	setup: () => Promise<MistApp> | MistApp
-) => {
-	mistIntro__();
-	let mayBePromiseApp = setup();
-	let app: MistApp;
-	if (mayBePromiseApp instanceof Promise) app = await mayBePromiseApp;
-	else app = mayBePromiseApp;
-	app.Run();
-	logger.log("{0}\n\t {1}", "Radha Vallabh Shri Harivansh", "Radhey Shyam");
-};
