@@ -51,26 +51,6 @@ class TestLayer extends Mist.Layer {
 		this.cameraRotation = 0;
 	}
 
-	updateFPSDebugText(delta: number) {
-		if (!delta) return;
-		const fps = 1000 / delta;
-		this.frameTimes.push(fps);
-
-		const now = performance.now();
-
-		if (now - this.lastTime > 1000) {
-			if (this.frameTimes.length) {
-				const averageFps =
-					this.frameTimes.reduce((s, c) => s + c, 0) / this.frameTimes.length;
-				updateFPSText(averageFps);
-			}
-
-			// Reset for the next second
-			this.frameTimes = [];
-			this.lastTime = now;
-		}
-	}
-
 	updateCamera(delta: number) {
 		const { Input } = this.getContext();
 
@@ -268,9 +248,9 @@ class TestLayer extends Mist.Layer {
 
 	override onUpdate(delta: number): void {
 		// Each Frame
-		const { RenderAPI, Renderer } = this.getContext();
+		const { RenderAPI, Renderer, App } = this.getContext();
 
-		this.updateFPSDebugText(delta);
+		updateFPSText(App.performance.averageFps);
 		this.updateCamera(delta);
 		/* should be handled by the renderer */
 		RenderAPI.SetViewport(0, 0, Renderer.width, Renderer.height);

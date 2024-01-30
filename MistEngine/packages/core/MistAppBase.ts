@@ -18,9 +18,17 @@ export type ApplicationConstructorProps = {
 	rendererAPI: MistRendererAPI;
 };
 
+type AppWithPerformanceMeasure = MistAppBase & {
+	__performance__: {
+		averageFPS: number;
+		fpsReadings: number[];
+		performanceLastTime: number;
+	};
+};
+
 export default abstract class MistAppBase extends MistEventDispatcher {
-	protected appName: string;
 	protected _allowPerformanceMetrics: boolean;
+	protected appName: string;
 	protected input: MistInput;
 	protected layerStack: LayerStack;
 	protected renderer!: Renderer;
@@ -47,7 +55,17 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 	get name() {
 		return this.appName;
 	}
+	get performance() {
+		const _this = this as any as AppWithPerformanceMeasure;
 
+		if (!_this || !this._allowPerformanceMetrics) {
+			return { averageFps: 0 };
+		}
+
+		const avgFps = _this.__performance__.averageFPS;
+
+		return { averageFps: avgFps };
+	}
 	public getRenderer() {
 		return this.renderer;
 	}
@@ -60,6 +78,13 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 		this.isRunning = enable;
 	}
 
+	public Run() {
+		this._run();
+	}
+
+	/*
+  Pauses a Mist Application
+  */
 	public Pause() {
 		this._stop();
 	}
@@ -80,28 +105,50 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 		this._restartApp();
 	}
 
-	protected onTick(_timestamp: number) {
+	protected onTick(_delta: number) {
 		throw new Error("onTick Method should be overridden");
 	}
 
-	private updatePerformanceMatrices(_now: number) {}
-
 	private loop(timestamp: number) {
 		if (!this.isRunning) return;
+		const delta = timestamp - this.lastTime;
 
-		if (this._allowPerformanceMetrics)
-			this.updatePerformanceMatrices(timestamp);
+		if (this._allowPerformanceMetrics) this.updatePerformanceMatrices(delta);
 
 		if (!this.lastTime) this.lastTime = timestamp;
 
 		this.renderer.Resize();
-		this.onTick(timestamp);
+		this.onTick(delta);
 
 		this.lastTime = timestamp;
 		this.currentFrameId = requestAnimationFrame(this.loop.bind(this));
 	}
 
-	public Run() {
+	private updatePerformanceMatrices(
+		delta: number,
+		updateInterval: number = 1000
+	) {
+		if (!delta) return;
+		const fps = 1000 / delta;
+		const _this = this as any as AppWithPerformanceMeasure;
+		if (!_this) return;
+		_this.__performance__.fpsReadings.push(fps);
+
+		const now = performance.now();
+		const lastTime = _this.__performance__.performanceLastTime;
+
+		if (now - lastTime > updateInterval) {
+			const readings = _this.__performance__.fpsReadings;
+
+			const averageFPS = readings.reduce((s, c) => c + s, 0) / readings.length;
+
+			_this.__performance__.averageFPS = averageFPS;
+			_this.__performance__.fpsReadings = [];
+			_this.__performance__.performanceLastTime = now;
+		}
+	}
+
+	private _run() {
 		if (this.isRunning)
 			throw new Error(`App: '${this.appName}' is already running!`);
 
@@ -111,7 +158,6 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 		logger.log("Using {0}", this.renderer.GetApi());
 		this.currentFrameId = requestAnimationFrame(this.loop.bind(this));
 	}
-
 	private _stop() {
 		if (this.currentFrameId) cancelAnimationFrame(this.currentFrameId);
 		this.setRunning(false);
@@ -141,7 +187,7 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 		}
 	}
 
-	public pushLayer<T extends new (...args: any[]) => Layer>(
+	protected pushLayer<T extends new (...args: any[]) => Layer>(
 		layerConstructor: T,
 		...args: ConstructorParameters<T>
 	) {
@@ -151,7 +197,7 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 		this.layerStack.pushLayer(layer);
 	}
 
-	public pushOverlay<T extends new (...args: any[]) => Layer>(
+	protected pushOverlay<T extends new (...args: any[]) => Layer>(
 		overlayConstructor: T,
 		...args: ConstructorParameters<T>
 	) {
@@ -179,9 +225,10 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 	private initPerformanceMatrices() {
 		if (this._allowPerformanceMetrics)
 			Object.assign(this, {
-				__performance: {
+				__performance__: {
 					averageFPS: 0,
-					fpsMeasureStack: [],
+					fpsReadings: [],
+					performanceLastTime: 0,
 				},
 			});
 	}

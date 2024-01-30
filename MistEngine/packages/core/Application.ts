@@ -12,10 +12,9 @@ export class MistApp extends MistAppBase {
 		super(props);
 	}
 
-	protected override onTick(timestamp: number): void {
+	protected override onTick(delta: number): void {
 		for (const layer of this.layerStack.reversed()) {
-			const deltaTime = timestamp - this.lastTime;
-			layer.onUpdate(deltaTime);
+			layer.onUpdate(delta);
 		}
 	}
 }
