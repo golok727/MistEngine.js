@@ -133,26 +133,24 @@ class TestLayer extends Mist.Layer {
 		const tri = this.triangleObj;
 
 		const sqObjectTransform = Matrix4.Translate(sq.position).multiplyMat(
-			Matrix4.Scale(sq.scale),
-			Matrix4.Rotate(sq.angle, vec3(0, 0, 1))
+			Matrix4.Rotate(sq.angle, vec3(0, 0, 1)),
+			Matrix4.Scale(sq.scale)
 		);
 
 		const triObjectTransform = Matrix4.Translate(tri.position).multiplyMat(
-			Matrix4.Scale(tri.scale),
-			Matrix4.Rotate(tri.angle, vec3(0, 0, 1))
+			Matrix4.Rotate(tri.angle, vec3(0, 0, 1)),
+			Matrix4.Scale(tri.scale)
 		);
 
 		Renderer.BeginScene(this.camera);
-		// prettier-ignore
-		Renderer.Submit(this.squareObj.va, this.squareObj.shader, sqObjectTransform);
 
-		for (let j = 1; j < 10; j++) {
-			for (let i = 1; i < 10; i++) {
+		for (let j = 0; j < 10; j++) {
+			for (let i = 0; i < 10; i++) {
 				const blueSquareObjTransform = Matrix4.Translate(
 					sqBlue.position.clone().add(vec3(0.4 * i, 0.4 * j, 1))
 				).multiplyMat(
-					Matrix4.Scale(sqBlue.scale),
-					Matrix4.Rotate(sqBlue.angle, vec3(0, 0, 1))
+					Matrix4.Rotate(sqBlue.angle, vec3(0, 0, 1)),
+					Matrix4.Scale(sqBlue.scale)
 				);
 
 				Renderer.Submit(
@@ -163,6 +161,8 @@ class TestLayer extends Mist.Layer {
 			}
 		}
 
+		// prettier-ignore
+		Renderer.Submit(this.squareObj.va, this.squareObj.shader, sqObjectTransform);
 		// prettier-ignore
 		Renderer.Submit(this.triangleObj.va, this.triangleObj.shader, triObjectTransform);
 
