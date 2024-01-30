@@ -11,14 +11,14 @@ export interface MistVertexArray extends MistAPIUsable {
 
 export class VertexArrayFactory {
 	static Create(renderer: Renderer): MistVertexArray {
-		switch (renderer.GetApi()) {
+		switch (renderer.GetApiType()) {
 			case MistRendererAPI.WebGL2:
 				return new MistWebGL2VertexArray(renderer);
 			case MistRendererAPI.WebGPU:
 				throw new Error("VertexArray for WEBGL2 is not implemented yet");
 			default:
 				throw new Error(
-					`Unsupported Renderer Api '${renderer.GetApi()}' for creating VertexArray`
+					`Unsupported Renderer Api '${renderer.GetApiType()}' for creating VertexArray`
 				);
 		}
 	}

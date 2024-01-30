@@ -19,8 +19,6 @@ function updateFPSText(fps: number) {
 }
 
 class TestLayer extends Mist.Layer {
-	private frameTimes: number[] = [];
-	private lastTime = 0;
 	private trainTexture!: Mist.MistTexture;
 	private squareObj!: DrawableObject;
 	private triangleObj!: DrawableObject & {
@@ -236,13 +234,12 @@ class TestLayer extends Mist.Layer {
 
 	override onKeyDown(ev: MistKeyDownEvent): boolean {
 		if (ev.key == MistKey.Num0 && ev.target.isPressed(MistKey.Control))
-			ev.native.preventDefault();
+			ev.preventDefault();
 
 		return false;
 	}
 	public onMouseWheel(ev: MistMouseWheelEvent): boolean {
-		if (ev.target.isPressed(MistKey.Control)) ev.native.preventDefault();
-
+		if (ev.target.isPressed(MistKey.Control)) ev.preventDefault();
 		return false;
 	}
 
@@ -288,5 +285,6 @@ class SandboxApp extends Mist.MistApp {
 
 Mist.CreateMistApp(async () => {
 	await Mist.preloadTexture("/train.png");
-	return new SandboxApp();
+	const app = new SandboxApp();
+	return app;
 });

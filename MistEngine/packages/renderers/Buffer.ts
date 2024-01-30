@@ -127,15 +127,17 @@ export class MistVertexBufferFactory {
 		renderer: Renderer,
 		data: Float32Array
 	): MistVertexBuffer {
-		switch (renderer.GetApi()) {
+		switch (renderer.GetApiType()) {
 			case MistRendererAPI.WebGL2:
 				return new MistWebGL2VertexBuffer(renderer, data);
 			case MistRendererAPI.WebGPU:
 				throw new Error(
-					`Renderer API ${renderer.GetApi()} is under construction`
+					`Renderer API ${renderer.GetApiType()} is under construction`
 				);
 			default:
-				throw new Error(`Renderer API ${renderer.GetApi()} is not supported`);
+				throw new Error(
+					`Renderer API ${renderer.GetApiType()} is not supported`
+				);
 		}
 	}
 }
@@ -145,17 +147,19 @@ export class MistIndexBufferFactory {
 	 * Creates a index buffer based on the given renderer API
 	 */
 	public static Create(renderer: Renderer, data: Uint32Array): MistIndexBuffer {
-		switch (renderer.GetApi()) {
+		switch (renderer.GetApiType()) {
 			case MistRendererAPI.WebGL2:
 				return new WebGL2IndexBuffer(renderer, data);
 
 			case MistRendererAPI.WebGPU:
 				throw new Error(
-					`Renderer API ${renderer.GetApi()} is under construction`
+					`Renderer API ${renderer.GetApiType()} is under construction`
 				);
 
 			default:
-				throw new Error(`Renderer API ${renderer.GetApi()} is not supported`);
+				throw new Error(
+					`Renderer API ${renderer.GetApiType()} is not supported`
+				);
 		}
 	}
 }

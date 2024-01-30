@@ -11,7 +11,9 @@ export interface RenderingAPI<Ctx = unknown> {
 }
 
 export function getGpuRenderingContext(renderer: Renderer): GPUCanvasContext {
-	throw new Error(`getGpuContext for ${renderer.GetApi} is not implemented`);
+	throw new Error(
+		`getGpuContext for ${renderer.GetApiType} is not implemented`
+	);
 }
 
 export function getGLRenderingContext(

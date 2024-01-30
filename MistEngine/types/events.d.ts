@@ -1,39 +1,56 @@
 namespace globalThis {
-	MistInput = import("../packages/core/Input/Input.ts").default;
 	interface MistBaseEvent<T> {
 		target: T;
 	}
-	interface MistAppReadyEvent extends MistBaseEvent<MistApp> {
+
+	interface DefaultPrevent {
+		preventDefault(): void;
+	}
+
+	interface MistAppReadyEvent
+		extends MistBaseEvent<import("../packages/core/MistAppBase.ts").default> {
 		type: MistEventTypeT["AppReady"];
 	}
 
-	interface MistAppStartEvent extends MistBaseEvent<MistApp> {
+	interface MistAppStartEvent
+		extends MistBaseEvent<import("../packages/core/MistAppBase.ts").default> {
 		type: MistEventTypeT["AppStart"];
 	}
 
-	interface MistAppShutDownEvent extends MistBaseEvent<MistApp> {
+	interface MistAppShutDownEvent
+		extends MistBaseEvent<import("../packages/core/MistAppBase.ts").default> {
 		type: MistEventTypeT["AppShutDown"];
 	}
 
-	interface MistAppRestartEvent extends MistBaseEvent<MistApp> {
+	interface MistAppRestartEvent
+		extends MistBaseEvent<import("../packages/core/MistAppBase.ts").default> {
 		type: MistEventTypeT["AppRestart"];
 	}
 
-	interface MistRendererResizeEvent extends MistBaseEvent<Renderer> {
+	interface MistRendererResizeEvent
+		extends MistBaseEvent<
+			import("../packages/renderers/Renderer.ts").Renderer<any>
+		> {
 		type: MistEventTypeT["RendererResize"];
 		width: number;
 		height: number;
 	}
 	// Global Keyboard
 	interface MistKeyUpEvent
-		extends MistBaseEvent<import("../packages/core/Input/Input.ts").default> {
+		extends MistBaseEvent<
+				typeof import("../packages/core/Input/Input.ts").default
+			>,
+			DefaultPrevent {
 		type: MistEventTypeT["KeyUp"];
 		key: MistKey;
 		native: KeyboardEvent;
 	}
 
 	interface MistKeyDownEvent
-		extends MistBaseEvent<import("../packages/core/Input/Input.ts").default> {
+		extends MistBaseEvent<
+				typeof import("../packages/core/Input/Input.ts").default
+			>,
+			DefaultPrevent {
 		type: MistEventTypeT["KeyDown"];
 		key: MistKey;
 		native: KeyboardEvent;
@@ -41,7 +58,9 @@ namespace globalThis {
 
 	// Mouse
 
-	interface MistMouseDownEvent extends MistBaseEvent<MistInput> {
+	interface MistMouseDownEvent
+		extends MistBaseEvent<import("../packages/core/Input/Input.ts").default>,
+			DefaultPrevent {
 		type: MistEventTypeT["MouseDown"];
 		x: number;
 		y: number;
@@ -49,7 +68,9 @@ namespace globalThis {
 		native: MouseEvent;
 	}
 
-	interface MistMouseUpEvent extends MistBaseEvent<MistInput> {
+	interface MistMouseUpEvent
+		extends MistBaseEvent<import("../packages/core/Input/Input.ts").default>,
+			DefaultPrevent {
 		type: MistEventTypeT["MouseUp"];
 		x: number;
 		y: number;
@@ -57,7 +78,9 @@ namespace globalThis {
 		native: MouseEvent;
 	}
 
-	interface MistMouseMoveEvent extends MistBaseEvent<MistInput> {
+	interface MistMouseMoveEvent
+		extends MistBaseEvent<import("../packages/core/Input/Input.ts").default>,
+			DefaultPrevent {
 		type: MistEventTypeT["MouseMove"];
 		x: number;
 		y: number;
@@ -66,7 +89,9 @@ namespace globalThis {
 		native: MouseEvent;
 	}
 
-	interface MistMouseWheelEvent extends MistBaseEvent<MistInput> {
+	interface MistMouseWheelEvent
+		extends MistBaseEvent<import("../packages/core/Input/Input.ts").default>,
+			DefaultPrevent {
 		type: MistEventTypeT["MouseWheel"];
 
 		deltaX: number;

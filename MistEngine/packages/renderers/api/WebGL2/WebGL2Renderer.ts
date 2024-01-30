@@ -89,7 +89,7 @@ export class MistWebGL2Renderer
 		return this.renderAPI;
 	}
 
-	public GetApi(): MistRendererAPI {
+	public GetApiType(): MistRendererAPI {
 		return this.API;
 	}
 }

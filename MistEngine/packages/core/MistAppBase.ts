@@ -155,7 +155,7 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 		this.dispatchEvent({ type: MistEventType.AppStart, target: this });
 
 		this.setRunning(true);
-		logger.log("Using {0}", this.renderer.GetApi());
+		logger.log("Using {0}", this.renderer.GetApiType());
 		this.currentFrameId = requestAnimationFrame(this.loop.bind(this));
 	}
 	private _stop() {

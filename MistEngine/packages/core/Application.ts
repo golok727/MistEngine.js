@@ -27,6 +27,7 @@ export const CreateMistApp = async (
 	let app: MistApp;
 	if (mayBePromiseApp instanceof Promise) app = await mayBePromiseApp;
 	else app = mayBePromiseApp;
+	app.dispatchEvent({ type: MistEventType.AppReady, target: app });
 	app.Run();
 	logger.log("{0}\n\t {1}", "Radha Vallabh Shri Harivansh", "Radhey Shyam");
 };

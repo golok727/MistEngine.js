@@ -9,16 +9,18 @@ export class TextureFactory {
 	 * @param name The preloaded file name
 	 */
 	public static Create(renderer: Renderer, mistUrl: string): MistTexture {
-		switch (renderer.GetApi()) {
+		switch (renderer.GetApiType()) {
 			case MistRendererAPI.WebGL2:
 				return new MistWebGLTexture(renderer, mistUrl);
 
 			case MistRendererAPI.WebGL2:
 				throw new Error(
-					`Renderer API ${renderer.GetApi()} is under construction`
+					`Renderer API ${renderer.GetApiType()} is under construction`
 				);
 			default:
-				throw new Error(`Renderer API ${renderer.GetApi()} is not supported`);
+				throw new Error(
+					`Renderer API ${renderer.GetApiType()} is not supported`
+				);
 		}
 	}
 }

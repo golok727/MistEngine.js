@@ -11,7 +11,7 @@ export class ShaderFactory {
 		vertexShaderSrc: string,
 		fragmentShaderSrc: string
 	): MistShader {
-		switch (renderer.GetApi()) {
+		switch (renderer.GetApiType()) {
 			case MistRendererAPI.WebGL2:
 				return new MistWebGL2Shader(
 					renderer,
@@ -20,10 +20,12 @@ export class ShaderFactory {
 				);
 			case MistRendererAPI.WebGL2:
 				throw new Error(
-					`Renderer API ${renderer.GetApi()} is under construction`
+					`Renderer API ${renderer.GetApiType()} is under construction`
 				);
 			default:
-				throw new Error(`Renderer API ${renderer.GetApi()} is not supported`);
+				throw new Error(
+					`Renderer API ${renderer.GetApiType()} is not supported`
+				);
 		}
 	}
 	// Strip the first line of if the first line is empty

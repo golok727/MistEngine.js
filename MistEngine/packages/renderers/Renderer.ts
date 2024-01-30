@@ -11,14 +11,14 @@ export enum MistRendererAPI {
 	None = "None",
 }
 
-export interface Renderer<Ctx = unknown> extends MistEventDispatcher {
-	GetRenderAPI(): RenderingAPI<Ctx>;
-	GetApi(): MistRendererAPI;
+export interface Renderer<API = unknown> extends MistEventDispatcher {
+	GetRenderAPI(): RenderingAPI<API>;
+	GetApiType(): MistRendererAPI;
 	Resize(): void;
 	get width(): number;
 	get height(): number;
 	get aspect(): number;
-	getNativeContext(): Ctx;
+	getNativeContext(): API;
 	BeginScene(camera: Camera): void;
 	Submit(vertexArray: MistVertexArray, shader: MistShader): void;
 	EndScene(): void;
