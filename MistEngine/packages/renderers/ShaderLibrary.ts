@@ -1,3 +1,9 @@
+/*
+	@mist-engine/ShaderLibrary
+	A shader library which stores all the shaders in one location which can be loaded into any Mist Application;
+
+	The shader files provided should be a `Mist Shader` which allows loading multiple shaders in single file. More in the docs
+*/
 import { MistShader, ShaderFactory } from "./Shader";
 import MistShaderParser from "./MistShaderParser";
 import { MistApp } from "@mist-engine/Mist";
@@ -6,8 +12,17 @@ export default class MistShaderLibrary {
 	private static loadedShaders: Map<string, MistShader> = new Map();
 
 	/**
-	 * @param url  Preloaded url of the shader file
-	 * @param name optional name to store it as if not provided it will be stored with the name with the extension removed and you can access it with the url provided
+	 * @param url  Preloaded url of the shader file preloaded_filepath#shaderName\
+	 * For example, if you used `Mist.ShaderLibrary.Preload('your-app', 'myShader.mist.glsl')`
+	to load a shader and you named your shader `basicShader` with `@MistShaderBegin(basicShader)`  then you would access the shader file like this
+
+	@example
+
+	```ts
+	Mist.ShaderLibrary.Load('myShader.mist.glsl/#basicShader');
+	// preloaded_filepath/#shaderName
+```
+
 	 */
 	public static Load(url: string) {
 		url = url.trim();
