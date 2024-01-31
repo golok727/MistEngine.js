@@ -1,8 +1,3 @@
-
-Certainly! Here's the documentation in Markdown format with code blocks:
-
-markdown
-Copy code
 # MistShader
 
 The Mist Shader file is a shader file processed by the `Mist.ShaderLibrary.Preload` function, which parses and converts the Mist shader into a GLSL shader file.
