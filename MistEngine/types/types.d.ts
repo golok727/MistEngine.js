@@ -1,9 +1,7 @@
 type Values<T> = T[keyof T];
 type Keys<T> = keyof T;
 
-interface MistGlobal {
-	currentAppInstance: import("@mist-engine/core/Application").MistApp | null;
-}
+interface MistGlobal {}
 
 declare var __MIST__: Window["__MIST__"];
 

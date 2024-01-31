@@ -1,3 +1,4 @@
+import MistAppManager from "@mist-engine/core/MistAppManager";
 import { MistAPIUsable, MistRendererAPI, Renderer } from "./Renderer";
 import {
 	WebGL2IndexBuffer,
@@ -124,9 +125,15 @@ export class MistVertexBufferFactory {
 	 * Creates a vertex buffer based on the given renderer API
 	 */
 	public static Create(
-		renderer: Renderer,
-		data: Float32Array
+		data: Float32Array,
+		renderer?: Renderer
 	): MistVertexBuffer {
+		renderer = renderer ? renderer : MistAppManager.getCurrent()?.getRenderer();
+		if (!renderer)
+			throw new Error(
+				"Mist.Texture Create called without an active context. Please use this inside a Mist.App or Mist.Layer or provide a Mist.Renderer as arg[2] for context"
+			);
+
 		switch (renderer.GetApiType()) {
 			case MistRendererAPI.WebGL2:
 				return new MistWebGL2VertexBuffer(renderer, data);
@@ -146,7 +153,16 @@ export class MistIndexBufferFactory {
 	/**
 	 * Creates a index buffer based on the given renderer API
 	 */
-	public static Create(renderer: Renderer, data: Uint32Array): MistIndexBuffer {
+	public static Create(
+		data: Uint32Array,
+		renderer?: Renderer
+	): MistIndexBuffer {
+		renderer = renderer ? renderer : MistAppManager.getCurrent()?.getRenderer();
+		if (!renderer)
+			throw new Error(
+				"Mist.Texture Create called without an active context. Please use this inside a Mist.App or Mist.Layer or provide a Mist.Renderer as arg[2] for context"
+			);
+
 		switch (renderer.GetApiType()) {
 			case MistRendererAPI.WebGL2:
 				return new WebGL2IndexBuffer(renderer, data);

@@ -9,7 +9,7 @@ import MistInput from "./Input/Input";
 import { Context } from "./Context";
 import Layer, { LayerWithContext } from "./Layer";
 import { MistLogger } from "@mist-engine/logger";
-import { MistApp } from "./Application";
+import MistAppManager from "./MistAppManager";
 
 const logger = new MistLogger({ name: "App" });
 
@@ -53,6 +53,7 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 		MistInput.Init();
 		this.addInputEventListeners();
 	}
+
 	get name() {
 		return this.appName;
 	}
@@ -95,7 +96,6 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 	 */
 	public ShutDown() {
 		this._stop();
-		this.terminateGlobalContext();
 		this.dispatchEvent({ type: MistEventType.AppShutDown, target: this });
 		this.input.destroy();
 	}
@@ -107,20 +107,29 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 		this._restartApp();
 	}
 
+	protected onAttach() {
+		throw new Error("MistAppBase: onAttach should be overridden");
+	}
+
 	protected onTick(_delta: number) {
-		throw new Error("onTick Method should be overridden");
+		throw new Error("MistAppBase: onTick Method should be overridden");
+	}
+
+	protected onDetach() {
+		throw new Error("MistAppBase: onDetach should be overridden");
 	}
 
 	private loop(timestamp: number) {
 		if (!this.isRunning) return;
 		const delta = timestamp - this.lastTime;
-		this.makeThisCurrent();
 
 		if (this._allowPerformanceMetrics) this.updatePerformanceMatrices(delta);
 
 		if (!this.lastTime) this.lastTime = timestamp;
 
+		MistAppManager.setCurrent(this);
 		this.renderer.Resize();
+
 		this.onTick(delta);
 
 		this.lastTime = timestamp;
@@ -156,9 +165,9 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 			throw new Error(`App: '${this.appName}' is already running!`);
 
 		this.dispatchEvent({ type: MistEventType.AppStart, target: this });
-		this.makeThisCurrent();
 
-		for (const layer of this.layerStack.reversed()) layer.onAttach();
+		MistAppManager.setCurrent(this);
+		this.onAttach();
 
 		this.setRunning(true);
 		logger.log("Using {0}", this.renderer.GetApiType());
@@ -168,6 +177,8 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 		if (this.currentFrameId) cancelAnimationFrame(this.currentFrameId);
 		this.setRunning(false);
 		this.currentFrameId = undefined;
+
+		MistAppManager.setCurrent(this);
 		for (const layer of this.layerStack.reversed()) layer.onDetach();
 	}
 
@@ -294,18 +305,4 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 			layer.onMouseWheel && layer.onMouseWheel(ev);
 		}
 	};
-
-	private makeThisCurrent() {
-		if (this instanceof MistApp)
-			window.__MIST__.currentAppInstance = this as MistApp;
-	}
-
-	private terminateGlobalContext() {
-		if (this instanceof MistApp && window.__MIST__.currentAppInstance === this)
-			window.__MIST__.currentAppInstance = null;
-	}
-}
-
-export function getCurrentApp() {
-	return window.__MIST__.currentAppInstance;
 }

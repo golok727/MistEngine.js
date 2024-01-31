@@ -222,7 +222,6 @@ class TestLayer extends Mist.Layer {
 	}
 
 	setupTexturedSquare() {
-		const { Renderer } = this.getContext();
 		// prettier-ignore
 		const squareVertices = new Float32Array([
 			-0.75, -0.75, 0.0, 0.0, 0.0 /* Bottom left */,
@@ -241,11 +240,11 @@ class TestLayer extends Mist.Layer {
 		]);
 		const squareObj = this.squareObj;
 
-		squareObj.va = Mist.VertexArray.Create(Renderer);
-		const squareObjVb = Mist.VertexBuffer.Create(Renderer, squareVertices);
+		squareObj.va = Mist.VertexArray.Create();
+		const squareObjVb = Mist.VertexBuffer.Create(squareVertices);
 		squareObjVb.setLayout(squareLayout);
 
-		const squareObjIb = Mist.IndexBuffer.Create(Renderer, squareIndices);
+		const squareObjIb = Mist.IndexBuffer.Create(squareIndices);
 
 		squareObj.va.addVertexBuffer(squareObjVb);
 		squareObj.va.setIndexBuffer(squareObjIb);
@@ -253,7 +252,6 @@ class TestLayer extends Mist.Layer {
 
 	setupTriangle() {
 		// Triangle
-		const { Renderer } = this.getContext();
 		const triangleVertices = new Float32Array([
 			-0.5, -0.5, 0.0, 1.0, 1.0, 0.0, 1.0 /* Bottom left */,
 
@@ -270,19 +268,18 @@ class TestLayer extends Mist.Layer {
 		]);
 		const { triangleObj } = this;
 
-		triangleObj.va = Mist.VertexArray.Create(Renderer);
+		triangleObj.va = Mist.VertexArray.Create();
 
-		const triangleObjVb = Mist.VertexBuffer.Create(Renderer, triangleVertices);
+		const triangleObjVb = Mist.VertexBuffer.Create(triangleVertices);
 		triangleObjVb.setLayout(triangleLayout);
 
-		const triangleObjIb = Mist.IndexBuffer.Create(Renderer, triangleIndices);
+		const triangleObjIb = Mist.IndexBuffer.Create(triangleIndices);
 
 		triangleObj.va.addVertexBuffer(triangleObjVb);
 		triangleObj.va.setIndexBuffer(triangleObjIb);
 	}
 
 	setupBlueSquare() {
-		const { Renderer } = this.getContext();
 		const blueSqVertices = new Float32Array([
 			-0.75, -0.75, 0.0 /* Bottom left */,
 
@@ -299,11 +296,11 @@ class TestLayer extends Mist.Layer {
 		]);
 		const blueSquareObj = this.blueSquare;
 
-		blueSquareObj.va = Mist.VertexArray.Create(Renderer);
-		const blueSquareVb = Mist.VertexBuffer.Create(Renderer, blueSqVertices);
+		blueSquareObj.va = Mist.VertexArray.Create();
+		const blueSquareVb = Mist.VertexBuffer.Create(blueSqVertices);
 		blueSquareVb.setLayout(blueSquareLayout);
 
-		const blueSquareIb = Mist.IndexBuffer.Create(Renderer, blueSquareIndices);
+		const blueSquareIb = Mist.IndexBuffer.Create(blueSquareIndices);
 
 		blueSquareObj.va.addVertexBuffer(blueSquareVb);
 		blueSquareObj.va.setIndexBuffer(blueSquareIb);
@@ -339,22 +336,23 @@ class TestLayer extends Mist.Layer {
 	}
 }
 
-class SandboxApp extends Mist.MistApp {
+class SandboxApp extends Mist.Application {
 	constructor() {
 		super({
 			name: "SandboxApp",
 			canvas,
-			rendererAPI: Mist.MistRendererAPI.WebGL2,
+			rendererAPI: Mist.RendererAPI.WebGL2,
 		});
 		this.pushLayer(TestLayer);
 	}
 }
 
-Mist.CreateMistApp(async () => {
+Mist.CreateApp(async () => {
 	const app = new SandboxApp();
 
 	await Mist.preloadTexture("/train.png");
 	await Mist.preloadTexture("/radha.png");
 	await Mist.ShaderLibrary.Preload(app, "/sandbox.mist.glsl");
+
 	return app;
 });
