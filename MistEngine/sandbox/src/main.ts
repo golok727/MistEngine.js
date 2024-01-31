@@ -1,6 +1,5 @@
 import "./style.css";
 import Mist, { Matrix4, Vector3, vec3 } from "@mist-engine/index";
-import MistKey from "@mist-engine/core/Input/MistKey";
 import { OrthographicCamera } from "@mist-engine/cameras";
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
@@ -67,25 +66,25 @@ class TestLayer extends Mist.Layer {
 
 		if (
 			Input.wheel.isActive &&
-			Input.arePressed(MistKey.Control, MistKey.Alt)
+			Input.arePressed(Mist.Key.Control, Mist.Key.Alt)
 		) {
 			this.cameraRotation += CAMERA_ROT_SPEED * delta * Input.wheel.dirY;
 		}
 
-		if (Input.arePressed(MistKey.Control, MistKey.Num0)) {
+		if (Input.arePressed(Mist.Key.Control, Mist.Key.Num0)) {
 			this.cameraPosition = new Vector3(0);
 			this.cameraRotation = 0;
 		}
 
-		if (Input.anyPressed(MistKey.w, MistKey.W)) {
+		if (Input.anyPressed(Mist.Key.w, Mist.Key.W)) {
 			this.cameraPosition.y += CAMERA_SPEED * delta;
-		} else if (Input.anyPressed(MistKey.s, MistKey.S)) {
+		} else if (Input.anyPressed(Mist.Key.s, Mist.Key.S)) {
 			this.cameraPosition.y -= CAMERA_SPEED * delta;
 		}
 
-		if (Input.anyPressed(MistKey.d, MistKey.D)) {
+		if (Input.anyPressed(Mist.Key.d, Mist.Key.D)) {
 			this.cameraPosition.x += CAMERA_SPEED * delta;
-		} else if (Input.anyPressed(MistKey.a, MistKey.A)) {
+		} else if (Input.anyPressed(Mist.Key.a, Mist.Key.A)) {
 			this.cameraPosition.x -= CAMERA_SPEED * delta;
 		}
 	}
@@ -100,15 +99,15 @@ class TestLayer extends Mist.Layer {
 			this.selectedObj.angle += OBJ_ROT_SPEED * delta * Input.wheel.dirY;
 		}
 
-		if (Input.isPressed(MistKey.ArrowUp)) {
+		if (Input.isPressed(Mist.Key.ArrowUp)) {
 			this.selectedObj.position.y += OBJ_SPEED * delta;
-		} else if (Input.anyPressed(MistKey.ArrowDown)) {
+		} else if (Input.anyPressed(Mist.Key.ArrowDown)) {
 			this.selectedObj.position.y -= OBJ_SPEED * delta;
 		}
 
-		if (Input.anyPressed(MistKey.ArrowRight)) {
+		if (Input.anyPressed(Mist.Key.ArrowRight)) {
 			this.selectedObj.position.x += OBJ_SPEED * delta;
-		} else if (Input.anyPressed(MistKey.ArrowLeft)) {
+		} else if (Input.anyPressed(Mist.Key.ArrowLeft)) {
 			this.selectedObj.position.x -= OBJ_SPEED * delta;
 		}
 	}
@@ -171,7 +170,7 @@ class TestLayer extends Mist.Layer {
 
 	override onMouseDown(ev: MistMouseDownEvent): boolean {
 		const { Renderer } = this.getContext();
-		if (ev.button.left && ev.target.isPressed(MistKey.Control)) {
+		if (ev.button.left && ev.target.isPressed(Mist.Key.Control)) {
 			const normalizedX = ev.x / Renderer.canvasWidth;
 			const normalizedY = ev.y / Renderer.canvasHeight;
 
@@ -185,17 +184,17 @@ class TestLayer extends Mist.Layer {
 	}
 
 	override onKeyDown(ev: MistKeyDownEvent): boolean {
-		if (ev.key == MistKey.Num0 && ev.target.isPressed(MistKey.Control))
+		if (ev.key == Mist.Key.Num0 && ev.target.isPressed(Mist.Key.Control))
 			ev.preventDefault();
-		else if (ev.key === MistKey.Num1) this.selectedObj = this.squareObj;
-		else if (ev.key === MistKey.Num2) this.selectedObj = this.triangleObj;
-		else if (ev.key === MistKey.Num3) this.selectedObj = this.blueSquare;
+		else if (ev.key === Mist.Key.Num1) this.selectedObj = this.squareObj;
+		else if (ev.key === Mist.Key.Num2) this.selectedObj = this.triangleObj;
+		else if (ev.key === Mist.Key.Num3) this.selectedObj = this.blueSquare;
 
 		return false;
 	}
 
 	public onMouseWheel(ev: MistMouseWheelEvent): boolean {
-		if (ev.target.isPressed(MistKey.Control)) ev.preventDefault();
+		if (ev.target.isPressed(Mist.Key.Control)) ev.preventDefault();
 		return false;
 	}
 
@@ -208,7 +207,7 @@ class TestLayer extends Mist.Layer {
 			this.onRendererResize
 		);
 
-		this.trainTexture = Mist.Texture.Create(Renderer, "/train.png");
+		this.trainTexture = Mist.Texture.Create(Renderer, "/radha.png");
 
 		this.setupAllShaders();
 		this.setupTexturedSquare();
@@ -256,9 +255,9 @@ class TestLayer extends Mist.Layer {
 		// Triangle
 		const { Renderer } = this.getContext();
 		const triangleVertices = new Float32Array([
-			-0.5, -0.5, 0.0, 1.0, 1.0, 0.0, 0.0 /* Bottom left */,
+			-0.5, -0.5, 0.0, 1.0, 1.0, 0.0, 1.0 /* Bottom left */,
 
-			0.5, -0.5, 0.0, 1.0, 0.0, 1.0, 0.0 /* Bottom right */,
+			0.5, -0.5, 0.0, 1.0, 0.0, 1.0, 1.0 /* Bottom right */,
 
 			0.0, 0.5, 0.0, 1.0, 0.0, 0.0, 1.0 /* Top Right */,
 		]);
@@ -309,106 +308,20 @@ class TestLayer extends Mist.Layer {
 		blueSquareObj.va.addVertexBuffer(blueSquareVb);
 		blueSquareObj.va.setIndexBuffer(blueSquareIb);
 	}
+
 	setupAllShaders() {
-		const { Renderer } = this.getContext();
-		const sqVertexShader = `
-		#version 300 es
-		layout ( location = 0 ) in  vec3 a_Position;
-		layout(location = 1) in vec2 a_TexCoord; 
-		uniform mat4 u_ViewProjection;
-		uniform mat4 u_Transform;
-
-		out vec2 TexCoord;
-		void main()
-		{		
-			TexCoord = a_TexCoord;
-			TexCoord.y = 1.0 - TexCoord.y; // Flip the y coordinate
-			gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-		}
-	`;
-
-		const sqFragmentShader = `
-		#version 300 es
-		precision highp float;
-		
-		in vec2 TexCoord; 
-		uniform vec3 u_Color;
-		uniform sampler2D u_Texture;
-		out vec4 fragColor; 
-		void main()
-		{
-			fragColor = texture(u_Texture, TexCoord);
-		}
-	`;
-
-		const triVertexShader = `
-		#version 300 es
-		layout ( location = 0 ) in  vec3 a_Position;
-		layout(location = 1) in vec4 a_Color; 
-		out vec4 color;
-
-		uniform mat4 u_ViewProjection;
-		uniform mat4 u_Transform;
-		void main()
-		{		
-			color = a_Color; 
-			gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-		}
-	`;
-
-		const triFragmentShader = `
-		#version 300 es
-		precision highp float;
-		
-		in vec4 color; 
-		out vec4 fragColor; 
-		void main()
-		{
-			fragColor = color;
-		}
-	`;
-
-		const blueSquareVertShader = `
-	#version 300 es
-	layout ( location = 0 ) in  vec3 a_Position;
-
-	uniform mat4 u_ViewProjection;
-	uniform mat4 u_Transform;
-	void main()
-	{		
-		gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-	}
-`;
-
-		const blueSquareFragShader = `
-	#version 300 es
-	precision highp float;
-	
-	out vec4 fragColor; 
-	void main()
-	{
-		fragColor = vec4(0.0, 0.0, 1.0, 1.0);
-	}
-`;
-
-		this.triangleObj.shader = Mist.Shader.Create(
-			Renderer,
-			triVertexShader,
-			triFragmentShader
+		this.triangleObj.shader = Mist.ShaderLibrary.Load(
+			"/sandbox.mist.glsl/#triangleShader"
 		);
 
-		this.squareObj.shader = Mist.Shader.Create(
-			Renderer,
-			sqVertexShader,
-			sqFragmentShader
+		this.squareObj.shader = Mist.ShaderLibrary.Load(
+			"/sandbox.mist.glsl/#texturedSquare"
 		);
-
-		this.blueSquare.shader = Mist.Shader.Create(
-			Renderer,
-			blueSquareVertShader,
-			blueSquareFragShader
+		this.blueSquare.shader = Mist.ShaderLibrary.Load(
+			"/sandbox.mist.glsl/#blueSquare"
 		);
 	}
+
 	onRendererResize: MistEventListenerCallback<MistRendererResizeEvent> = (
 		ev
 	) => {
@@ -416,6 +329,7 @@ class TestLayer extends Mist.Layer {
 		// prettier-ignore
 		this.camera.updateProjection(-1 * aspect, 1 * aspect, -1, 1)
 	};
+
 	override onDetach(): void {
 		const { Renderer } = this.getContext();
 		Renderer.removeEventListener(
@@ -437,7 +351,10 @@ class SandboxApp extends Mist.MistApp {
 }
 
 Mist.CreateMistApp(async () => {
-	await Mist.preloadTexture("/train.png");
 	const app = new SandboxApp();
+
+	await Mist.preloadTexture("/train.png");
+	await Mist.preloadTexture("/radha.png");
+	await Mist.ShaderLibrary.Preload(app, "/sandbox.mist.glsl");
 	return app;
 });

@@ -2,7 +2,6 @@ import { loadImageAsync } from "@mist-engine/utils";
 
 export class Store {
 	private static textures: Map<string, HTMLImageElement> = new Map();
-
 	/**
 	 * This API is fairly new which will be changed later
 	 * @param url Url of the image to load

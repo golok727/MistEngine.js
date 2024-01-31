@@ -13,6 +13,9 @@ export default class MistWebGL2RenderingAPI
 		const context = this.canvas.getContext("webgl2");
 		if (!context) throw new Error("Error getting WebGL2 context");
 		this.context = context;
+		const gl = context;
+		gl.enable(gl.BLEND);
+		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 	}
 
 	get inner(): WebGL2RenderingContext {

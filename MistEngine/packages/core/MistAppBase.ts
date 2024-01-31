@@ -154,6 +154,8 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 
 		this.dispatchEvent({ type: MistEventType.AppStart, target: this });
 
+		for (const layer of this.layerStack.reversed()) layer.onAttach();
+
 		this.setRunning(true);
 		logger.log("Using {0}", this.renderer.GetApiType());
 		this.currentFrameId = requestAnimationFrame(this.loop.bind(this));
@@ -162,6 +164,7 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 		if (this.currentFrameId) cancelAnimationFrame(this.currentFrameId);
 		this.setRunning(false);
 		this.currentFrameId = undefined;
+		for (const layer of this.layerStack.reversed()) layer.onDetach();
 	}
 
 	private _restartApp() {
@@ -193,7 +196,6 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 	) {
 		const layer = new layerConstructor(...args);
 		this.provideContextToLayer(layer as LayerWithContext);
-		layer.onAttach();
 		this.layerStack.pushLayer(layer);
 	}
 
@@ -204,7 +206,6 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 		const overlay = new overlayConstructor(...args);
 		this.provideContextToLayer(overlay as LayerWithContext);
 
-		overlay.onAttach();
 		this.layerStack.pushOverlay(overlay);
 	}
 
