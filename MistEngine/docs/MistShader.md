@@ -27,21 +27,27 @@ Sets the Mist shader version.
 
 Begins a Mist shader with the given name. This is the identifier through which you can access your shader from the application. For example, if you preload a shader with `Mist.ShaderLibrary.Preload('your-app', 'myShader.mist.glsl')` and name your shader basicShader with `@MistShaderBegin(basicShader)`, you would access the shader file like this in TypeScript:
 ```ts
-Copy code
 Mist.ShaderLibrary.Load('myShader.mist.glsl/#basicShader');
 // preloaded_filepath/#shaderName
 ```
-
+* You need to end the current shader(if any) with `@MistShaderEnd(current_shader)_name` else if will throw an error
 ### Shader Type
 ```cpp
-@MistShaderType(vertex)
+/*  
+  type: vertex | fragment | pixel
+*/
+@MistShaderType(type) 
+```
 Specifies the type of Mist shader - whether it is a vertex or fragment shader.
+- Arguments can be _vertex_, _fragment_ or _pixel_
+- _pixel_ and _fragment_ are the same thing.
 
-Shader End
-cpp
-Copy code
+### Shader End
+```cpp
 @MistShaderEnd(@param shader_name)
+```
 Ends the Mist shader with the given name.
+
 ### Three Shader Programs
 ```glsl
 @MistShaderVersion(1.1)
