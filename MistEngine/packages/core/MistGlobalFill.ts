@@ -1,5 +1,5 @@
 if (window.__MIST__ === undefined) {
-	window.__MIST__ = { ...window.__MIST__ };
+	window.__MIST__ = { currentAppInstance: null };
 }
 
 window.MistEventType = Object.freeze({

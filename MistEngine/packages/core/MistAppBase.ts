@@ -9,6 +9,7 @@ import MistInput from "./Input/Input";
 import { Context } from "./Context";
 import Layer, { LayerWithContext } from "./Layer";
 import { MistLogger } from "@mist-engine/logger";
+import { MistApp } from "./Application";
 
 const logger = new MistLogger({ name: "App" });
 
@@ -94,6 +95,7 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 	 */
 	public ShutDown() {
 		this._stop();
+		this.terminateGlobalContext();
 		this.dispatchEvent({ type: MistEventType.AppShutDown, target: this });
 		this.input.destroy();
 	}
@@ -112,6 +114,7 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 	private loop(timestamp: number) {
 		if (!this.isRunning) return;
 		const delta = timestamp - this.lastTime;
+		this.makeThisCurrent();
 
 		if (this._allowPerformanceMetrics) this.updatePerformanceMatrices(delta);
 
@@ -153,6 +156,7 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 			throw new Error(`App: '${this.appName}' is already running!`);
 
 		this.dispatchEvent({ type: MistEventType.AppStart, target: this });
+		this.makeThisCurrent();
 
 		for (const layer of this.layerStack.reversed()) layer.onAttach();
 
@@ -290,4 +294,18 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 			layer.onMouseWheel && layer.onMouseWheel(ev);
 		}
 	};
+
+	private makeThisCurrent() {
+		if (this instanceof MistApp)
+			window.__MIST__.currentAppInstance = this as MistApp;
+	}
+
+	private terminateGlobalContext() {
+		if (this instanceof MistApp && window.__MIST__.currentAppInstance === this)
+			window.__MIST__.currentAppInstance = null;
+	}
+}
+
+export function getCurrentApp() {
+	return window.__MIST__.currentAppInstance;
 }

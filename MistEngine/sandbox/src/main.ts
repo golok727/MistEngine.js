@@ -207,7 +207,7 @@ class TestLayer extends Mist.Layer {
 			this.onRendererResize
 		);
 
-		this.trainTexture = Mist.Texture.Create(Renderer, "/radha.png");
+		this.trainTexture = Mist.Texture.Create("/radha.png");
 
 		this.setupAllShaders();
 		this.setupTexturedSquare();
