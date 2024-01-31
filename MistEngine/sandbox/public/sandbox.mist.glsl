@@ -2,12 +2,14 @@
 
 //! TexturedSquare
 @MistShaderBegin(texturedSquare)
+
 @MistShaderType(vertex)
 
-layout ( location = 0 ) in  vec3 a_Position;
-layout(location = 1) in vec2 a_TexCoord; 
+@MistAttribute(0, Vec3, a_Position)
+@MistAttribute(1, Vec2, a_TexCoord)
 
-out vec2 TexCoord;
+@MistOut(Vec2, TexCoord)
+
 void main()
 {		
   TexCoord = a_TexCoord;
@@ -15,11 +17,15 @@ void main()
   gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
 }
 
+
 @MistShaderType(fragment)
-in vec2 TexCoord; 
-uniform vec3 u_Color;
-uniform sampler2D u_Texture;
-out vec4 fragColor; 
+
+@MistUniform (Vec3, u_Color)
+@MistUniform  (Texture, u_Texture)
+
+@MistIn(Vec2, TexCoord)
+@MistOut(Vec4, fragColor)
+
 void main()
 {
   fragColor = texture(u_Texture, TexCoord);
@@ -32,9 +38,10 @@ void main()
 @MistShaderBegin(triangleShader)
 
 @MistShaderType(vertex)
-layout ( location = 0 ) in  vec3 a_Position;
-layout(location = 1) in vec4 a_Color; 
-out vec4 color;
+
+@MistAttribute(0, Vec3, a_Position)
+@MistAttribute(1, Vec4, a_Color)
+@MistOut(Vec4, color)
 
 void main()
 {		
@@ -44,8 +51,10 @@ void main()
 
 
 @MistShaderType(fragment)
-in vec4 color; 
-out vec4 fragColor; 
+
+@MistIn(Vec4, color)
+@MistOut(Vec4, fragColor)
+
 void main()
 {
   fragColor = color;
@@ -58,7 +67,8 @@ void main()
 @MistShaderBegin(blueSquare)
 @MistShaderType(vertex)
 
-layout ( location = 0 ) in  vec3 a_Position;
+@MistAttribute(0, Vec3, a_Position)
+
 
 void main()
 {		
@@ -66,8 +76,8 @@ void main()
 }
 
 @MistShaderType(fragment)
+@MistOut(Vec4, fragColor)
 
-out vec4 fragColor; 
 void main()
 {
   fragColor = vec4(0.0, 0.0, 1.0, 1.0);

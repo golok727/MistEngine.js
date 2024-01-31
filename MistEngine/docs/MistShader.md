@@ -56,10 +56,11 @@ Ends the Mist shader with the given name.
 @MistShaderBegin(texturedSquare)
 @MistShaderType(vertex)
 
-layout ( location = 0 ) in  vec3 a_Position;
-layout( location = 1 ) in vec2 a_TexCoord; 
+@MistAttribute(0, Vec3, a_Position)
+@MistAttribute(1, Vec2, a_TexCoord)
 
-out vec2 TexCoord;
+@MistOut(Vec2, TexCoord)
+
 void main()
 {		
   TexCoord = a_TexCoord;
@@ -68,10 +69,13 @@ void main()
 }
 
 @MistShaderType(fragment)
-in vec2 TexCoord; 
-uniform vec3 u_Color;
-uniform sampler2D u_Texture;
-out vec4 fragColor; 
+
+@MistIn(Vec2, TexCoord)
+
+@MistUniform (Vec3, u_Color)
+@MistUniform  (Texture, u_Texture)
+
+@MistOut(Vec4, fragColor)
 void main()
 {
   fragColor = texture(u_Texture, TexCoord);
@@ -84,8 +88,9 @@ void main()
 @MistShaderBegin(triangleShader)
 
 @MistShaderType(vertex)
-layout ( location = 0 ) in  vec3 a_Position;
-layout(location = 1) in vec4 a_Color; 
+
+@MistAttribute(0, Vec3, a_Position)
+@MistAttribute(1, Vec4, a_Color)
 out vec4 color;
 
 void main()
@@ -110,7 +115,8 @@ void main()
 @MistShaderBegin(blueSquare)
 @MistShaderType(vertex)
 
-layout ( location = 0 ) in  vec3 a_Position;
+@MistAttribute(0, Vec3, a_Position)
+
 
 void main()
 {		
@@ -126,6 +132,7 @@ void main()
 }
 
 @MistShaderEnd(blueSquare)
+
 
 ```
 
