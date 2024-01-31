@@ -2,8 +2,6 @@ export { default as MistInput } from "@mist-engine/core/Input/Input";
 
 export { default as Key } from "@mist-engine/core/Input/MistKey";
 
-export { default as ShaderLibrary } from "@mist-engine/renderers/ShaderLibrary";
-
 export {
 	MistApp as Application,
 	CreateMistApp as CreateApp,
@@ -16,7 +14,7 @@ export type { MistWebGL2Shader } from "./renderers/api/WebGL2/WebGL2Shader";
 export type { MistApp } from "@mist-engine/core/Application";
 
 export {
-	MistRendererAPI as RendererAPI	,
+	MistRendererAPI as RendererAPI,
 	VertexBuffer,
 	IndexBuffer,
 	BufferLayout,
@@ -24,7 +22,8 @@ export {
 	VertexArray,
 	Shader,
 	Texture,
-	preloadTexture,
+	MistShaderLibrary as ShaderLibrary,
+	MistTextureLibrary as TextureLibrary,
 } from "@mist-engine/renderers";
 
 export type {

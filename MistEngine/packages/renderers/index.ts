@@ -1,3 +1,8 @@
+import MistTextureLibrary from "./TextureLibrary";
+import MistShaderLibrary from "./ShaderLibrary";
+
+export { MistTextureLibrary, MistShaderLibrary };
+
 export { MistRendererAPI } from "./Renderer";
 export { MistWebGL2Renderer } from "./api/WebGL2/WebGL2Renderer";
 export { default as MistWebGL2RenderingAPI } from "./api/WebGL2/WebGL2RenderingAPI";
@@ -16,7 +21,5 @@ export {
 export { VertexArrayFactory as VertexArray } from "./VertexArray";
 export { ShaderFactory as Shader } from "./Shader";
 export { TextureFactory as Texture } from "./Texture";
-
-export { preloadTexture } from "./Store";
 
 export type { Renderer } from "./Renderer";

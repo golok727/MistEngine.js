@@ -1,6 +1,6 @@
 import { Renderer } from "@mist-engine/renderers/Renderer";
 import { getGLRenderingContext } from "@mist-engine/renderers/RenderingApi";
-import { Store } from "@mist-engine/renderers/Store";
+import TextureLibrary from "@mist-engine/renderers/TextureLibrary";
 import { MistTexture } from "@mist-engine/renderers/Texture";
 
 function isPowerOf2(value: number) {
@@ -13,7 +13,7 @@ export class MistWebGLTexture implements MistTexture {
 	private isLoaded: boolean;
 	constructor(renderer: Renderer, url: string) {
 		this._gl = getGLRenderingContext(renderer);
-		let image = Store.getTexture(url);
+		let image = TextureLibrary.GetImageForTexture(url);
 		this.isLoaded = !!image;
 
 		if (!image) {

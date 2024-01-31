@@ -15,7 +15,7 @@ export class VertexArrayFactory {
 		renderer = renderer ? renderer : MistAppManager.getCurrent()?.getRenderer();
 		if (!renderer)
 			throw new Error(
-				"Mist.Texture Create called without an active context. Please use this inside a Mist.App or Mist.Layer or provide a Mist.Renderer as arg[2] for context"
+				"Mist.VertexArray Create called without an active context. Please use this inside a Mist.App or Mist.Layer or provide a Mist.Renderer as arg[1] for context"
 			);
 
 		switch (renderer.GetApiType()) {

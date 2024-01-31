@@ -131,7 +131,7 @@ export class MistVertexBufferFactory {
 		renderer = renderer ? renderer : MistAppManager.getCurrent()?.getRenderer();
 		if (!renderer)
 			throw new Error(
-				"Mist.Texture Create called without an active context. Please use this inside a Mist.App or Mist.Layer or provide a Mist.Renderer as arg[2] for context"
+				"Mist.VertexBuffer Create called without an active context. Please use this inside a Mist.App or Mist.Layer or provide a Mist.Renderer as arg[2] for context"
 			);
 
 		switch (renderer.GetApiType()) {
@@ -160,7 +160,7 @@ export class MistIndexBufferFactory {
 		renderer = renderer ? renderer : MistAppManager.getCurrent()?.getRenderer();
 		if (!renderer)
 			throw new Error(
-				"Mist.Texture Create called without an active context. Please use this inside a Mist.App or Mist.Layer or provide a Mist.Renderer as arg[2] for context"
+				"Mist.IndexBuffer Create called without an active context. Please use this inside a Mist.App or Mist.Layer or provide a Mist.Renderer as arg[2] for context"
 			);
 
 		switch (renderer.GetApiType()) {

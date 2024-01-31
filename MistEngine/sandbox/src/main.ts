@@ -1,6 +1,7 @@
 import "./style.css";
 import Mist, { Matrix4, Vector3, vec3 } from "@mist-engine/index";
 import { OrthographicCamera } from "@mist-engine/cameras";
+import MistKey from "@mist-engine/core/Input/MistKey";
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const fpsSpan = document.getElementById("fps-text") as HTMLSpanElement;
@@ -18,7 +19,9 @@ function updateFPSText(fps: number) {
 }
 
 class TestLayer extends Mist.Layer {
+	private currentSampledTexture: number = 0;
 	private trainTexture!: Mist.MistTexture;
+	private radhaTexture!: Mist.MistTexture;
 	private squareObj!: DrawableObject;
 	private triangleObj!: DrawableObject;
 	private selectedObj!: DrawableObject;
@@ -121,6 +124,13 @@ class TestLayer extends Mist.Layer {
 		this.updateCamera(delta);
 		this.updateSelectedObject(delta);
 
+		this.squareObj.shader.use();
+		if (this.squareObj.shader.is<Mist.MistWebGL2Shader>())
+			this.squareObj.shader.setUniform1i(
+				"u_Texture",
+				this.currentSampledTexture
+			);
+
 		/* should be handled by the renderer */
 		RenderAPI.SetViewport(0, 0, Renderer.width, Renderer.height);
 
@@ -186,6 +196,10 @@ class TestLayer extends Mist.Layer {
 	override onKeyDown(ev: MistKeyDownEvent): boolean {
 		if (ev.key == Mist.Key.Num0 && ev.target.isPressed(Mist.Key.Control))
 			ev.preventDefault();
+		else if (ev.key == Mist.Key.Num1 && ev.target.isPressed(Mist.Key.Alt))
+			this.currentSampledTexture = 0;
+		else if (ev.key == Mist.Key.Num2 && ev.target.isPressed(Mist.Key.Alt))
+			this.currentSampledTexture = 1;
 		else if (ev.key === Mist.Key.Num1) this.selectedObj = this.squareObj;
 		else if (ev.key === Mist.Key.Num2) this.selectedObj = this.triangleObj;
 		else if (ev.key === Mist.Key.Num3) this.selectedObj = this.blueSquare;
@@ -207,7 +221,8 @@ class TestLayer extends Mist.Layer {
 			this.onRendererResize
 		);
 
-		this.trainTexture = Mist.Texture.Create("/radha.png");
+		this.trainTexture = Mist.TextureLibrary.Get("/train.png");
+		this.radhaTexture = Mist.TextureLibrary.Get("/radha.png");
 
 		this.setupAllShaders();
 		this.setupTexturedSquare();
@@ -215,10 +230,9 @@ class TestLayer extends Mist.Layer {
 		this.setupBlueSquare();
 
 		this.squareObj.shader.use();
-		if (this.squareObj.shader.is<Mist.MistWebGL2Shader>())
-			this.squareObj.shader.setUniform1i("u_Texture", 0);
 
-		this.trainTexture.use(0);
+		this.radhaTexture.use(0);
+		this.trainTexture.use(1);
 	}
 
 	setupTexturedSquare() {
@@ -350,8 +364,9 @@ class SandboxApp extends Mist.Application {
 Mist.CreateApp(async () => {
 	const app = new SandboxApp();
 
-	await Mist.preloadTexture("/train.png");
-	await Mist.preloadTexture("/radha.png");
+	await Mist.TextureLibrary.Create(app, "/radha.png");
+	await Mist.TextureLibrary.Create(app, "/train.png");
+
 	await Mist.ShaderLibrary.Preload(app, "/sandbox.mist.glsl");
 
 	return app;

@@ -37,9 +37,9 @@ export default class MistShaderLibrary {
 
 		for (const shaderSrc of mistShaders) {
 			const shader = ShaderFactory.Create(
-				renderer,
 				shaderSrc.vertex,
-				shaderSrc.fragment
+				shaderSrc.fragment,
+				renderer
 			);
 			const name = url + "/";
 			this.Add(`${name}#${shaderSrc.name}`, shader);

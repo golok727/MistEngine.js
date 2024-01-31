@@ -1,3 +1,4 @@
+import MistAppManager from "@mist-engine/core/MistAppManager";
 import { MistAPIUsable, MistRendererAPI, Renderer } from "./Renderer";
 import { MistWebGL2Shader } from "@mist-engine/renderers/api/WebGL2/WebGL2Shader";
 
@@ -7,10 +8,16 @@ export interface MistShader extends MistAPIUsable {
 
 export class ShaderFactory {
 	static Create(
-		renderer: Renderer,
 		vertexShaderSrc: string,
-		fragmentShaderSrc: string
+		fragmentShaderSrc: string,
+		renderer?: Renderer
 	): MistShader {
+		renderer = renderer ? renderer : MistAppManager.getCurrent()?.getRenderer();
+		if (!renderer)
+			throw new Error(
+				"Mist.Shader Create called without an active context. Please use this inside a Mist.App or Mist.Layer or provide a Mist.Renderer as arg[3] for context"
+			);
+
 		switch (renderer.GetApiType()) {
 			case MistRendererAPI.WebGL2:
 				return new MistWebGL2Shader(
