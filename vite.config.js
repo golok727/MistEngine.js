@@ -11,7 +11,7 @@ export default defineConfig({
 
 	build: {
 		lib: {
-			entry: path.resolve(__dirname, "bundles/mist.js/index.ts"),
+			entry: path.resolve(__dirname, "bundles/mist/index.ts"),
 			formats: ["es"],
 			name: "mist.js",
 			fileName: "index",
