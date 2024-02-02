@@ -6,6 +6,7 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			"@mist-engine": path.resolve(__dirname, "packages/engine"),
+			"@mist-math": path.resolve(__dirname, "packages/math"),
 			"@mist": path.resolve(__dirname, "packages"),
 		},
 	},

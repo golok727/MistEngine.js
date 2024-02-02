@@ -1,4 +1,4 @@
-import { Matrix4 } from "@mist-engine/math";
+import { Matrix4 } from "@mist-math";
 import { Renderer } from "@mist-engine/renderers/Renderer";
 import { getGLRenderingContext } from "@mist-engine/renderers/RenderingApi";
 import { MistShader } from "@mist-engine/renderers/Shader";

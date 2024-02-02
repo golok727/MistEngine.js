@@ -1,4 +1,4 @@
-import { Matrix4, Vector3 } from "@mist-engine/math";
+import { Matrix4, Vector3 } from "@mist-math";
 
 export interface Camera {
 	setPosition(pos: Vector3): void;

@@ -5,7 +5,7 @@ import { MistVertexArray } from "@mist-engine/renderers/VertexArray";
 import { MistEventDispatcher } from "@mist-engine/core/Events";
 import { Camera } from "@mist-engine/cameras";
 import { MistShader } from "@mist-engine/renderers";
-import { Matrix4 } from "@mist-engine/math";
+import { Matrix4 } from "@mist-math";
 import { MistWebGL2Shader } from "./WebGL2Shader";
 
 export class MistWebGL2Renderer

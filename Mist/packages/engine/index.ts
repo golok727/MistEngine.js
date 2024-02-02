@@ -50,4 +50,4 @@ export {
 	vec3,
 	vec4,
 	Matrix4,
-} from "@mist-engine/math";
+} from "@mist-math";

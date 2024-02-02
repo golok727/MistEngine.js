@@ -4,7 +4,7 @@ import { MistEventDispatcher } from "@mist-engine/core/Events";
 import { Camera } from "@mist-engine/cameras";
 
 import { MistShader } from "@mist-engine/renderers";
-import { Matrix4 } from "@mist-engine/math/mat4";
+import { Matrix4 } from "@mist-math";
 
 export enum MistRendererAPI {
 	WebGL2 = "WebGL2",
