@@ -8,11 +8,11 @@
 
 		"paths": {
 			"@mist-engine/*": ["./packages/engine/*"],
-			"@mist-math/*": ["/packages/math/*"],
+			"@mist-math/*": ["./packages/math/*"],
 			"@/*": ["./packages/*"],
+			"@mist/*": ["./packages/*"],
 
-			"@mist-math": ["./packages/math"],
-			"@mist": ["./packages/engine"]
+			"@mist-math": ["./packages/math"]
 		},
 		/* Bundler mode */
 		"moduleResolution": "bundler",
@@ -25,7 +25,14 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
-		"types": ["@webgpu/types", "./types/types.d.ts", "./types/events.d.ts"]
+		"baseUrl": "./",
+		"types": ["@webgpu/types"]
 	},
-	"include": ["packages", "sandbox", "types/types.d.ts", "types/events.d.ts"]
+	"include": [
+		"packages",
+		"examples",
+		"sandbox-app",
+		"./packages/types/**/*.d.ts"
+	],
+	"exclude": ["node_modules"]
 }
