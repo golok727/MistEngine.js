@@ -7,7 +7,8 @@ export default defineConfig({
 		alias: {
 			"@mist-engine": path.resolve(__dirname, "packages/engine"),
 			"@mist-math": path.resolve(__dirname, "packages/math"),
-			"@mist": path.resolve(__dirname, "packages"),
+			"@": path.resolve(__dirname, "packages"),
+			"@mist": path.resolve(__dirname, "packages/engine"),
 		},
 	},
 	build: {

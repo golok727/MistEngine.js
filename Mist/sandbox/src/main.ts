@@ -1,6 +1,5 @@
 import "./style.css";
-import Mist, { Matrix4, Vector3, vec3 } from "@mist-engine/index";
-import { OrthographicCamera } from "@mist-engine/cameras";
+import Mist, { Matrix4, Vector3, vec3 } from "@mist";
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const fpsSpan = document.getElementById("fps-text") as HTMLSpanElement;
@@ -214,7 +213,7 @@ class TestLayer extends Mist.Layer {
 	override onAttach(): void {
 		const { Renderer } = this.getContext();
 		// prettier-ignore
-		this.camera = new OrthographicCamera(-1 * Renderer.aspect, 1 * Renderer.aspect, -1, 1);
+		this.camera = new Mist.OrthographicCamera(-1 * Renderer.aspect, 1 * Renderer.aspect, -1, 1);
 		Renderer.addEventListener(
 			MistEventType.RendererResize,
 			this.onRendererResize

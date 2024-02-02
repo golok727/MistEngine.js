@@ -8,8 +8,11 @@
 
 		"paths": {
 			"@mist-engine/*": ["./packages/engine/*"],
+			"@mist-math/*": ["/packages/math/*"],
+			"@/*": ["./packages/*"],
+
 			"@mist-math": ["./packages/math"],
-			"@mist/*": ["./packages/*"]
+			"@mist": ["./packages/engine"]
 		},
 		/* Bundler mode */
 		"moduleResolution": "bundler",
