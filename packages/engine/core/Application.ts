@@ -1,7 +1,7 @@
 import "./MistGlobalFill";
 
-import { MistLogger } from "@mist-engine/logger";
-import { printMistInto } from "@mist-engine/utils";
+import { MistLogger } from "@mist/engine/logger";
+import { printMistInto } from "@mist/engine/utils";
 
 import MistAppBase, { ApplicationConstructorProps } from "./MistAppBase";
 import MistAppManager from "./MistAppManager";

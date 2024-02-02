@@ -1,5 +1,5 @@
-import { MistVertexArray } from "@mist-engine/renderers/VertexArray";
-import { RenderingAPI } from "@mist-engine/renderers/RenderingApi";
+import { MistVertexArray } from "@mist/engine/renderers/VertexArray";
+import { RenderingAPI } from "@mist/engine/renderers/RenderingApi";
 
 export default class MistWebGL2RenderingAPI
 	implements RenderingAPI<WebGL2RenderingContext>

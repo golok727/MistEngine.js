@@ -1,6 +1,6 @@
-import MistAppManager from "@mist-engine/core/MistAppManager";
+import MistAppManager from "@mist/engine/core/MistAppManager";
 import { MistAPIUsable, MistRendererAPI, Renderer } from "./Renderer";
-import { MistWebGL2Shader } from "@mist-engine/renderers/api/WebGL2/WebGL2Shader";
+import { MistWebGL2Shader } from "@mist/engine/renderers/api/WebGL2/WebGL2Shader";
 
 export interface MistShader extends MistAPIUsable {
 	is<T extends MistShader>(): this is T;

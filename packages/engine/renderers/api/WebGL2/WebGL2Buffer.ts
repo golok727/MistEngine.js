@@ -2,9 +2,9 @@ import {
 	BufferLayout,
 	MistIndexBuffer,
 	MistVertexBuffer,
-} from "@mist-engine/renderers/Buffer";
-import { Renderer } from "@mist-engine/renderers/Renderer";
-import { getGLRenderingContext } from "@mist-engine/renderers/RenderingApi";
+} from "@mist/engine/renderers/Buffer";
+import { Renderer } from "@mist/engine/renderers/Renderer";
+import { getGLRenderingContext } from "@mist/engine/renderers/RenderingApi";
 
 export class MistWebGL2VertexBuffer implements MistVertexBuffer {
 	private buffer: WebGLBuffer;

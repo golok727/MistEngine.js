@@ -1,4 +1,4 @@
-import { camelToDashCase } from "@mist-engine/utils";
+import { camelToDashCase } from "@mist/engine/utils";
 
 type LoggerOptions = {
 	name: string;

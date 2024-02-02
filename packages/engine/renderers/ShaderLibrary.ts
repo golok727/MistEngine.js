@@ -1,12 +1,12 @@
 /*
-	@mist-engine/ShaderLibrary
+	@mist/engine/ShaderLibrary
 	A shader library which stores all the shaders in one location which can be loaded into any Mist Application;
 
 	The shader files provided should be a `Mist Shader` which allows loading multiple shaders in single file. More in the docs
 */
 import { MistShader, ShaderFactory } from "./Shader";
 import MistShaderParser from "./MistShaderParser";
-import { MistApp } from "@mist-engine/Mist";
+import { MistApp } from "@mist/engine/Mist";
 
 export default class MistShaderLibrary {
 	private static loadedShaders: Map<string, MistShader> = new Map();

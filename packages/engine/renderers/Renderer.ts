@@ -1,10 +1,10 @@
 import { MistVertexArray } from "./VertexArray";
 import { RenderingAPI } from "./RenderingApi";
-import { MistEventDispatcher } from "@mist-engine/core/Events";
-import { Camera } from "@mist-engine/cameras";
+import { MistEventDispatcher } from "@mist/engine/core/Events";
+import { Camera } from "@mist/engine/cameras";
 
-import { MistShader } from "@mist-engine/renderers";
-import { Matrix4 } from "@mist-math";
+import { MistShader } from "@mist/engine/renderers";
+import { Matrix4 } from "@mist/math";
 
 export enum MistRendererAPI {
 	WebGL2 = "WebGL2",

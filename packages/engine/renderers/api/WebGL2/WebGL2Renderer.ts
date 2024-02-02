@@ -1,11 +1,11 @@
-import { MistRendererAPI, Renderer } from "@mist-engine/renderers/Renderer";
+import { MistRendererAPI, Renderer } from "@mist/engine/renderers/Renderer";
 
 import MistWebGL2RenderingAPI from "./WebGL2RenderingAPI";
-import { MistVertexArray } from "@mist-engine/renderers/VertexArray";
-import { MistEventDispatcher } from "@mist-engine/core/Events";
-import { Camera } from "@mist-engine/cameras";
-import { MistShader } from "@mist-engine/renderers";
-import { Matrix4 } from "@mist-math";
+import { MistVertexArray } from "@mist/engine/renderers/VertexArray";
+import { MistEventDispatcher } from "@mist/engine/core/Events";
+import { Camera } from "@mist/engine/cameras";
+import { MistShader } from "@mist/engine/renderers";
+import { Matrix4 } from "@mist/math";
 import { MistWebGL2Shader } from "./WebGL2Shader";
 
 export class MistWebGL2Renderer

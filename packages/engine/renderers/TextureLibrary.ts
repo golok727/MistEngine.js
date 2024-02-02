@@ -1,6 +1,6 @@
-import { loadImageAsync } from "@mist-engine/utils";
+import { loadImageAsync } from "@mist/engine/utils";
 import { MistTexture, Texture } from ".";
-import { MistApp } from "@mist-engine/Mist";
+import { MistApp } from "@mist/engine/Mist";
 
 export default class MistTextureLibrary {
 	private static preloadedImages: Map<string, HTMLImageElement> = new Map();

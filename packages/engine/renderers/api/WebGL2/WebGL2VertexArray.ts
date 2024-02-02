@@ -1,11 +1,11 @@
-import { Renderer } from "@mist-engine/renderers/Renderer";
+import { Renderer } from "@mist/engine/renderers/Renderer";
 import {
 	MistIndexBuffer,
 	MistVertexBuffer,
 	shaderDataTypeToGLBaseDataType,
-} from "@mist-engine/renderers/Buffer";
-import { getGLRenderingContext } from "@mist-engine/renderers/RenderingApi";
-import { MistVertexArray } from "@mist-engine/renderers/VertexArray";
+} from "@mist/engine/renderers/Buffer";
+import { getGLRenderingContext } from "@mist/engine/renderers/RenderingApi";
+import { MistVertexArray } from "@mist/engine/renderers/VertexArray";
 
 export class MistWebGL2VertexArray implements MistVertexArray {
 	private _gl: WebGL2RenderingContext;

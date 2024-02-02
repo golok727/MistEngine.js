@@ -7,7 +7,12 @@
 		"skipLibCheck": true,
 
 		"paths": {
-			"@mist/*": ["./packages/*"]
+			"@mist-engine/*": ["./packages/engine/*"],
+			"@mist-math/*": ["./packages/math/*"],
+			"@/*": ["./packages/*"],
+			"@mist/*": ["./packages/*"],
+
+			"@mist-math": ["./packages/math"]
 		},
 		/* Bundler mode */
 		"moduleResolution": "bundler",
@@ -26,10 +31,8 @@
 	"include": [
 		"packages",
 		"bundles",
-		"examples",
-		"sandbox-app",
 		"./packages/types/**/*.d.ts",
-		"vite-env.d.ts"
+		"./vite-env.d.ts"
 	],
 	"exclude": ["node_modules"]
 }

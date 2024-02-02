@@ -1,7 +1,7 @@
-import Vector2, { vec2 } from "./vec2";
-import Vector3, { vec3 } from "./vec3";
-import Vector4, { vec4 } from "./vec4";
-import { Matrix4 } from "./mat4";
+import Vector2, { vec2 } from "./src/vec2";
+import Vector3, { vec3 } from "./src/vec3";
+import Vector4, { vec4 } from "./src/vec4";
+import { Matrix4 } from "./src/mat4";
 
 export { Vector2, Vector3, Vector4, vec2, vec3, vec4, Matrix4 };
 

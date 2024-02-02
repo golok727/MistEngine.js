@@ -1,4 +1,4 @@
-import MistAppManager from "@mist-engine/core/MistAppManager";
+import MistAppManager from "@mist/engine/core/MistAppManager";
 import { MistIndexBuffer, MistVertexBuffer } from "./Buffer";
 import { MistRendererAPI, Renderer, MistAPIUsable } from "./Renderer";
 import { MistWebGL2VertexArray } from "./api/WebGL2/WebGL2VertexArray";

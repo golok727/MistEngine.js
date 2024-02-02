@@ -2,13 +2,13 @@ import {
 	MistRendererAPI,
 	MistWebGL2Renderer,
 	Renderer,
-} from "@mist-engine/renderers";
+} from "@mist/engine/renderers";
 import { MistEventDispatcher } from "./Events";
 import LayerStack from "./LayerStack";
 import MistInput from "./Input/Input";
 import { Context } from "./Context";
 import Layer, { LayerWithContext } from "./Layer";
-import { MistLogger } from "@mist-engine/logger";
+import { MistLogger } from "@mist/engine/logger";
 import MistAppManager from "./MistAppManager";
 
 const logger = new MistLogger({ name: "App" });

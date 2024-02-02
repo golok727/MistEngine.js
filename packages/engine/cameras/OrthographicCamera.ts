@@ -1,5 +1,5 @@
-import { MistEventDispatcher } from "@mist-engine/core/Events";
-import { Vector3, Matrix4 } from "@mist-math";
+import { MistEventDispatcher } from "@mist/engine/core/Events";
+import { Vector3, Matrix4 } from "@mist/math";
 import { Camera } from "./Camera";
 
 export default class OrthographicCamera

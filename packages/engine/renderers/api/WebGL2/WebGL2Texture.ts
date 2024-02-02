@@ -1,7 +1,7 @@
-import { Renderer } from "@mist-engine/renderers/Renderer";
-import { getGLRenderingContext } from "@mist-engine/renderers/RenderingApi";
-import TextureLibrary from "@mist-engine/renderers/TextureLibrary";
-import { MistTexture } from "@mist-engine/renderers/Texture";
+import { Renderer } from "@mist/engine/renderers/Renderer";
+import { getGLRenderingContext } from "@mist/engine/renderers/RenderingApi";
+import TextureLibrary from "@mist/engine/renderers/TextureLibrary";
+import { MistTexture } from "@mist/engine/renderers/Texture";
 
 function isPowerOf2(value: number) {
 	return (value & (value - 1)) == 0;
