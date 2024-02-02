@@ -7,18 +7,6 @@
 
 // const MIST_SHADER_DECORATOR_BASE_REGEX =
 // 	/^@(?<decorator>Mist\w+)\((?<value>.+)?\)+(?:\s+)?$/;
-
-type ValidatorFunction = (arg: string) => { error?: string; ok: boolean };
-
-type ValidationConfig = {
-	minRequired: number;
-	decoName: string;
-	requiredArgsName: string[];
-	validate: Record<
-		number,
-		{ required: boolean; validator?: ValidatorFunction }
-	>;
-};
 const MIST_SHADER_DECORATOR_BASE_REGEX = createMistDecoratorRegex("");
 
 function createMistDecoratorRegex(name: string, exact = false) {
@@ -29,10 +17,6 @@ function createMistDecoratorRegex(name: string, exact = false) {
 }
 
 const MIST_SHADER_DECORATOR_REGEX = createMistDecoratorRegex("Shader");
-const MIST_ATTRIBUTE_REGEX = createMistDecoratorRegex("Attribute", true);
-const MIST_UNIFORM_REGEX = createMistDecoratorRegex("Uniform", true);
-const MIST_IN_REGEX = createMistDecoratorRegex("In", true);
-const MIST_OUT_REGEX = createMistDecoratorRegex("Out", true);
 
 const MistShaderDecorators: Record<string, number> = {
 	MistShaderVersion: 1,
@@ -111,30 +95,6 @@ export default class MistShaderParser {
 			return;
 		}
 
-		const attributeDecoratorMatch = line.match(MIST_ATTRIBUTE_REGEX);
-		if (attributeDecoratorMatch) {
-			this.setAttributeDecoratorValue(attributeDecoratorMatch);
-			return;
-		}
-
-		const uniformDecoratorMatch = line.match(MIST_UNIFORM_REGEX);
-		if (uniformDecoratorMatch) {
-			this.setUniformDecoratorValue(uniformDecoratorMatch);
-			return;
-		}
-
-		const inDecoratorMatch = line.match(MIST_IN_REGEX);
-		if (inDecoratorMatch) {
-			this.setInOrOutDecorator(inDecoratorMatch, "in");
-			return;
-		}
-
-		const outDecoratorMatch = line.match(MIST_OUT_REGEX);
-		if (outDecoratorMatch) {
-			this.setInOrOutDecorator(outDecoratorMatch, "out");
-			return;
-		}
-
 		throw new Error(`Invalid MistDecorator: ${line}`);
 	}
 	private appendToCurrentShader(s: string) {
@@ -164,157 +124,7 @@ export default class MistShaderParser {
 			this.appendToCurrentShader(line);
 		}
 	}
-	private setAttributeDecoratorValue(match: RegExpMatchArray) {
-		if (!match.groups)
-			throw new Error(`Mist.MistShaderParser: Error parsing ${match[0]}`);
 
-		const args = (match.groups.value ?? "").split(",").map((arg) => arg.trim());
-		this.validateArgs(args, {
-			decoName: "MistAttribute",
-			minRequired: 3,
-			requiredArgsName: ["location", "dataType", "name"],
-			validate: {
-				0: {
-					required: true,
-					validator: (arg) => ({
-						ok: !isNaN(parseInt(arg)),
-						error: "should be a number",
-					}),
-				},
-				1: {
-					required: true,
-				},
-
-				2: {
-					required: true,
-					validator: (arg) => ({ ok: arg !== "", error: "cannot be empty" }),
-				},
-			},
-		});
-
-		const location = parseInt(args[0]);
-		const name = args[2];
-		const dataType = this.mistShaderDataTypeToGLDataType(args[1]);
-
-		const glsl = `layout (location = ${location}) in ${dataType} ${name};`;
-		this.appendToCurrentShader(glsl);
-	}
-
-	private setUniformDecoratorValue(match: RegExpMatchArray) {
-		if (!match.groups)
-			throw new Error(`Mist.MistShaderParser: Error parsing ${match[0]}`);
-
-		const args = (match.groups.value ?? "").split(",").map((arg) => arg.trim());
-		this.validateArgs(args, {
-			decoName: "MistUniform",
-			minRequired: 2,
-			requiredArgsName: ["type", "name"],
-			validate: {
-				0: {
-					required: true,
-				},
-				1: {
-					required: true,
-					validator: (arg) => ({ ok: arg !== "", error: "cannot be empty" }),
-				},
-			},
-		});
-
-		const dataType = this.mistShaderDataTypeToGLDataType(args[0]);
-		const name = args[1];
-
-		const glsl = `uniform ${dataType} ${name};`;
-		this.appendToCurrentShader(glsl);
-	}
-	private setInOrOutDecorator(match: RegExpMatchArray, t: "out" | "in") {
-		if (!match.groups)
-			throw new Error(
-				`Mist.MistShaderParser::MistIn() Error parsing ${match[0]}`
-			);
-
-		const args = (match.groups.value ?? "").split(",").map((arg) => arg.trim());
-		this.validateArgs(args, {
-			decoName: "MistUniform",
-			minRequired: 2,
-			requiredArgsName: ["type", "name"],
-			validate: {
-				0: {
-					required: true,
-				},
-				1: {
-					required: true,
-					validator: (arg) => ({ ok: arg !== "", error: "cannot be empty" }),
-				},
-			},
-		});
-		const dataType = this.mistShaderDataTypeToGLDataType(args[0]);
-		const name = args[1];
-		const glsl = `${t} ${dataType} ${name}; `;
-		this.appendToCurrentShader(glsl);
-	}
-
-	private validateArgs(args: string[], validate: ValidationConfig) {
-		if (!args) {
-			throw new Error(
-				`Mist.MistShaderParser::MistUniform: Required ${
-					validate.minRequired
-				} arguments (${validate.requiredArgsName.join(",")}), provided ${
-					args ?? "None"
-				}`
-			);
-		}
-
-		if (args.length !== validate.minRequired)
-			throw new Error(
-				`Mist.MistShaderParser::${validate.decoName}: Required ${
-					validate.minRequired
-				} arguments, provided ${
-					args.length
-				}, Required Args: (${validate.requiredArgsName.join(",")})`
-			);
-
-		args.forEach((arg, idx) => {
-			if (!arg && validate.validate[idx].required === true) {
-				throw new Error(
-					`Mist.MistShaderParser::${validate.decoName}: Required argument ${validate.requiredArgsName[idx]} cannot be empty`
-				);
-			}
-			const validatorFn = validate.validate[idx].validator;
-			if (validatorFn) {
-				const res = validatorFn(arg);
-				if (!res.ok)
-					throw new Error(
-						`Mist.MistShaderParser::${validate.decoName}: ${res.error}`
-					);
-			}
-		});
-	}
-	private mistShaderDataTypeToGLDataType(type: string) {
-		switch (type) {
-			case "Mat4":
-				return "mat4";
-
-			case "Float":
-				return "float";
-
-			case "Vec2":
-				return "vec2";
-
-			case "Vec3":
-				return "vec3";
-
-			case "Vec4":
-				return "vec4";
-
-			case "Texture":
-				return "sampler2D";
-
-			default:
-				throw new Error(
-					`Invalid MistShader DataType: Provided => ${type}; \nExpected => Float | Vec2 | Vec3 | Vec4 | Mat4 | Texture`
-				);
-		}
-	}
 	private setShaderDecoratorValue(match: RegExpMatchArray) {
 		if (!match.groups) throw new Error("Error parsing shader...");
 		const decorator = match.groups["decorator"];
