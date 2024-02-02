@@ -212,7 +212,7 @@ class TestLayer extends Mist.Layer {
 	override onAttach(): void {
 		const { Renderer } = this.getContext();
 		// prettier-ignore
-		this.camera = new Mist.OrthographicCamera(-1 * Renderer.aspect, 1 * Renderer.aspect, -1, 1);
+		this.camera = new Mist.OrthographicCamera( -Renderer.aspect,  Renderer.aspect, -1, 1);
 		Renderer.addEventListener(
 			MistEventType.RendererResize,
 			this.onRendererResize
@@ -335,7 +335,7 @@ class TestLayer extends Mist.Layer {
 	) => {
 		const aspect = ev.target.aspect;
 		// prettier-ignore
-		this.camera.updateProjection(-1 * aspect, 1 * aspect, -1, 1)
+		this.camera.updateProjection( -aspect, aspect, -1, 1)
 	};
 
 	override onDetach(): void {
