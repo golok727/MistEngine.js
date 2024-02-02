@@ -5,7 +5,8 @@ import { defineConfig } from "vite";
 export default defineConfig({
 	resolve: {
 		alias: {
-			"@mist-engine": path.resolve(__dirname, "packages"),
+			"@mist-engine": path.resolve(__dirname, "packages/mist-engine"),
+			"@mist": path.resolve(__dirname, "packages"),
 		},
 	},
 	build: {
