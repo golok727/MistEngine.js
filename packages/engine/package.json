@@ -4,7 +4,9 @@
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {},
-	"devDependencies": {},
+	"devDependencies": {
+		"@webgpu/types": "^0.1.40"
+	},
 	"dependencies": {
 		"nanoid": "^5.0.4"
 	},
