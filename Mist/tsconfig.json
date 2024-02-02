@@ -7,7 +7,7 @@
 		"skipLibCheck": true,
 
 		"paths": {
-			"@mist-engine/*": ["./packages/mist-engine/*"],
+			"@mist-engine/*": ["./packages/engine/*"],
 			"@mist": ["./packages/*"]
 		},
 		/* Bundler mode */
