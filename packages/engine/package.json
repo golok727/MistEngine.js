@@ -8,9 +8,7 @@
 		"@webgpu/types": "^0.1.40"
 	},
 	"dependencies": {
-		"nanoid": "^5.0.4"
-	},
-	"peerDependencies": {
+		"nanoid": "^5.0.4",
 		"@mist/math": "file:../math"
 	}
 }
