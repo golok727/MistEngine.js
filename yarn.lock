@@ -282,7 +282,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mist/engine@workspace:packages/engine":
+"@mist-apps/sandbox-app@workspace:apps/sandbox":
+  version: 0.0.0-use.local
+  resolution: "@mist-apps/sandbox-app@workspace:apps/sandbox"
+  languageName: unknown
+  linkType: soft
+
+"@mist/engine@workspace:*, @mist/engine@workspace:packages/engine":
   version: 0.0.0-use.local
   resolution: "@mist/engine@workspace:packages/engine"
   dependencies:
@@ -1601,6 +1607,15 @@ __metadata:
     vite: "npm:^5.0.8"
     vite-plugin-dts: "npm:^3.7.2"
     vitest: "npm:^1.2.0"
+  languageName: unknown
+  linkType: soft
+
+"mist.js@workspace:bundles/mist":
+  version: 0.0.0-use.local
+  resolution: "mist.js@workspace:bundles/mist"
+  dependencies:
+    "@mist/engine": "workspace:*"
+    "@mist/math": "workspace:*"
   languageName: unknown
   linkType: soft
 

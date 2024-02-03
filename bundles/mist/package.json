@@ -4,7 +4,6 @@
   "types": "../../build/index.d.ts",
   "private": true,
   "version": "0.0.0",
-  "scripts": {},
   "dependencies": {
     "@mist/engine": "workspace:*",
     "@mist/math": "workspace:*"

@@ -5,7 +5,9 @@
   "type": "module",
   "workspaces": [
     "./packages/*",
-    "./examples/*"
+    "./examples/*",
+    "./apps/*",
+    "./bundles/*"
   ],
   "scripts": {
     "clean:build": "del \f lib",
