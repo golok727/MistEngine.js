@@ -27,7 +27,7 @@
 		"packages",
 		"bundles",
 		"examples",
-		"sandbox-app",
+		"apps",
 		"./packages/types/**/*.d.ts",
 		"vite-env.d.ts"
 	],

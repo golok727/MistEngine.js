@@ -11,7 +11,7 @@
 		"clean:build": "del \f lib",
 		"test": "vitest",
 		"vite": "vite",
-		"run:sandbox": "vite serve ./sandbox-app -c ./vite.config.js",
+		"run:sandbox": "vite serve ./apps/sandbox -c ./vite.config.js",
 		"build": "tsc -p ./tsconfig.build.json && vite build",
 		"preview": "vite preview"
 	},
