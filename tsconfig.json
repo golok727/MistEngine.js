@@ -32,5 +32,12 @@
 		"./packages/**/*.d.ts",
 		"vite-env.d.ts"
 	],
-	"exclude": ["node_modules"]
+	"exclude": [
+		"bundles/**/*.d.ts",
+		"node_modules",
+		"**/dist/**",
+		"**/lib/**",
+		"**/out/**",
+		"**/*.worker.ts"
+	]
 }
