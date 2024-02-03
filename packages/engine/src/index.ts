@@ -14,5 +14,5 @@
  ---------------------------------------------------------------
 */
 
-import * as Mist from "./Mist";
-export default Mist;
+import * as Mist from './Mist'
+export default Mist

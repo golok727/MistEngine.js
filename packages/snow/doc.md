@@ -1,19 +1,17 @@
 # Snow
 
-Snow is a custom shading language for mist engine 
-
-
+Snow is a custom shading language for mist engine
 
 ```shader
 
 @Version(100)
 
 @Shader basic {
-  
+
   @vertex()
   {
 
-    @attributes 
+    @attributes
     {
       @vec4 position [[ location = 0 ]]
     }
@@ -21,7 +19,7 @@ Snow is a custom shading language for mist engine
     @uniforms {
       @vec4 viewProjection
     }
-    
+
     @position: viewProjection * position
   }
 
@@ -31,8 +29,8 @@ Snow is a custom shading language for mist engine
     @uniforms {
       @vec4 color
     }
-    
-    @position: color 
+
+    @position: color
   }
 }
 

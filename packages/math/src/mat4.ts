@@ -1,73 +1,73 @@
-import Vector3 from "./vec3";
-import { V3 } from "./vector";
+import Vector3 from './vec3'
+import {V3} from './vector'
 
 // prettier-ignore
 type Matrix4Elements =  [ m11: number, m12: number , m13: number , m14: number , m21: number , m22: number , m23: number , m24: number , m31: number , m32: number , m33: number , m34: number , m41: number , m42: number , m43: number , m44: number ]
 
 export class Matrix4 {
-	private elements: Matrix4Elements;
+  private elements: Matrix4Elements
 
-	constructor(...values: Matrix4Elements | []) {
-		//  prettier-ignore
-		this.elements = [
+  constructor(...values: Matrix4Elements | []) {
+    //  prettier-ignore
+    this.elements = [
         1, 0, 0, 0,
         0, 1, 0, 0,
         0, 0, 1, 0,
         0, 0, 0, 1
       ];
 
-		if (values.length) {
-			this.set(...values);
-		}
-	}
+    if (values.length) {
+      this.set(...values)
+    }
+  }
 
-	public static Ortho(
-		...args: Parameters<Matrix4["makeOrthographic"]>
-	): Matrix4 {
-		const m = new Matrix4();
-		m.makeOrthographic(...args);
-		return m;
-	}
-	/**
-	 * Returns a Translation Matrix
-	 */
-	public static Translate(v: Vector3) {
-		const m = new Matrix4();
+  public static Ortho(
+    ...args: Parameters<Matrix4['makeOrthographic']>
+  ): Matrix4 {
+    const m = new Matrix4()
+    m.makeOrthographic(...args)
+    return m
+  }
+  /**
+   * Returns a Translation Matrix
+   */
+  public static Translate(v: Vector3) {
+    const m = new Matrix4()
 
-		m.setPosition(v);
+    m.setPosition(v)
 
-		return m;
-	}
+    return m
+  }
 
-	/**
-	 * Returns a Scale Matrix
-	 */
-	public static Scale(s: Vector3) {
-		const m = new Matrix4();
+  /**
+   * Returns a Scale Matrix
+   */
+  public static Scale(s: Vector3) {
+    const m = new Matrix4()
 
-		m.toScaleMat(s);
+    m.toScaleMat(s)
 
-		return m;
-	}
-	/**
-	 * Returns a translation matrix
-	 */
-	public static Rotate(angle: number, axis: Vector3) {
-		// https://en.wikipedia.org/wiki/Rotation_matrix
-		const m = new Matrix4();
-		const c = Math.cos(angle),
-			s = Math.sin(angle);
+    return m
+  }
+  /**
+   * Returns a translation matrix
+   */
+  public static Rotate(angle: number, axis: Vector3) {
+    // https://en.wikipedia.org/wiki/Rotation_matrix
+    const m = new Matrix4()
+    const c = Math.cos(angle),
+      s = Math.sin(angle)
 
-		const i = 1 - c;
-		const x = axis.x,
-			y = axis.y,
-			z = axis.z;
+    const i = 1 - c
+    const x = axis.x,
+      y = axis.y,
+      z = axis.z
 
-		const ix = i * x,
-			iy = i * y;
+    const ix = i * x,
+      iy = i * y
 
-		// prettier-ignore
-		m.set(
+    // prettier-ignore
+    m.set(
 
 			ix * x + c, ix * y - s * z, ix * z + s * y, 0,
 			ix * y + s * z, iy * y + c, iy * z - s * x, 0,
@@ -76,21 +76,21 @@ export class Matrix4 {
 
 		);
 
-		return m;
-	}
+    return m
+  }
 
-	public static PrettyPrint(m: Matrix4) {
-		let out = "";
-		for (let i = 0; i < 4; i++) {
-			for (let j = 0; j < 4; j++) {
-				out += m.elements[i * 4 + j] + "\t";
-			}
-			out += "\n";
-		}
-		console.log(out);
-	}
-	// prettier-ignore
-	public set(...m: Matrix4Elements) {
+  public static PrettyPrint(m: Matrix4) {
+    let out = ''
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 4; j++) {
+        out += m.elements[i * 4 + j] + '\t'
+      }
+      out += '\n'
+    }
+    console.log(out)
+  }
+  // prettier-ignore
+  public set(...m: Matrix4Elements) {
 		const el = this.elements;
 		el[0] = m[0]; el[1] = m[1]; el[2] = m[2]; el[3] = m[3];
 		el[4] = m[4]; el[5] = m[5]; el[6] = m[6]; el[7] = m[7];
@@ -99,28 +99,28 @@ export class Matrix4 {
 		return this;
 	}
 
-	public identity() {
-		// prettier-ignore
-		this.set(
+  public identity() {
+    // prettier-ignore
+    this.set(
 			1, 0, 0, 0, 
 			0, 1, 0, 0,
 			0, 0, 1, 0,
 			0, 0, 0, 1
 		);
-		return this;
-	}
+    return this
+  }
 
-	public multiply(m: Matrix4) {
-		return this.multiplyAndApply(this, m);
-	}
+  public multiply(m: Matrix4) {
+    return this.multiplyAndApply(this, m)
+  }
 
-	public multiplyMat(...matrices: Matrix4[]) {
-		for (const m of matrices) this.multiply(m);
-		return this;
-	}
+  public multiplyMat(...matrices: Matrix4[]) {
+    for (const m of matrices) this.multiply(m)
+    return this
+  }
 
-	// prettier-ignore
-	private multiplyAndApply(A: Matrix4, B: Matrix4) {
+  // prettier-ignore
+  private multiplyAndApply(A: Matrix4, B: Matrix4) {
 		const a = A.elements
 		const b = B.elements
 		const m = this.elements
@@ -158,8 +158,8 @@ export class Matrix4 {
 		return this;
 	}
 
-	// prettier-ignore
-	public multiplyScalar(s: number) {
+  // prettier-ignore
+  public multiplyScalar(s: number) {
 		const m = this.elements;
 
 		m[0] *= s; m[4] *= s; m[8] *= s; m[12] *= s;
@@ -170,37 +170,37 @@ export class Matrix4 {
 		return this;
 	}
 
-	public setPosition(...v: [Vector3] | V3) {
-		const el = this.elements;
-		if (v.length === 1) {
-			el[12] = v[0].x;
-			el[13] = v[0].y;
-			el[14] = v[0].z;
-		} else {
-			el[12] = v[0];
-			el[13] = v[1];
-			el[14] = v[2];
-		}
-		return this;
-	}
+  public setPosition(...v: [Vector3] | V3) {
+    const el = this.elements
+    if (v.length === 1) {
+      el[12] = v[0].x
+      el[13] = v[0].y
+      el[14] = v[0].z
+    } else {
+      el[12] = v[0]
+      el[13] = v[1]
+      el[14] = v[2]
+    }
+    return this
+  }
 
-	public toScaleMat(...v: [Vector3] | V3) {
-		let x, y, z;
+  public toScaleMat(...v: [Vector3] | V3) {
+    let x, y, z
 
-		v.length === 1 ? ({ x, y, z } = v[0]) : ([x, y, z] = v);
-		// prettier-ignore
-		this.set(
+    v.length === 1 ? ({x, y, z} = v[0]) : ([x, y, z] = v)
+    // prettier-ignore
+    this.set(
 						x, 0, 0, 0,
 						0, y, 0, 0, 
 						0, 0, z, 0, 
 						0, 0, 0, 1
 						);
 
-		return this;
-	}
+    return this
+  }
 
-	// prettier-ignore
-	public scale(v: Vector3) {
+  // prettier-ignore
+  public scale(v: Vector3) {
 		const el = this.elements;
 
 		el[0] *= v.x; el[1] *= v.x; el[2] *= v.x; el[3] *= v.x;
@@ -210,13 +210,13 @@ export class Matrix4 {
 		return this;
 	}
 
-	public setFromArray(elms: Matrix4Elements) {
-		for (let i = 0; i < 16; i++) this.elements[i] = elms[i];
-		return this;
-	}
+  public setFromArray(elms: Matrix4Elements) {
+    for (let i = 0; i < 16; i++) this.elements[i] = elms[i]
+    return this
+  }
 
-	// prettier-ignore
-	public copyFrom(m: Matrix4) {
+  // prettier-ignore
+  public copyFrom(m: Matrix4) {
 		const te = this.elements;
 		const me = m.elements;
 
@@ -228,24 +228,24 @@ export class Matrix4 {
 		return this;
 	}
 
-	public clone() {
-		const m = new Matrix4();
-		m.copyFrom(this);
-		return m;
-	}
+  public clone() {
+    const m = new Matrix4()
+    m.copyFrom(this)
+    return m
+  }
 
-	public copyPosition(m: Matrix4) {
-		const te = this.elements,
-			me = m.elements;
+  public copyPosition(m: Matrix4) {
+    const te = this.elements,
+      me = m.elements
 
-		te[12] = me[12];
-		te[13] = me[13];
-		te[14] = me[14];
+    te[12] = me[12]
+    te[13] = me[13]
+    te[14] = me[14]
 
-		return this;
-	}
-	// prettier-ignore
-	public makeOrthographic(
+    return this
+  }
+  // prettier-ignore
+  public makeOrthographic(
 		left: number,
 		right: number,
 		top: number,
@@ -276,8 +276,8 @@ export class Matrix4 {
 
 		return this;
 	}
-	// prettier-ignore
-	invert() {
+  // prettier-ignore
+  invert() {
 		// https://github.com/mrdoob/three.js/blob/dev/src/math/Matrix4.js
 		const te = this.elements,
 
@@ -321,7 +321,7 @@ export class Matrix4 {
 
 	}
 
-	public toArray() {
-		return [...this.elements];
-	}
+  public toArray() {
+    return [...this.elements]
+  }
 }

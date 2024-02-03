@@ -1,43 +1,43 @@
 {
-	"compilerOptions": {
-		"target": "ES2020",
-		"useDefineForClassFields": true,
-		"module": "ESNext",
-		"lib": ["ES2020", "DOM", "DOM.Iterable"],
-		"skipLibCheck": true,
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
 
-		"paths": {
-			"@mist/*": ["./packages/*/src"],
-			"mist.js": ["./bundles/mist/src"]
-		},
-		/* Bundler mode */
-		"moduleResolution": "bundler",
-		"allowImportingTsExtensions": true,
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"noEmit": true,
-		/* Linting */
-		"strict": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"noFallthroughCasesInSwitch": true,
-		"baseUrl": "./",
-		"types": ["@webgpu/types"]
-	},
-	"include": [
-		"packages",
-		"bundles",
-		"examples",
-		"apps",
-		"./packages/**/*.d.ts",
-		"vite-env.d.ts"
-	],
-	"exclude": [
-		"bundles/**/*.d.ts",
-		"node_modules",
-		"**/dist/**",
-		"**/lib/**",
-		"**/out/**",
-		"**/*.worker.ts"
-	]
+    "paths": {
+      "@mist/*": ["./packages/*/src"],
+      "mist.js": ["./bundles/mist/src"],
+    },
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": "./",
+    "types": ["@webgpu/types"],
+  },
+  "include": [
+    "packages",
+    "bundles",
+    "examples",
+    "apps",
+    "./packages/**/*.d.ts",
+    "vite-env.d.ts",
+  ],
+  "exclude": [
+    "bundles/**/*.d.ts",
+    "node_modules",
+    "**/dist/**",
+    "**/lib/**",
+    "**/out/**",
+    "**/*.worker.ts",
+  ],
 }

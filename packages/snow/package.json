@@ -1,6 +1,6 @@
 {
-	"name": "@mist/snow",
-	"private": true,
-	"version": "0.0.0",
-	"type": "module"
+  "name": "@mist/snow",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module"
 }

@@ -1,12 +1,12 @@
 {
-	"name": "mist.js",
-	"module": "../../build/index.js",
-	"types": "../../build/index.d.ts",
-	"private": true,
-	"version": "0.0.0",
-	"scripts": {},
-	"dependencies": {
-		"@mist/engine": "workspace:*",
-		"@mist/math": "workspace:*"
-	}
+  "name": "mist.js",
+  "module": "../../build/index.js",
+  "types": "../../build/index.d.ts",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {},
+  "dependencies": {
+    "@mist/engine": "workspace:*",
+    "@mist/math": "workspace:*"
+  }
 }

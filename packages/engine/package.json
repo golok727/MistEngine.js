@@ -1,14 +1,14 @@
 {
-	"name": "@mist/engine",
-	"private": true,
-	"version": "0.0.0",
-	"type": "module",
-	"devDependencies": {
-		"@webgpu/types": "^0.1.40"
-	},
-	"dependencies": {
-		"@mist/logger": "workspace:*",
-		"@mist/math": "workspace:*",
-		"nanoid": "^5.0.4"
-	}
+  "name": "@mist/engine",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "devDependencies": {
+    "@webgpu/types": "^0.1.40"
+  },
+  "dependencies": {
+    "@mist/logger": "workspace:*",
+    "@mist/math": "workspace:*",
+    "nanoid": "^5.0.4"
+  }
 }

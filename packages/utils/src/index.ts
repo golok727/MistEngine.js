@@ -1,1 +1,1 @@
-export { camelToDashCase, loadImageAsync, printMistInto } from "./utils";
+export {camelToDashCase, loadImageAsync, printMistInto} from './utils'
