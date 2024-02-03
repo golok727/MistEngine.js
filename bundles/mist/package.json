@@ -6,7 +6,7 @@
 	"version": "0.0.0",
 	"scripts": {},
 	"dependencies": {
-		"@mist/engine": "file:../packages/engine",
-		"@mist/math": "file:../package/math"
+		"@mist/engine": "workspace:*",
+		"@mist/math": "workspace:*"
 	}
 }

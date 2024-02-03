@@ -3,12 +3,12 @@
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
-	"scripts": {},
 	"devDependencies": {
 		"@webgpu/types": "^0.1.40"
 	},
 	"dependencies": {
-		"nanoid": "^5.0.4",
-		"@mist/math": "file:../math"
+		"@mist/logger": "workspace:*",
+		"@mist/math": "workspace:*",
+		"nanoid": "^5.0.4"
 	}
 }

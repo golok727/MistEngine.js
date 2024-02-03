@@ -1,5 +1,5 @@
 import "./style.css";
-import { Mist, Matrix4, Vector3, vec3 } from "../../../bundles/mist";
+import { Mist, Matrix4, Vector3, vec3 } from "mist.js";
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const fpsSpan = document.getElementById("fps-text") as HTMLSpanElement;
 
