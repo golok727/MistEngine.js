@@ -1,9 +1,25 @@
 {
   "name": "@mist/logger",
-  "private": true,
   "version": "0.0.0",
-  "type": "module",
+  "author": {
+    "name": "Radha"
+  },
+  "main": "lib/index.cjs",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.js"
+      },
+      "require": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.cjs"
+      }
+    }
+  },
   "dependencies": {
-    "@mist/utils": "workspace:*"
+    "@mist/utils": "file:../utils"
   }
 }

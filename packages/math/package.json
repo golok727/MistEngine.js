@@ -1,6 +1,22 @@
 {
   "name": "@mist/math",
-  "private": true,
+  "author": {
+    "name": "Radha"
+  },
   "version": "0.0.0",
-  "type": "module"
+  "main": "lib/index.cjs",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.js"
+      },
+      "require": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.cjs"
+      }
+    }
+  }
 }

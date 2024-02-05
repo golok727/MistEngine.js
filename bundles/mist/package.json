@@ -1,11 +1,24 @@
 {
   "name": "mist.js",
-  "module": "../../build/index.js",
-  "types": "../../build/index.d.ts",
-  "private": true,
+  "author": "Radha",
+  "main": "lib/index.cjs",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.js"
+      },
+      "require": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.cjs"
+      }
+    }
+  },
   "version": "0.0.0",
   "dependencies": {
-    "@mist/engine": "workspace:*",
-    "@mist/math": "workspace:*"
+    "@mist/engine": "file:../../packages/engine",
+    "@mist/math": "file:../../packages/math"
   }
 }

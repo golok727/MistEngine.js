@@ -10,7 +10,8 @@
     "./bundles/*"
   ],
   "scripts": {
-    "clean:build": "del \f lib",
+    "build:clean": "rimraf --glob \"{packages,bundles}/*/{dist,lib}\"",
+    "build:all": "tsc && node ./vite.build.mjs",
     "test": "vitest",
     "vite": "vite",
     "run:sandbox": "vite serve ./apps/sandbox -c ./vite.config.js",
@@ -18,10 +19,12 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "rimraf": "^5.0.5",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
     "vite-plugin-dts": "^3.7.2",
-    "vitest": "^1.2.0"
+    "vitest": "^1.2.0",
+    "workspaces-run": "^1.0.2"
   },
   "packageManager": "yarn@4.1.0"
 }

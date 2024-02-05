@@ -1,3 +1,4 @@
 {
-  "name": "@mist-apps/sandbox-app"
+  "name": "@mist-apps/sandbox-app",
+  "private": true
 }

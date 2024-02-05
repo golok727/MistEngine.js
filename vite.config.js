@@ -1,7 +1,8 @@
 import path from 'path'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
-export const common = {
+
+export default defineConfig({
   resolve: {
     alias: [
       {
@@ -13,19 +14,6 @@ export const common = {
         replacement: path.resolve(__dirname, './packages/$1/src/index.ts'),
       },
     ],
-  },
-}
-
-export default defineConfig({
-  ...common,
-  build: {
-    lib: {
-      entry: path.resolve(__dirname, 'bundles/mist/src/index.ts'),
-      formats: ['es'],
-      name: 'mist.js',
-      fileName: 'index',
-    },
-    outDir: path.resolve(__dirname, 'build'),
   },
   plugins: [dts({ rollupTypes: true })],
 })
