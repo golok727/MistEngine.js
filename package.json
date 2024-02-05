@@ -10,8 +10,8 @@
     "./bundles/*"
   ],
   "scripts": {
-    "build:clean": "rimraf --glob \"{packages,bundles}/*/{dist,lib}\"",
-    "build:all": "tsc && node ./vite.build.mjs",
+    "clean:build": "rimraf --glob \"{packages,bundles}/*/{dist,lib}\"",
+    "build:all": "tsc && node ./scripts/build.mjs",
     "test": "vitest",
     "vite": "vite",
     "run:sandbox": "vite serve ./apps/sandbox -c ./vite.config.js",

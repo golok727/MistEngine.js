@@ -1,104 +1,166 @@
-namespace globalThis {
-  interface MistBaseEvent<T> {
-    target: T
-  }
+type MistEventTypesK =
+  | 'AppReady'
+  | 'AppStart'
+  | 'AppShutDown'
+  | 'AppRestart'
+  | 'RendererResize'
+  | 'MouseDown'
+  | 'MouseMove'
+  | 'MouseUp'
+  | 'MouseWheel'
+  | 'KeyDown'
+  | 'KeyUp'
 
-  interface DefaultPrevent {
-    preventDefault(): void
-  }
+type MistEventTypeT = {
+  [K in MistEventTypesK]: K
+}
 
-  interface MistAppReadyEvent
-    extends MistBaseEvent<import('../packages/core/MistAppBase.ts').default> {
-    type: MistEventTypeT['AppReady']
-  }
+interface MistEventMap {
+  [MistEventType.AppReady]: MistAppReadyEvent
+  [MistEventType.AppStart]: MistAppStartEvent
+  [MistEventType.AppShutDown]: MistAppShutDownEvent
+  [MistEventType.AppRestart]: MistAppRestartEvent
+  [MistEventType.RendererResize]: MistRendererResizeEvent
 
-  interface MistAppStartEvent
-    extends MistBaseEvent<import('../packages/core/MistAppBase.ts').default> {
-    type: MistEventTypeT['AppStart']
-  }
+  [MistEventType.KeyDown]: MistKeyDownEvent
+  [MistEventType.KeyUp]: MistKeyUpEvent
 
-  interface MistAppShutDownEvent
-    extends MistBaseEvent<import('../packages/core/MistAppBase.ts').default> {
-    type: MistEventTypeT['AppShutDown']
-  }
+  [MistEventType.MouseUp]: MistMouseUpEvent
+  [MistEventType.MouseMove]: MistMouseMoveEvent
+  [MistEventType.MouseDown]: MistMouseDownEvent
+  [MistEventType.MouseWheel]: MistMouseWheelEvent
+}
 
-  interface MistAppRestartEvent
-    extends MistBaseEvent<import('../packages/core/MistAppBase.ts').default> {
-    type: MistEventTypeT['AppRestart']
-  }
+type MistEvent =
+  | MistAppReadyEvent
+  | MistAppStartEvent
+  | MistAppShutDownEvent
+  | MistAppRestartEvent
+  | MistRendererResizeEvent
+  | MistKeyUpEvent
+  | MistKeyDownEvent
+  | MistMouseDownEvent
+  | MistMouseUpEvent
+  | MistMouseMoveEvent
+  | MistMouseWheelEvent
 
-  interface MistRendererResizeEvent
-    extends MistBaseEvent<
-      import('../packages/renderers/Renderer.ts').Renderer<any>
-    > {
-    type: MistEventTypeT['RendererResize']
-    width: number
-    height: number
-  }
-  // Global Keyboard
-  interface MistKeyUpEvent
-    extends MistBaseEvent<
-        typeof import('../packages/core/Input/Input.ts').default
-      >,
-      DefaultPrevent {
-    type: MistEventTypeT['KeyUp']
-    key: MistKey
-    native: KeyboardEvent
-  }
+type MistEventListenerCallback<E = MistEvent> = (event: E) => any
 
-  interface MistKeyDownEvent
-    extends MistBaseEvent<
-        typeof import('../packages/core/Input/Input.ts').default
-      >,
-      DefaultPrevent {
-    type: MistEventTypeT['KeyDown']
-    key: MistKey
-    native: KeyboardEvent
-  }
+interface MistBaseEvent<T> {
+  target: T
+}
 
-  // Mouse
+interface DefaultPrevent {
+  preventDefault(): void
+}
 
-  interface MistMouseDownEvent
-    extends MistBaseEvent<import('../packages/core/Input/Input.ts').default>,
-      DefaultPrevent {
-    type: MistEventTypeT['MouseDown']
-    x: number
-    y: number
-    button: import('@mist/engine/core/Input/Input.ts').ElementInputState['mouse']['button']
-    native: MouseEvent
-  }
+interface MistAppReadyEvent
+  extends MistBaseEvent<
+    import('packages/engine/src/core/MistAppBase.ts').default
+  > {
+  type: MistEventTypeT['AppReady']
+}
 
-  interface MistMouseUpEvent
-    extends MistBaseEvent<import('../packages/core/Input/Input.ts').default>,
-      DefaultPrevent {
-    type: MistEventTypeT['MouseUp']
-    x: number
-    y: number
-    button: import('@mist/engine/core/Input/Input.ts').ElementInputState['mouse']['button']
-    native: MouseEvent
-  }
+interface MistAppStartEvent
+  extends MistBaseEvent<
+    import('packages/engine/src/core/MistAppBase.ts').default
+  > {
+  type: MistEventTypeT['AppStart']
+}
 
-  interface MistMouseMoveEvent
-    extends MistBaseEvent<import('../packages/core/Input/Input.ts').default>,
-      DefaultPrevent {
-    type: MistEventTypeT['MouseMove']
-    x: number
-    y: number
-    isDown: boolean
-    button: import('@mist/engine/core/Input/Input.ts').ElementInputState['mouse']['button']
-    native: MouseEvent
-  }
+interface MistAppShutDownEvent
+  extends MistBaseEvent<
+    import('packages/engine/src/core/MistAppBase.ts').default
+  > {
+  type: MistEventTypeT['AppShutDown']
+}
 
-  interface MistMouseWheelEvent
-    extends MistBaseEvent<import('../packages/core/Input/Input.ts').default>,
-      DefaultPrevent {
-    type: MistEventTypeT['MouseWheel']
+interface MistAppRestartEvent
+  extends MistBaseEvent<
+    import('packages/engine/src/core/MistAppBase.ts').default
+  > {
+  type: MistEventTypeT['AppRestart']
+}
 
-    deltaX: number
-    deltaY: number
-    dirX: number
-    dirY: number
+interface MistRendererResizeEvent
+  extends MistBaseEvent<
+    import('packages/engine/src/renderers/Renderer.ts').Renderer<any>
+  > {
+  type: MistEventTypeT['RendererResize']
+  width: number
+  height: number
+}
+// Global Keyboard
+interface MistKeyUpEvent
+  extends MistBaseEvent<
+      typeof import('packages/engine/src/core/Input/Input.ts').default
+    >,
+    DefaultPrevent {
+  type: MistEventTypeT['KeyUp']
+  key: MistKey
+  native: KeyboardEvent
+}
 
-    native: WheelEvent
-  }
+interface MistKeyDownEvent
+  extends MistBaseEvent<
+      typeof import('packages/engine/src/core/Input/Input.ts').default
+    >,
+    DefaultPrevent {
+  type: MistEventTypeT['KeyDown']
+  key: MistKey
+  native: KeyboardEvent
+}
+
+// Mouse
+
+interface MistMouseDownEvent
+  extends MistBaseEvent<
+      import('packages/engine/src/core/Input/Input.ts').default
+    >,
+    DefaultPrevent {
+  type: MistEventTypeT['MouseDown']
+  x: number
+  y: number
+  button: import('packages/engine/src/core/Input/Input.ts').ElementInputState['mouse']['button']
+  native: MouseEvent
+}
+
+interface MistMouseUpEvent
+  extends MistBaseEvent<
+      import('packages/engine/src/core/Input/Input.ts').default
+    >,
+    DefaultPrevent {
+  type: MistEventTypeT['MouseUp']
+  x: number
+  y: number
+  button: import('packages/engine/src/core/Input/Input.ts').ElementInputState['mouse']['button']
+  native: MouseEvent
+}
+
+interface MistMouseMoveEvent
+  extends MistBaseEvent<
+      import('packages/engine/src/core/Input/Input.ts').default
+    >,
+    DefaultPrevent {
+  type: MistEventTypeT['MouseMove']
+  x: number
+  y: number
+  isDown: boolean
+  button: import('packages/engine/src/core/Input/Input.ts').ElementInputState['mouse']['button']
+  native: MouseEvent
+}
+
+interface MistMouseWheelEvent
+  extends MistBaseEvent<
+      import('packages/engine/src/core/Input/Input.ts').default
+    >,
+    DefaultPrevent {
+  type: MistEventTypeT['MouseWheel']
+
+  deltaX: number
+  deltaY: number
+  dirX: number
+  dirY: number
+
+  native: WheelEvent
 }
