@@ -35,9 +35,9 @@ export default class LayerStack {
     return {
       next: (): IteratorResult<Layer> => {
         if (index < this.layerStack.length) {
-          return {value: this.layerStack[index++], done: false}
+          return { value: this.layerStack[index++], done: false }
         } else {
-          return {value: null as any, done: true}
+          return { value: null as any, done: true }
         }
       },
     }
@@ -47,9 +47,9 @@ export default class LayerStack {
 
     return {
       next: () => {
-        if (index >= 0) return {value: this.layerStack[index--], done: false}
+        if (index >= 0) return { value: this.layerStack[index--], done: false }
         else {
-          return {value: undefined, done: true}
+          return { value: undefined, done: true }
         }
       },
 

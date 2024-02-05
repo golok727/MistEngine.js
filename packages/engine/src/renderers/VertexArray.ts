@@ -1,7 +1,7 @@
 import MistAppManager from '../core/MistAppManager'
-import {MistIndexBuffer, MistVertexBuffer} from './Buffer'
-import {MistRendererAPI, Renderer, MistAPIUsable} from './Renderer'
-import {MistWebGL2VertexArray} from './api/WebGL2/WebGL2VertexArray'
+import { MistIndexBuffer, MistVertexBuffer } from './Buffer'
+import { MistRendererAPI, Renderer, MistAPIUsable } from './Renderer'
+import { MistWebGL2VertexArray } from './api/WebGL2/WebGL2VertexArray'
 
 export interface MistVertexArray extends MistAPIUsable {
   addVertexBuffer(vertexBuffer: MistVertexBuffer): void

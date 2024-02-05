@@ -1,7 +1,7 @@
-import {Matrix4} from '@mist/math'
-import {Renderer} from '../../Renderer'
-import {getGLRenderingContext} from '../../RenderingApi'
-import {MistShader} from '../../Shader'
+import { Matrix4 } from '@mist/math'
+import { Renderer } from '../../Renderer'
+import { getGLRenderingContext } from '../../RenderingApi'
+import { MistShader } from '../../Shader'
 
 type ShaderTypes = 'VERTEX' | 'FRAGMENT'
 
@@ -71,7 +71,7 @@ export class MistWebGL2Shader implements MistShader {
   }
 
   private createProgram(...shaders: WebGLShader[]): WebGLProgram {
-    const {_gl: gl} = this
+    const { _gl: gl } = this
     const program = gl.createProgram()
     if (!program) throw new Error('Error Creating Shader Program')
 
@@ -101,7 +101,7 @@ export class MistWebGL2Shader implements MistShader {
   private createShader(type: ShaderTypes, source: string): WebGLShader {
     const shaderType = this.getGLShaderType(type)
 
-    const {_gl: gl} = this
+    const { _gl: gl } = this
     const shader = gl.createShader(shaderType)
     if (!shader) throw new Error(`Error creating Shader ${type}`)
     gl.shaderSource(shader, source)

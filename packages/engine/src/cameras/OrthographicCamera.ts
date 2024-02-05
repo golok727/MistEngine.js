@@ -1,6 +1,6 @@
-import {MistEventDispatcher} from '../core/Events'
-import {Vector3, Matrix4} from '@mist/math'
-import {Camera} from './Camera'
+import { MistEventDispatcher } from '../core/Events'
+import { Vector3, Matrix4 } from '@mist/math'
+import { Camera } from './Camera'
 
 export default class OrthographicCamera
   extends MistEventDispatcher

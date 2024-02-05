@@ -1,5 +1,5 @@
 import './style.css'
-import {Mist, Matrix4, Vector3, vec3} from 'mist.js'
+import { Mist, Matrix4, Vector3, vec3 } from 'mist.js'
 const canvas = document.getElementById('canvas') as HTMLCanvasElement
 const fpsSpan = document.getElementById('fps-text') as HTMLSpanElement
 
@@ -56,7 +56,7 @@ class TestLayer extends Mist.Layer {
   }
 
   updateCamera(delta: number) {
-    const {Input} = this.getContext()
+    const { Input } = this.getContext()
 
     this.camera.setPosition(this.cameraPosition)
     this.camera.setRotation(this.cameraRotation)
@@ -90,7 +90,7 @@ class TestLayer extends Mist.Layer {
   }
 
   updateSelectedObject(delta: number) {
-    const {Input} = this.getContext()
+    const { Input } = this.getContext()
 
     const OBJ_SPEED = 0.002
     const OBJ_ROT_SPEED = 0.008
@@ -114,7 +114,7 @@ class TestLayer extends Mist.Layer {
 
   override onUpdate(delta: number): void {
     // Each Frame
-    const {RenderAPI, Renderer, App} = this.getContext()
+    const { RenderAPI, Renderer, App } = this.getContext()
 
     updateFPSText(App.performance.averageFps)
 
@@ -176,7 +176,7 @@ class TestLayer extends Mist.Layer {
   }
 
   override onMouseDown(ev: MistMouseDownEvent): boolean {
-    const {Renderer} = this.getContext()
+    const { Renderer } = this.getContext()
     if (ev.button.left && ev.target.isPressed(Mist.Key.Control)) {
       const normalizedX = ev.x / Renderer.canvasWidth
       const normalizedY = ev.y / Renderer.canvasHeight
@@ -210,7 +210,7 @@ class TestLayer extends Mist.Layer {
   }
 
   override onAttach(): void {
-    const {Renderer} = this.getContext()
+    const { Renderer } = this.getContext()
     // prettier-ignore
     this.camera = new Mist.OrthographicCamera( -Renderer.aspect,  Renderer.aspect, -1, 1);
     Renderer.addEventListener(
@@ -246,8 +246,8 @@ class TestLayer extends Mist.Layer {
     const squareIndices = new Uint32Array([0, 1, 2, 2, 3, 0])
 
     const squareLayout = new Mist.BufferLayout([
-      {name: 'a_Position', type: Mist.ShaderDataType.Float3, location: 0},
-      {name: 'a_TexCoord', type: Mist.ShaderDataType.Float2, location: 1},
+      { name: 'a_Position', type: Mist.ShaderDataType.Float3, location: 0 },
+      { name: 'a_TexCoord', type: Mist.ShaderDataType.Float2, location: 1 },
     ])
     const squareObj = this.squareObj
 
@@ -274,10 +274,10 @@ class TestLayer extends Mist.Layer {
     const triangleIndices = new Uint32Array([0, 1, 2])
 
     const triangleLayout = new Mist.BufferLayout([
-      {name: 'a_Position', type: Mist.ShaderDataType.Float3, location: 0},
-      {name: 'a_Color', type: Mist.ShaderDataType.Float4, location: 1},
+      { name: 'a_Position', type: Mist.ShaderDataType.Float3, location: 0 },
+      { name: 'a_Color', type: Mist.ShaderDataType.Float4, location: 1 },
     ])
-    const {triangleObj} = this
+    const { triangleObj } = this
 
     triangleObj.va = Mist.VertexArray.Create()
 
@@ -303,7 +303,7 @@ class TestLayer extends Mist.Layer {
     const blueSquareIndices = new Uint32Array([0, 1, 2, 2, 3, 0])
 
     const blueSquareLayout = new Mist.BufferLayout([
-      {name: 'a_Position', type: Mist.ShaderDataType.Float3, location: 0},
+      { name: 'a_Position', type: Mist.ShaderDataType.Float3, location: 0 },
     ])
     const blueSquareObj = this.blueSquare
 
@@ -339,7 +339,7 @@ class TestLayer extends Mist.Layer {
   }
 
   override onDetach(): void {
-    const {Renderer} = this.getContext()
+    const { Renderer } = this.getContext()
     Renderer.removeEventListener(
       MistEventType.RendererResize,
       this.onRendererResize,

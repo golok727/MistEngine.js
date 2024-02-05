@@ -1,6 +1,6 @@
-import {BufferLayout, MistIndexBuffer, MistVertexBuffer} from '../../Buffer'
-import {Renderer} from '../../Renderer'
-import {getGLRenderingContext} from '../../RenderingApi'
+import { BufferLayout, MistIndexBuffer, MistVertexBuffer } from '../../Buffer'
+import { Renderer } from '../../Renderer'
+import { getGLRenderingContext } from '../../RenderingApi'
 
 export class MistWebGL2VertexBuffer implements MistVertexBuffer {
   private buffer: WebGLBuffer

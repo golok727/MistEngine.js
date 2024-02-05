@@ -3,7 +3,7 @@
 A Game engine Work in Progress
 
 ```typescript
-import {Mist} from 'mist.js'
+import { Mist } from 'mist.js'
 
 const canvas = document.getElementById('canvas')
 
@@ -18,7 +18,7 @@ class GameLayer extends Mist.Layer {
   }
 
   onUpdate(delta: number) {
-    const {Input, Renderer, RendererAPI} = this.getContext()
+    const { Input, Renderer, RendererAPI } = this.getContext()
     RendererAPI.ClearColor(1, 1, 1, 1)
     RendererAPI.Clear()
 
@@ -32,7 +32,7 @@ class GameLayer extends Mist.Layer {
 }
 class MyApp extends Mist.App {
   constructor() {
-    super({name: 'MyApp', canvas})
+    super({ name: 'MyApp', canvas })
     this.pushLayer(GameLayer)
   }
 }

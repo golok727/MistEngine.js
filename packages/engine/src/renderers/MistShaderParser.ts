@@ -27,7 +27,7 @@ const MistShaderDecorators: Record<string, number> = {
 
 type Parsed = {
   version: number | null
-  shaders: Record<string, {fragment: string; vertex: string}>
+  shaders: Record<string, { fragment: string; vertex: string }>
 }
 
 export type ShaderSource = {

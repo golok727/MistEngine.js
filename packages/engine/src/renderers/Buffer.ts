@@ -1,5 +1,5 @@
 import MistAppManager from '../core/MistAppManager'
-import {MistAPIUsable, MistRendererAPI, Renderer} from './Renderer'
+import { MistAPIUsable, MistRendererAPI, Renderer } from './Renderer'
 import {
   WebGL2IndexBuffer,
   MistWebGL2VertexBuffer,
@@ -37,7 +37,7 @@ class BufferElement {
   size: number
   normalized: boolean
 
-  constructor({name, type, location, normalized}: BufferLayoutConstructor) {
+  constructor({ name, type, location, normalized }: BufferLayoutConstructor) {
     this.name = name
     this.type = type
     this.location = location
@@ -95,8 +95,8 @@ export class BufferLayout {
     return {
       next: () => {
         return idx < this.elements.length
-          ? {value: this.elements[idx++], done: false}
-          : {value: undefined, done: true}
+          ? { value: this.elements[idx++], done: false }
+          : { value: undefined, done: true }
       },
     }
   }

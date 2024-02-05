@@ -1,1 +1,1 @@
-export {MistLogger} from './MistLogger'
+export { MistLogger } from './MistLogger'

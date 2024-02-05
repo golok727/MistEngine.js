@@ -1,6 +1,6 @@
-import VectorBase, {type Vec3Args, type V3} from './vector'
+import VectorBase, { type Vec3Args, type V3 } from './vector'
 
-export type Vec3Like = {x: number; y: number; z: number}
+export type Vec3Like = { x: number; y: number; z: number }
 
 /**
  * Vector 3

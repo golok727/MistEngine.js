@@ -4,9 +4,9 @@
 
 	The shader files provided should be a `Mist Shader` which allows loading multiple shaders in single file. More in the docs
 */
-import {MistShader, ShaderFactory} from './Shader'
+import { MistShader, ShaderFactory } from './Shader'
 import MistShaderParser from './MistShaderParser'
-import type {MistApp} from '../core/Application'
+import type { MistApp } from '../core/Application'
 
 export default class MistShaderLibrary {
   private static loadedShaders: Map<string, MistShader> = new Map()

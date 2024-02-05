@@ -1,13 +1,13 @@
-import {MistRendererAPI, MistWebGL2Renderer, Renderer} from '../renderers'
-import {MistEventDispatcher} from './Events'
+import { MistRendererAPI, MistWebGL2Renderer, Renderer } from '../renderers'
+import { MistEventDispatcher } from './Events'
 import LayerStack from './LayerStack'
 import MistInput from './Input/Input'
-import {Context} from './Context'
-import Layer, {LayerWithContext} from './Layer'
-import {MistLogger} from '@mist/logger'
+import { Context } from './Context'
+import Layer, { LayerWithContext } from './Layer'
+import { MistLogger } from '@mist/logger'
 import MistAppManager from './MistAppManager'
 
-const logger = new MistLogger({name: 'App'})
+const logger = new MistLogger({ name: 'App' })
 
 export type ApplicationConstructorProps = {
   name: string
@@ -34,7 +34,7 @@ export default abstract class MistAppBase extends MistEventDispatcher {
   protected lastTime: number
   protected currentFrameId?: number
 
-  constructor({name, canvas, rendererAPI}: ApplicationConstructorProps) {
+  constructor({ name, canvas, rendererAPI }: ApplicationConstructorProps) {
     super()
     this._allowPerformanceMetrics = !import.meta.env.PROD // for now
     this.appName = name
@@ -57,12 +57,12 @@ export default abstract class MistAppBase extends MistEventDispatcher {
     const _this = this as any as AppWithPerformanceMeasure
 
     if (!_this || !this._allowPerformanceMetrics) {
-      return {averageFps: 0}
+      return { averageFps: 0 }
     }
 
     const avgFps = _this.__performance__.averageFPS
 
-    return {averageFps: avgFps}
+    return { averageFps: avgFps }
   }
   public getRenderer() {
     return this.renderer
@@ -92,7 +92,7 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 	 */
   public ShutDown() {
     this._stop()
-    this.dispatchEvent({type: MistEventType.AppShutDown, target: this})
+    this.dispatchEvent({ type: MistEventType.AppShutDown, target: this })
     this.input.destroy()
   }
 
@@ -160,7 +160,7 @@ export default abstract class MistAppBase extends MistEventDispatcher {
     if (this.isRunning)
       throw new Error(`App: '${this.appName}' is already running!`)
 
-    this.dispatchEvent({type: MistEventType.AppStart, target: this})
+    this.dispatchEvent({ type: MistEventType.AppStart, target: this })
 
     MistAppManager.setCurrent(this)
     this.onAttach()
@@ -180,7 +180,7 @@ export default abstract class MistAppBase extends MistEventDispatcher {
 
   private _restartApp() {
     this._stop()
-    this.dispatchEvent({type: MistEventType.AppRestart, target: this})
+    this.dispatchEvent({ type: MistEventType.AppRestart, target: this })
     this.Run()
   }
 

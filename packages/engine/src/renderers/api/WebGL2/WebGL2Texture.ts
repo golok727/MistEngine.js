@@ -1,7 +1,7 @@
-import {Renderer} from '../../Renderer'
-import {getGLRenderingContext} from '../../RenderingApi'
+import { Renderer } from '../../Renderer'
+import { getGLRenderingContext } from '../../RenderingApi'
 import TextureLibrary from '../../TextureLibrary'
-import {MistTexture} from '../../Texture'
+import { MistTexture } from '../../Texture'
 
 function isPowerOf2(value: number) {
   return (value & (value - 1)) == 0

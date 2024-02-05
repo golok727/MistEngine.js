@@ -1,6 +1,6 @@
 import MistAppManager from '../core/MistAppManager'
-import {MistAPIUsable, MistRendererAPI, Renderer} from './Renderer'
-import {MistWebGLTexture} from './api/WebGL2/WebGL2Texture'
+import { MistAPIUsable, MistRendererAPI, Renderer } from './Renderer'
+import { MistWebGLTexture } from './api/WebGL2/WebGL2Texture'
 
 export interface MistTexture extends MistAPIUsable {}
 

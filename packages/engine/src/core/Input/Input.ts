@@ -4,7 +4,7 @@
   Separated mouse events for canvas elements
 */
 
-import {MistEventDispatcher} from '../Events'
+import { MistEventDispatcher } from '../Events'
 import MistKey from './MistKey'
 
 type MistInputMap = Record<string, boolean>
@@ -149,7 +149,7 @@ class MistInput extends MistEventDispatcher {
       if (wheelEndTimeout !== undefined) clearTimeout(wheelEndTimeout)
 
       this.state.mouse.wheel.isActive = true
-      const {deltaX, deltaY} = ev
+      const { deltaX, deltaY } = ev
 
       this.state.mouse.wheel.deltaX = deltaX
       this.state.mouse.wheel.deltaY = deltaY
@@ -272,8 +272,8 @@ class MistInput extends MistEventDispatcher {
       inputMap[key] = false
     }
 
-    this.GlobalInputState = {...this.GlobalInputState}
-    Object.assign(this.GlobalInputState, {inputMap})
+    this.GlobalInputState = { ...this.GlobalInputState }
+    Object.assign(this.GlobalInputState, { inputMap })
 
     this.addGlobalEventListeners()
     this._isInitialized = true
@@ -286,7 +286,7 @@ class MistInput extends MistEventDispatcher {
 
   private static Reset() {
     this._isInitialized = false
-    this.GlobalInputState = {inputMap: {}, isKeyDown: false}
+    this.GlobalInputState = { inputMap: {}, isKeyDown: false }
   }
 
   // Destroy Global Inputs

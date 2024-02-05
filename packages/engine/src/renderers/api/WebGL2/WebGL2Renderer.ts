@@ -1,12 +1,12 @@
-import {MistRendererAPI, Renderer} from '../../Renderer'
+import { MistRendererAPI, Renderer } from '../../Renderer'
 
 import MistWebGL2RenderingAPI from './WebGL2RenderingAPI'
-import {MistVertexArray} from '../../VertexArray'
-import {MistEventDispatcher} from '../../../core/Events'
-import {Camera} from '../../../cameras'
-import {MistShader} from '../../Shader'
-import {Matrix4} from '@mist/math'
-import {MistWebGL2Shader} from './WebGL2Shader'
+import { MistVertexArray } from '../../VertexArray'
+import { MistEventDispatcher } from '../../../core/Events'
+import { Camera } from '../../../cameras'
+import { MistShader } from '../../Shader'
+import { Matrix4 } from '@mist/math'
+import { MistWebGL2Shader } from './WebGL2Shader'
 
 export class MistWebGL2Renderer
   extends MistEventDispatcher

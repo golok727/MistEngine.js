@@ -1,4 +1,4 @@
-import {Context} from './Context'
+import { Context } from './Context'
 
 export default abstract class Layer {
   private _name: string
@@ -30,4 +30,4 @@ export default abstract class Layer {
   public onDetach() {}
 }
 
-export type LayerWithContext<T = Layer> = T & {readonly __context__: Context}
+export type LayerWithContext<T = Layer> = T & { readonly __context__: Context }

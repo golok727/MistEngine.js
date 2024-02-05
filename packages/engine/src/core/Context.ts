@@ -1,6 +1,6 @@
-import {RenderingAPI} from '../renderers/RenderingApi'
-import {MistApp} from './Application'
-import {Renderer} from '../renderers'
+import { RenderingAPI } from '../renderers/RenderingApi'
+import { MistApp } from './Application'
+import { Renderer } from '../renderers'
 import MistInput from './Input/Input'
 
 export interface Context {

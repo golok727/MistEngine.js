@@ -1,5 +1,5 @@
-import {MistVertexArray} from './VertexArray'
-import {Renderer} from './Renderer'
+import { MistVertexArray } from './VertexArray'
+import { Renderer } from './Renderer'
 import MistWebGL2RenderingAPI from './api/WebGL2/WebGL2RenderingAPI'
 
 export interface RenderingAPI<Ctx = unknown> {

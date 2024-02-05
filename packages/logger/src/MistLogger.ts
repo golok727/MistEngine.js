@@ -1,4 +1,4 @@
-import {camelToDashCase} from '@mist/utils'
+import { camelToDashCase } from '@mist/utils'
 
 type LoggerOptions = {
   name: string
@@ -186,7 +186,7 @@ export class MistLogger {
     message: string,
     level: Values<typeof MistLogger.LogLevel>,
   ): [string, string[]] {
-    let {pattern: placeholderString} = this.options
+    let { pattern: placeholderString } = this.options
 
     const outputLogStyles: string[] = []
 
@@ -228,7 +228,7 @@ export class MistLogger {
 
         default: {
           const key = MistLogger.FormatterMap[pattern].name
-          const {regex, getValue, stylesProps} = MistLogger.Formatters[key]
+          const { regex, getValue, stylesProps } = MistLogger.Formatters[key]
 
           const styles = MistLogger.makeConsoleStyles(stylesProps)
 
@@ -250,7 +250,7 @@ export class MistLogger {
     placeholderString: string,
     level: Values<typeof MistLogger.LogLevel>,
   ): [string, string[]] {
-    const {regex, getValue, stylesProps} = MistLogger.Formatters.Message
+    const { regex, getValue, stylesProps } = MistLogger.Formatters.Message
     const styles = MistLogger.makeConsoleStyles({
       ...stylesProps,
       color: this.getColorForLogLevel(level),
@@ -258,7 +258,7 @@ export class MistLogger {
 
     placeholderString = placeholderString.replace(
       regex,
-      this.wrapTokenWithStyles(getValue({...this.options, message})),
+      this.wrapTokenWithStyles(getValue({ ...this.options, message })),
     )
     return [placeholderString, [styles, '']]
   }
@@ -268,7 +268,7 @@ export class MistLogger {
     placeholderString: string,
     level: Values<typeof MistLogger.LogLevel>,
   ): [string, string[]] {
-    const {regex, getValue, stylesProps} = MistLogger.Formatters.LevelText
+    const { regex, getValue, stylesProps } = MistLogger.Formatters.LevelText
 
     const styles = MistLogger.makeConsoleStyles({
       ...stylesProps,
@@ -278,7 +278,7 @@ export class MistLogger {
 
     placeholderString = placeholderString.replace(
       regex,
-      this.wrapTokenWithStyles(getValue({...this.options, level})),
+      this.wrapTokenWithStyles(getValue({ ...this.options, level })),
     )
 
     return [placeholderString, [styles, '']]
@@ -288,7 +288,7 @@ export class MistLogger {
     placeholderString: string,
     level: Values<typeof MistLogger.LogLevel>,
   ): [string, string[]] {
-    const {regex, getValue, stylesProps} = MistLogger.Formatters.LevelShort
+    const { regex, getValue, stylesProps } = MistLogger.Formatters.LevelShort
 
     const styles = MistLogger.makeConsoleStyles({
       ...stylesProps,
@@ -296,7 +296,7 @@ export class MistLogger {
 
     placeholderString = placeholderString.replace(
       regex,
-      this.wrapTokenWithStyles(getValue({...this.options, level})),
+      this.wrapTokenWithStyles(getValue({ ...this.options, level })),
     )
     return [placeholderString, [styles, '']]
   }
@@ -352,17 +352,17 @@ export class MistLogger {
 
     const formatterPatterns: any = {}
     for (const [name, pattern] of Object.entries(LogPatterns)) {
-      formatterPatterns[pattern] = {name, regex: new RegExp(pattern)}
+      formatterPatterns[pattern] = { name, regex: new RegExp(pattern) }
     }
     return formatterPatterns as Record<
       Pattern,
-      {name: PatternName; regex: RegExp}
+      { name: PatternName; regex: RegExp }
     >
   }
 
   private static readonly FormatterMap: Record<
     Pattern,
-    {name: PatternName; regex: RegExp}
+    { name: PatternName; regex: RegExp }
   > = MistLogger.createFormatterMap()
 
   private static readonly Formatters: Record<
@@ -381,7 +381,7 @@ export class MistLogger {
   > = {
     Message: {
       pattern: LogPatterns.Message,
-      stylesProps: {fontStyle: 'italic'},
+      stylesProps: { fontStyle: 'italic' },
       regex: MistLogger.FormatterMap[LogPatterns.Message].regex,
       getValue(options) {
         if (options.message === undefined)

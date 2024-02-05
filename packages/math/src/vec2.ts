@@ -1,6 +1,6 @@
-import VectorBase, {type Vec2Args, type V2} from './vector'
+import VectorBase, { type Vec2Args, type V2 } from './vector'
 
-export type Vec2Like = {x: number; y: number}
+export type Vec2Like = { x: number; y: number }
 
 /**
  * Vector 2

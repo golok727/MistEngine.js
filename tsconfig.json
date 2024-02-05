@@ -8,7 +8,7 @@
 
     "paths": {
       "@mist/*": ["./packages/*/src"],
-      "mist.js": ["./bundles/mist/src"],
+      "mist.js": ["./bundles/mist/src"]
     },
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -22,7 +22,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "baseUrl": "./",
-    "types": ["@webgpu/types"],
+    "types": ["@webgpu/types"]
   },
   "include": [
     "packages",
@@ -30,7 +30,7 @@
     "examples",
     "apps",
     "./packages/**/*.d.ts",
-    "vite-env.d.ts",
+    "vite-env.d.ts"
   ],
   "exclude": [
     "bundles/**/*.d.ts",
@@ -38,6 +38,6 @@
     "**/dist/**",
     "**/lib/**",
     "**/out/**",
-    "**/*.worker.ts",
-  ],
+    "**/*.worker.ts"
+  ]
 }

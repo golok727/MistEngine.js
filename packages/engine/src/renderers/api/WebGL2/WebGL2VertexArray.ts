@@ -1,11 +1,11 @@
-import {Renderer} from '../../Renderer'
+import { Renderer } from '../../Renderer'
 import {
   MistIndexBuffer,
   MistVertexBuffer,
   shaderDataTypeToGLBaseDataType,
 } from '../../Buffer'
-import {getGLRenderingContext} from '../../RenderingApi'
-import {MistVertexArray} from '../../VertexArray'
+import { getGLRenderingContext } from '../../RenderingApi'
+import { MistVertexArray } from '../../VertexArray'
 
 export class MistWebGL2VertexArray implements MistVertexArray {
   private _gl: WebGL2RenderingContext

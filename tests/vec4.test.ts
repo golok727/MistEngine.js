@@ -1,5 +1,5 @@
-import {expect, test} from 'vitest'
-import {Vector4, vec4} from '../packages'
+import { expect, test } from 'vitest'
+import { Vector4, vec4 } from '../packages'
 
 test('vec4.createHelper', () => {
   expect(vec4(2, 4, 5, 7)).toStrictEqual(new Vector4(2, 4, 5, 7))

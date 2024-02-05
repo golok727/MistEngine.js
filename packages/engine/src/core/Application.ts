@@ -1,12 +1,12 @@
 import './MistGlobalFill'
 
-import {MistLogger} from '@mist/logger'
-import {printMistInto} from '@mist/utils'
+import { MistLogger } from '@mist/logger'
+import { printMistInto } from '@mist/utils'
 
-import MistAppBase, {ApplicationConstructorProps} from './MistAppBase'
+import MistAppBase, { ApplicationConstructorProps } from './MistAppBase'
 import MistAppManager from './MistAppManager'
 
-const logger = new MistLogger({name: 'App'})
+const logger = new MistLogger({ name: 'App' })
 
 export class MistApp extends MistAppBase {
   constructor(props: ApplicationConstructorProps) {
@@ -40,7 +40,7 @@ export const CreateMistApp = async (
   let app: MistApp
   if (mayBePromiseApp instanceof Promise) app = await mayBePromiseApp
   else app = mayBePromiseApp
-  app.dispatchEvent({type: MistEventType.AppReady, target: app})
+  app.dispatchEvent({ type: MistEventType.AppReady, target: app })
 
   app.Run()
   logger.log('{0}\n\t {1}', 'Radha Vallabh Shri Harivansh', 'Radhey Shyam')

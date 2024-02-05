@@ -1,5 +1,5 @@
 import path from 'path'
-import {defineConfig} from 'vite'
+import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
 export const common = {
   resolve: {
@@ -27,5 +27,5 @@ export default defineConfig({
     },
     outDir: path.resolve(__dirname, 'build'),
   },
-  plugins: [dts({rollupTypes: true})],
+  plugins: [dts({ rollupTypes: true })],
 })

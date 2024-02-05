@@ -1,1 +1,1 @@
-export {default as MistEventDispatcher} from './MistEventDispatcher'
+export { default as MistEventDispatcher } from './MistEventDispatcher'
