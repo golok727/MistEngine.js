@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "out"
+  },
+  "exclude": [
+    "bundles/**/*.d.ts",
+    "node_modules",
+    "scripts",
+    "**/dist/**",
+    "**/lib/**",
+    "**/out/**"
+  ]
+}

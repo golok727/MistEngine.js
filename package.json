@@ -11,6 +11,8 @@
   ],
   "scripts": {
     "clean:build": "rimraf --glob \"{packages,bundles}/*/{dist,lib}\"",
+    "clean:out": "rimraf out",
+    "build:types": "tsc -p tsconfig.types.json",
     "build:all": "tsc && node ./scripts/build.mjs",
     "test": "vitest",
     "vite": "vite",

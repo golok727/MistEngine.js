@@ -6,5 +6,8 @@
 
 **/**.env
 
-build/
-lib/
+dist
+build
+lib
+
+out
