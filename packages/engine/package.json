@@ -1,6 +1,5 @@
 {
   "name": "@mist/engine",
-  "version": "0.0.0",
   "author": {
     "name": "Radha"
   },
@@ -19,12 +18,16 @@
       }
     }
   },
+  "files": [
+    "lib",
+    "*.d.ts"
+  ],
+  "dependencies": {
+    "@mist/logger": "workspace:*",
+    "@mist/math": "workspace:*",
+    "nanoid": "^5.0.4"
+  },
   "devDependencies": {
     "@webgpu/types": "^0.1.40"
-  },
-  "dependencies": {
-    "@mist/logger": "file:../logger",
-    "@mist/math": "file:../math",
-    "nanoid": "^5.0.4"
   }
 }

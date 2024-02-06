@@ -16,7 +16,10 @@
       }
     }
   },
-  "version": "0.0.0",
+  "files": [
+    "lib",
+    "*.d.ts"
+  ],
   "dependencies": {
     "@mist/engine": "workspace:*",
     "@mist/math": "workspace:*"

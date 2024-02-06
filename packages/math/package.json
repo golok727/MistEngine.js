@@ -3,7 +3,6 @@
   "author": {
     "name": "Radha"
   },
-  "version": "0.0.0",
   "main": "lib/index.cjs",
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -18,5 +17,9 @@
         "default": "./lib/index.cjs"
       }
     }
-  }
+  },
+  "files": [
+    "lib",
+    "*.d.ts"
+  ]
 }

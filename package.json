@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "workspaces": [
-    "./packages/*",
-    "./examples/*",
-    "./apps/*",
-    "./bundles/*"
+    "packages/*",
+    "examples/*",
+    "apps/*",
+    "bundles/*"
   ],
   "scripts": {
     "clean:build": "rimraf --glob \"{packages,bundles}/*/{dist,lib}\"",

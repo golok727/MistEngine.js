@@ -1,6 +1,5 @@
 {
   "name": "@mist/logger",
-  "version": "0.0.0",
   "author": {
     "name": "Radha"
   },
@@ -19,7 +18,11 @@
       }
     }
   },
+  "files": [
+    "lib",
+    "*.d.ts"
+  ],
   "dependencies": {
-    "@mist/utils": "file:../utils"
+    "@mist/utils": "workspace:*"
   }
 }
