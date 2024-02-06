@@ -231,33 +231,98 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mist/engine@workspace:*, @mist/engine@workspace:packages/engine":
+"@mist/engine@file:../../packages/engine::locator=mist.js%40workspace%3Abundles%2Fmist":
+  version: 0.0.0
+  resolution: "@mist/engine@file:../../packages/engine#../../packages/engine::hash=3fbbe7&locator=mist.js%40workspace%3Abundles%2Fmist"
+  dependencies:
+    "@mist/events": "file:../events"
+    "@mist/logger": "file:../logger"
+    "@mist/math": "file:../math"
+    nanoid: "npm:^5.0.4"
+  checksum: 10c0/3b17fc7aa261585ebaeef28a171fafa1aff9ea70e5a5cd9aa372e49059e83f1db6b698c503fad53014e1134db540e29e35c56fa492219b11f73007efb2dc67aa
+  languageName: node
+  linkType: hard
+
+"@mist/engine@workspace:packages/engine":
   version: 0.0.0-use.local
   resolution: "@mist/engine@workspace:packages/engine"
   dependencies:
-    "@mist/events": "workspace:*"
-    "@mist/logger": "workspace:*"
-    "@mist/math": "workspace:*"
+    "@mist/events": "file:../events"
+    "@mist/logger": "file:../logger"
+    "@mist/math": "file:../math"
     "@webgpu/types": "npm:^0.1.40"
     nanoid: "npm:^5.0.4"
   languageName: unknown
   linkType: soft
 
-"@mist/events@workspace:*, @mist/events@workspace:packages/events":
+"@mist/events@file:../events::locator=%40mist%2Fengine%40file%3A..%2F..%2Fpackages%2Fengine%23..%2F..%2Fpackages%2Fengine%3A%3Ahash%3D3fbbe7%26locator%3Dmist.js%2540workspace%253Abundles%252Fmist":
+  version: 0.0.0
+  resolution: "@mist/events@file:../events#../events::hash=bdbec8&locator=%40mist%2Fengine%40file%3A..%2F..%2Fpackages%2Fengine%23..%2F..%2Fpackages%2Fengine%3A%3Ahash%3D3fbbe7%26locator%3Dmist.js%2540workspace%253Abundles%252Fmist"
+  checksum: 10c0/61688c1e60be82625a7013e7e32c87c71562144425b765f44dfa9ba4b00014e0b39dc58990f84d88eb5e35a0e5977c3e32d85830b5a4669e221069a41e0f70c9
+  languageName: node
+  linkType: hard
+
+"@mist/events@file:../events::locator=%40mist%2Fengine%40workspace%3Apackages%2Fengine":
+  version: 0.0.0
+  resolution: "@mist/events@file:../events#../events::hash=bdbec8&locator=%40mist%2Fengine%40workspace%3Apackages%2Fengine"
+  checksum: 10c0/61688c1e60be82625a7013e7e32c87c71562144425b765f44dfa9ba4b00014e0b39dc58990f84d88eb5e35a0e5977c3e32d85830b5a4669e221069a41e0f70c9
+  languageName: node
+  linkType: hard
+
+"@mist/events@workspace:packages/events":
   version: 0.0.0-use.local
   resolution: "@mist/events@workspace:packages/events"
   languageName: unknown
   linkType: soft
 
-"@mist/logger@workspace:*, @mist/logger@workspace:packages/logger":
+"@mist/logger@file:../logger::locator=%40mist%2Fengine%40file%3A..%2F..%2Fpackages%2Fengine%23..%2F..%2Fpackages%2Fengine%3A%3Ahash%3D3fbbe7%26locator%3Dmist.js%2540workspace%253Abundles%252Fmist":
+  version: 0.0.0
+  resolution: "@mist/logger@file:../logger#../logger::hash=115150&locator=%40mist%2Fengine%40file%3A..%2F..%2Fpackages%2Fengine%23..%2F..%2Fpackages%2Fengine%3A%3Ahash%3D3fbbe7%26locator%3Dmist.js%2540workspace%253Abundles%252Fmist"
+  dependencies:
+    "@mist/utils": "file:../utils"
+  checksum: 10c0/9b261301c21f85785bf8930c15a66c81ecfc70eb3111f7e98c394cb58f08cfc93929078d35a9a5790f9b3a69b48d149cdd52b7b95f6c3e7bf6eea4f64204dede
+  languageName: node
+  linkType: hard
+
+"@mist/logger@file:../logger::locator=%40mist%2Fengine%40workspace%3Apackages%2Fengine":
+  version: 0.0.0
+  resolution: "@mist/logger@file:../logger#../logger::hash=115150&locator=%40mist%2Fengine%40workspace%3Apackages%2Fengine"
+  dependencies:
+    "@mist/utils": "file:../utils"
+  checksum: 10c0/9b261301c21f85785bf8930c15a66c81ecfc70eb3111f7e98c394cb58f08cfc93929078d35a9a5790f9b3a69b48d149cdd52b7b95f6c3e7bf6eea4f64204dede
+  languageName: node
+  linkType: hard
+
+"@mist/logger@workspace:packages/logger":
   version: 0.0.0-use.local
   resolution: "@mist/logger@workspace:packages/logger"
   dependencies:
-    "@mist/utils": "workspace:*"
+    "@mist/utils": "file:../utils"
   languageName: unknown
   linkType: soft
 
-"@mist/math@workspace:*, @mist/math@workspace:packages/math":
+"@mist/math@file:../../packages/math::locator=mist.js%40workspace%3Abundles%2Fmist":
+  version: 0.0.0
+  resolution: "@mist/math@file:../../packages/math#../../packages/math::hash=72ebe7&locator=mist.js%40workspace%3Abundles%2Fmist"
+  checksum: 10c0/e86f435a7a1615a61d4580068491721a3b7208a70e2810f31f8127c8a243cff64dab5926d6e15535b06d5cd97b71709025e91a3789173d13f350841949880fa7
+  languageName: node
+  linkType: hard
+
+"@mist/math@file:../math::locator=%40mist%2Fengine%40file%3A..%2F..%2Fpackages%2Fengine%23..%2F..%2Fpackages%2Fengine%3A%3Ahash%3D3fbbe7%26locator%3Dmist.js%2540workspace%253Abundles%252Fmist":
+  version: 0.0.0
+  resolution: "@mist/math@file:../math#../math::hash=72ebe7&locator=%40mist%2Fengine%40file%3A..%2F..%2Fpackages%2Fengine%23..%2F..%2Fpackages%2Fengine%3A%3Ahash%3D3fbbe7%26locator%3Dmist.js%2540workspace%253Abundles%252Fmist"
+  checksum: 10c0/e86f435a7a1615a61d4580068491721a3b7208a70e2810f31f8127c8a243cff64dab5926d6e15535b06d5cd97b71709025e91a3789173d13f350841949880fa7
+  languageName: node
+  linkType: hard
+
+"@mist/math@file:../math::locator=%40mist%2Fengine%40workspace%3Apackages%2Fengine":
+  version: 0.0.0
+  resolution: "@mist/math@file:../math#../math::hash=72ebe7&locator=%40mist%2Fengine%40workspace%3Apackages%2Fengine"
+  checksum: 10c0/e86f435a7a1615a61d4580068491721a3b7208a70e2810f31f8127c8a243cff64dab5926d6e15535b06d5cd97b71709025e91a3789173d13f350841949880fa7
+  languageName: node
+  linkType: hard
+
+"@mist/math@workspace:packages/math":
   version: 0.0.0-use.local
   resolution: "@mist/math@workspace:packages/math"
   languageName: unknown
@@ -277,6 +342,27 @@ __metadata:
   resolution: "@mist/snow@workspace:packages/snow"
   languageName: unknown
   linkType: soft
+
+"@mist/utils@file:../utils::locator=%40mist%2Flogger%40file%3A..%2Flogger%23..%2Flogger%3A%3Ahash%3D115150%26locator%3D%2540mist%252Fengine%2540file%253A..%252F..%252Fpackages%252Fengine%2523..%252F..%252Fpackages%252Fengine%253A%253Ahash%253D3fbbe7%2526locator%253Dmist.js%252540workspace%25253Abundles%25252Fmist":
+  version: 0.0.0
+  resolution: "@mist/utils@file:../utils#../utils::hash=bfadbb&locator=%40mist%2Flogger%40file%3A..%2Flogger%23..%2Flogger%3A%3Ahash%3D115150%26locator%3D%2540mist%252Fengine%2540file%253A..%252F..%252Fpackages%252Fengine%2523..%252F..%252Fpackages%252Fengine%253A%253Ahash%253D3fbbe7%2526locator%253Dmist.js%252540workspace%25253Abundles%25252Fmist"
+  checksum: 10c0/0b6401f45faa3d317532c52882c45c948571ae8d0fc4c68433205b11d838cd4e92a7cc9a7e8055271750248da37938d9b7a85c2823bb925bc5f39d203f41ad3c
+  languageName: node
+  linkType: hard
+
+"@mist/utils@file:../utils::locator=%40mist%2Flogger%40file%3A..%2Flogger%23..%2Flogger%3A%3Ahash%3D115150%26locator%3D%2540mist%252Fengine%2540workspace%253Apackages%252Fengine":
+  version: 0.0.0
+  resolution: "@mist/utils@file:../utils#../utils::hash=bfadbb&locator=%40mist%2Flogger%40file%3A..%2Flogger%23..%2Flogger%3A%3Ahash%3D115150%26locator%3D%2540mist%252Fengine%2540workspace%253Apackages%252Fengine"
+  checksum: 10c0/0b6401f45faa3d317532c52882c45c948571ae8d0fc4c68433205b11d838cd4e92a7cc9a7e8055271750248da37938d9b7a85c2823bb925bc5f39d203f41ad3c
+  languageName: node
+  linkType: hard
+
+"@mist/utils@file:../utils::locator=%40mist%2Flogger%40workspace%3Apackages%2Flogger":
+  version: 0.0.0
+  resolution: "@mist/utils@file:../utils#../utils::hash=bfadbb&locator=%40mist%2Flogger%40workspace%3Apackages%2Flogger"
+  checksum: 10c0/0b6401f45faa3d317532c52882c45c948571ae8d0fc4c68433205b11d838cd4e92a7cc9a7e8055271750248da37938d9b7a85c2823bb925bc5f39d203f41ad3c
+  languageName: node
+  linkType: hard
 
 "@mist/utils@workspace:*, @mist/utils@workspace:packages/utils":
   version: 0.0.0-use.local
@@ -2806,8 +2892,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "mist.js@workspace:bundles/mist"
   dependencies:
-    "@mist/engine": "workspace:*"
-    "@mist/math": "workspace:*"
+    "@mist/engine": "file:../../packages/engine"
+    "@mist/math": "file:../../packages/math"
   languageName: unknown
   linkType: soft
 

@@ -23,6 +23,6 @@
     "*.d.ts"
   ],
   "dependencies": {
-    "@mist/utils": "workspace:*"
+    "@mist/utils": "file:../utils"
   }
 }

@@ -23,9 +23,9 @@
     "*.d.ts"
   ],
   "dependencies": {
-    "@mist/events": "workspace:*",
-    "@mist/logger": "workspace:*",
-    "@mist/math": "workspace:*",
+    "@mist/events": "file:../events",
+    "@mist/logger": "file:../logger",
+    "@mist/math": "file:../math",
     "nanoid": "^5.0.4"
   },
   "devDependencies": {

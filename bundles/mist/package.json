@@ -21,7 +21,7 @@
     "*.d.ts"
   ],
   "dependencies": {
-    "@mist/engine": "workspace:*",
-    "@mist/math": "workspace:*"
+    "@mist/engine": "file:../../packages/engine",
+    "@mist/math": "file:../../packages/math"
   }
 }
