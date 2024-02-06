@@ -1,4 +1,7 @@
 {
   "name": "@mist/sandbox-app",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "mist.js": "workspace:*"
+  }
 }

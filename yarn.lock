@@ -231,12 +231,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mist-apps/sandbox-app@workspace:apps/sandbox":
-  version: 0.0.0-use.local
-  resolution: "@mist-apps/sandbox-app@workspace:apps/sandbox"
-  languageName: unknown
-  linkType: soft
-
 "@mist/engine@workspace:*, @mist/engine@workspace:packages/engine":
   version: 0.0.0-use.local
   resolution: "@mist/engine@workspace:packages/engine"
@@ -259,6 +253,14 @@ __metadata:
 "@mist/math@workspace:*, @mist/math@workspace:packages/math":
   version: 0.0.0-use.local
   resolution: "@mist/math@workspace:packages/math"
+  languageName: unknown
+  linkType: soft
+
+"@mist/sandbox-app@workspace:apps/sandbox":
+  version: 0.0.0-use.local
+  resolution: "@mist/sandbox-app@workspace:apps/sandbox"
+  dependencies:
+    mist.js: "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -2790,7 +2792,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"mist.js@workspace:bundles/mist":
+"mist.js@workspace:*, mist.js@workspace:bundles/mist":
   version: 0.0.0-use.local
   resolution: "mist.js@workspace:bundles/mist"
   dependencies:

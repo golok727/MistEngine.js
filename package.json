@@ -19,7 +19,8 @@
     "postbuild:types": "copyfiles -u 1 \"out/**/*\" . && run-s clean:out",
     "test": "vitest",
     "vite": "vite",
-    "run:sandbox": "vite serve ./apps/sandbox -c ./vite.config.js",
+    "run:sandbox-dev": "vite serve ./apps/sandbox -c ./vite.config.js",
+    "run:sandbox-prod-lib": "vite serve ./apps/sandbox -c vite.config.prod.serve.js",
     "preview": "vite preview"
   },
   "devDependencies": {

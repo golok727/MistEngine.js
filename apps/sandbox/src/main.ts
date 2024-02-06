@@ -2,9 +2,7 @@ import './style.css'
 import { Mist, Matrix4, Vector3, vec3 } from 'mist.js'
 const canvas = document.getElementById('canvas') as HTMLCanvasElement
 const fpsSpan = document.getElementById('fps-text') as HTMLSpanElement
-import { camelToDashCase } from '@mist/utils'
 
-console.log(camelToDashCase('helloWorld'))
 type DrawableObject = {
   va: Mist.MistVertexArray
   shader: Mist.MistShader
