@@ -2,7 +2,7 @@ import { MistRendererAPI, Renderer } from '../../Renderer'
 
 import MistWebGL2RenderingAPI from './WebGL2RenderingAPI'
 import { MistVertexArray } from '../../VertexArray'
-import { MistEventDispatcher } from '../../../core/Events'
+import { MistEventDispatcher } from '@mist/events'
 import { Camera } from '../../../cameras'
 import { MistShader } from '../../Shader'
 import { Matrix4 } from '@mist/math'

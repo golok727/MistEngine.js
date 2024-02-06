@@ -1,5 +1,5 @@
 import { MistRendererAPI, MistWebGL2Renderer, Renderer } from '../renderers'
-import { MistEventDispatcher } from './Events'
+import { MistEventDispatcher } from '@mist/events'
 import LayerStack from './LayerStack'
 import MistInput from './Input/Input'
 import { Context } from './Context'

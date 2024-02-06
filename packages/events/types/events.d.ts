@@ -1,5 +1,3 @@
-/// <reference path="./src/core/Input/MistKey.ts"/>
-
 type MistEventTypesK =
   | 'AppReady'
   | 'AppStart'

@@ -1,6 +1,6 @@
 import { MistVertexArray } from './VertexArray'
 import { RenderingAPI } from './RenderingApi'
-import { MistEventDispatcher } from '../core/Events'
+import { MistEventDispatcher } from '@mist/events'
 import { Camera } from '../cameras'
 
 import { MistShader } from './Shader'

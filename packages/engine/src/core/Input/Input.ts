@@ -4,7 +4,7 @@
   Separated mouse events for canvas elements
 */
 
-import { MistEventDispatcher } from '../Events'
+import { MistEventDispatcher } from '@mist/events'
 import MistKey from './MistKey'
 
 type MistInputMap = Record<string, boolean>

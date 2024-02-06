@@ -1,5 +1,5 @@
 {
-  "name": "@mist/engine",
+  "name": "@mist/events",
   "author": {
     "name": "Radha"
   },
@@ -21,14 +21,5 @@
   "files": [
     "lib",
     "*.d.ts"
-  ],
-  "dependencies": {
-    "@mist/events": "workspace:*",
-    "@mist/logger": "workspace:*",
-    "@mist/math": "workspace:*",
-    "nanoid": "^5.0.4"
-  },
-  "devDependencies": {
-    "@webgpu/types": "^0.1.40"
-  }
+  ]
 }

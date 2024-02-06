@@ -235,10 +235,17 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mist/engine@workspace:packages/engine"
   dependencies:
+    "@mist/events": "workspace:*"
     "@mist/logger": "workspace:*"
     "@mist/math": "workspace:*"
     "@webgpu/types": "npm:^0.1.40"
     nanoid: "npm:^5.0.4"
+  languageName: unknown
+  linkType: soft
+
+"@mist/events@workspace:*, @mist/events@workspace:packages/events":
+  version: 0.0.0-use.local
+  resolution: "@mist/events@workspace:packages/events"
   languageName: unknown
   linkType: soft
 

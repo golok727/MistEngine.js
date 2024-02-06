@@ -1,4 +1,4 @@
-import { MistEventDispatcher } from '../core/Events'
+import { MistEventDispatcher } from '@mist/events'
 import { Vector3, Matrix4 } from '@mist/math'
 import { Camera } from './Camera'
 

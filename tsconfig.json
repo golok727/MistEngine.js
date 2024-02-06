@@ -26,20 +26,12 @@
     "baseUrl": ".",
     "types": ["@webgpu/types"]
   },
-  "include": [
-    "packages",
-    "bundles",
-    "examples",
-    "apps",
-    "./packages/**/*.d.ts",
-    "vite-env.d.ts"
-  ],
   "exclude": [
     "bundles/**/*.d.ts",
     "node_modules",
     "**/dist/**",
     "**/lib/**",
     "**/out/**",
-    "**/*.worker.ts"
+    "tests/**/*.test.ts"
   ]
 }

@@ -13,6 +13,7 @@
     "scripts",
     "**/dist/**",
     "**/lib/**",
-    "**/out/**"
+    "**/out/**",
+    "tests/**/*.test.ts"
   ]
 }
