@@ -8,12 +8,11 @@
   },
   "exclude": [
     "bundles/**/*.d.ts",
-    "apps/sandbox",
+    "apps/sandbox/**",
     "node_modules",
     "scripts",
     "**/dist/**",
     "**/lib/**",
-    "**/out/**",
-    "tests/**/*.test.ts"
+    "**/out/**"
   ]
 }
