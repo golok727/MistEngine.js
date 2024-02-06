@@ -11,9 +11,11 @@
   ],
   "scripts": {
     "clean:build": "rimraf --glob \"{packages,bundles}/*/{dist,lib}\"",
+    "clean:types": "rimraf --glob \"{packages,bundles}/*/lib/**/*.d.ts\"",
     "clean:out": "rimraf out",
-    "build:types": "tsc -p tsconfig.types.json",
+    "build:types": "tsc -p tsconfig.types.json && node ./scripts/postTypes.mjs",
     "build:all": "tsc && node ./scripts/build.mjs",
+    "postbuild:types": "copyfiles -u 1 \"out/**/*\"",
     "test": "vitest",
     "vite": "vite",
     "run:sandbox": "vite serve ./apps/sandbox -c ./vite.config.js",
@@ -21,6 +23,8 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/copyfiles": "^2",
+    "copyfiles": "^2.4.1",
     "rimraf": "^5.0.5",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
