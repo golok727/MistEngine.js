@@ -260,6 +260,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mist/sandbox-app@workspace:apps/sandbox"
   dependencies:
+    "@mist/utils": "workspace:*"
     mist.js: "workspace:*"
   languageName: unknown
   linkType: soft
