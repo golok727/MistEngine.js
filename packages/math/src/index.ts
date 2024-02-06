@@ -1,3 +1,4 @@
+/// <reference path="../global.d.ts" />
 import Vector2, { vec2 } from './vec2'
 import Vector3, { vec3 } from './vec3'
 import Vector4, { vec4 } from './vec4'

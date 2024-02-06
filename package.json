@@ -15,7 +15,7 @@
     "clean:out": "rimraf out",
     "build:types": "tsc -p tsconfig.types.json && node ./scripts/postTypesBuild.mjs",
     "build": "tsc && node ./scripts/build.mjs",
-    "build:complete": "run-s build build:types postbuild:types",
+    "build:complete": "run-s clean:build build build:types postbuild:types",
     "postbuild:types": "copyfiles -u 1 \"out/**/*\" . && run-s clean:out",
     "test": "vitest",
     "vite": "vite",

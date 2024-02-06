@@ -1,2 +1,3 @@
-/// <reference path="../globals.d.ts" />
+/// <reference path="../global.d.ts" />
+
 export { default as MistEventDispatcher } from './MistEventDispatcher'
