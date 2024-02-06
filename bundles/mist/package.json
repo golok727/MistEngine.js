@@ -18,7 +18,7 @@
   },
   "version": "0.0.0",
   "dependencies": {
-    "@mist/engine": "file:../../packages/engine",
-    "@mist/math": "file:../../packages/math"
+    "@mist/engine": "workspace:*",
+    "@mist/math": "workspace:*"
   }
 }
