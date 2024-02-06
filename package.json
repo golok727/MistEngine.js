@@ -14,12 +14,12 @@
     "clean:types": "rimraf --glob \"{packages,bundles}/*/lib/**/*.d.ts\"",
     "clean:out": "rimraf out",
     "build:types": "tsc -p tsconfig.types.json && node ./scripts/postTypesBuild.mjs",
-    "build:all": "tsc && node ./scripts/build.mjs",
+    "build": "tsc && node ./scripts/build.mjs",
+    "build:complete": "run-s build build:types postbuild:types",
     "postbuild:types": "copyfiles -u 1 \"out/**/*\" . && run-s clean:out",
     "test": "vitest",
     "vite": "vite",
     "run:sandbox": "vite serve ./apps/sandbox -c ./vite.config.js",
-    "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
