@@ -13,7 +13,7 @@
     "clean:build": "rimraf --glob \"{packages,bundles}/*/{dist,lib}\"",
     "clean:types": "rimraf --glob \"{packages,bundles}/*/lib/**/*.d.ts\"",
     "clean:out": "rimraf out",
-    "build:types": "tsc -p tsconfig.types.json && node ./scripts/postTypes.mjs",
+    "build:types": "tsc -p tsconfig.types.json && node ./scripts/postTypesBuild.mjs",
     "build:all": "tsc && node ./scripts/build.mjs",
     "postbuild:types": "copyfiles -u 1 \"out/**/*\"",
     "test": "vitest",
