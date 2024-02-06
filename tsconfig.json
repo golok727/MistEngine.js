@@ -4,10 +4,13 @@
     "useDefineForClassFields": true,
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "skipLibCheck": true,
-
+    "skipLibCheck": false,
     "paths": {
       "@mist/*": ["./packages/*/src"],
+      "@/engine/*": ["./packages/engine/src/*"],
+      "@/logger/*": ["./packages/engine/src/*"],
+      "@/math/*": ["./packages/engine/src/*"],
+      "@/utils/*": ["./packages/engine/src/*"],
       "mist.js": ["./bundles/mist/src"]
     },
     /* Bundler mode */

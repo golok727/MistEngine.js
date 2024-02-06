@@ -12,6 +12,11 @@ export default defineConfig({
         find: /^@mist\/(.+)$/,
         replacement: path.resolve(__dirname, './packages/$1/src/index.ts'),
       },
+
+      {
+        find: /^@\/(.+)\/(.+)$/,
+        replacement: path.resolve(__dirname, './packages/$1/src/$2'),
+      },
     ],
   },
 })

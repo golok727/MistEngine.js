@@ -1,3 +1,5 @@
+/// <reference path="./src/core/Input/MistKey.ts"/>
+
 type MistEventTypesK =
   | 'AppReady'
   | 'AppStart'
@@ -92,31 +94,25 @@ interface MistRendererResizeEvent
 }
 // Global Keyboard
 interface MistKeyUpEvent
-  extends MistBaseEvent<
-      typeof import('packages/engine/src/core/Input/Input.ts').default
-    >,
+  extends MistBaseEvent<typeof import('@mist/engine').default.MistInput>,
     DefaultPrevent {
   type: MistEventTypeT['KeyUp']
-  key: MistKey
+  key: import('@mist/engine').default.Key
   native: KeyboardEvent
 }
 
 interface MistKeyDownEvent
-  extends MistBaseEvent<
-      typeof import('packages/engine/src/core/Input/Input.ts').default
-    >,
+  extends MistBaseEvent<typeof import('@mist/engine').default.MistInput>,
     DefaultPrevent {
   type: MistEventTypeT['KeyDown']
-  key: MistKey
+  key: import('@mist/engine').default.Key
   native: KeyboardEvent
 }
 
 // Mouse
 
 interface MistMouseDownEvent
-  extends MistBaseEvent<
-      import('packages/engine/src/core/Input/Input.ts').default
-    >,
+  extends MistBaseEvent<import('@mist/engine').default.MistInput>,
     DefaultPrevent {
   type: MistEventTypeT['MouseDown']
   x: number

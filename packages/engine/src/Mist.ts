@@ -24,7 +24,7 @@ export {
   Texture,
   MistShaderLibrary as ShaderLibrary,
   MistTextureLibrary as TextureLibrary,
-} from './renderers'
+} from '@/engine/renderers'
 
 export type {
   MistWebGL2RenderingAPI,
@@ -34,7 +34,7 @@ export type {
   MistVertexArray,
   MistShader,
   MistTexture,
-} from './renderers'
+} from '@/engine/renderers'
 
-export type { Camera } from './cameras'
-export { OrthographicCamera } from './cameras'
+export type { Camera } from '@/engine/cameras'
+export { OrthographicCamera } from '@/engine/cameras'
