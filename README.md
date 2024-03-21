@@ -1,6 +1,6 @@
 # MIST Engine
 
-A Game engine Work in Progress
+A game engine prototype
 
 ```typescript
 import { Mist } from 'mist.js'
